@@ -1,0 +1,39 @@
+<idea-plugin>
+  <id>com.layoutmanager</id>
+  <name>Window Layout Manager</name>
+  <version>1.0</version>
+  <vendor email="michael@estermann.family" url="https://www.estermann.family">Michael Estermann</vendor>
+
+
+  <description><![CDATA[
+      Enter short description for your plugin here.<br>
+      <em>most HTML tags may be used</em>
+    ]]></description>
+
+  <change-notes><![CDATA[
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="173.0"/>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
+  <depends>com.intellij.modules.lang</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <applicationService serviceImplementation="com.layoutmanager.persistence.LayoutConfig"/>
+  </extensions>
+
+  <application-components>
+    <component>
+      <implementation-class>com.layoutmanager.WindowLayoutManagerPluginRegistration</implementation-class>
+    </component>
+  </application-components>
+
+  <actions>
+    <!-- Add your actions here -->
+  </actions>
+
+</idea-plugin>

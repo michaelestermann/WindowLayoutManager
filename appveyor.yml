@@ -15,6 +15,6 @@ artifacts:
 deploy_script:
 - ps: >-
     if($env:appveyor_repo_branch -eq 'master') {
-      gradlew publishPlugin
+      .\gradlew publishPlugin
     }
 #

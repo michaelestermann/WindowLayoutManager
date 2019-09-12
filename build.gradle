@@ -20,3 +20,7 @@ dependencies {
 intellij {
     version '2019.2.1'
 }
+
+publishPlugin {
+  token = System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")
+}

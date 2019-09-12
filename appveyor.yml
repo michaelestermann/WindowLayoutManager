@@ -11,3 +11,10 @@ artifacts:
   - path: 'build\distributions\*.zip'
     name: window-layout-manager
 #
+
+deploy_script:
+- ps: >-
+    if($env:appveyor_repo_branch -eq 'master') {
+      gradlew publishPlugin
+    }
+#

@@ -5,9 +5,23 @@
   <vendor email="michael@estermann.family" url="https://www.estermann.family">Michael Estermann</vendor>
 
 
-  <description>This plugin allows you to create up to four window configurations with meaningful names.</description>
+  <description><![CDATA[
+    This plugin provides multi layout support for the IntelliJ based IDE of your choice.
+    You can store up to four layouts with a meaningful name.
+    </br>
+    Plugin is accessible via <b>Window Menu</b>:
+    <ul>
+        <li><b>Store Layout:</b> Stores the current window layout</li>
+        <li><b>Restore Layout:</b> Restores the selected layout immediately</li>
+    </ul>
+    Feel free to contribute at <a href="https://github.com/michaelestermann/WindowLayoutManager">GitHub</a>.
+    ]]></description>
 
-  <change-notes>First version released.</change-notes>
+  <change-notes><![CDATA[
+        <ul>
+          <li>Sept 12, 2019 (ver 1.0) - Initial version</li>
+        </ul>
+    ]]></change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
   <idea-version since-build="173.0"/>

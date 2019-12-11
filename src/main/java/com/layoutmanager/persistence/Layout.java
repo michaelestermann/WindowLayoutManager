@@ -19,6 +19,7 @@ public class Layout {
         return name;
     }
 
+    @SuppressWarnings({"unused", "Used for serialization."})
     public void setName(String name) {
         this.name = name;
     }
@@ -27,11 +28,8 @@ public class Layout {
         return toolWindows;
     }
 
+    @SuppressWarnings({"unused", "Used for serialization."})
     public void setToolWindows(ToolWindowInfo[] toolWindows) {
         this.toolWindows = toolWindows;
-    }
-
-    public boolean isDefined() {
-        return this.toolWindows.length > 0;
     }
 }

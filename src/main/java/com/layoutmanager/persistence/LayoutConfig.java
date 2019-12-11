@@ -5,6 +5,10 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @State(
         name = "Layout",
         storages = {
@@ -12,12 +16,7 @@ import org.jetbrains.annotations.Nullable;
         }
 )
 public class LayoutConfig implements PersistentStateComponent<LayoutConfig> {
-    private Layout[] layouts = new Layout[] {
-            new Layout("<Empty>", new ToolWindowInfo[0]),
-            new Layout("<Empty>", new ToolWindowInfo[0]),
-            new Layout("<Empty>", new ToolWindowInfo[0]),
-            new Layout("<Empty>", new ToolWindowInfo[0]),
-    };
+    private List<Layout> layouts = new ArrayList<>();
 
     @Nullable
     @Override
@@ -30,20 +29,29 @@ public class LayoutConfig implements PersistentStateComponent<LayoutConfig> {
         XmlSerializerUtil.copyBean(layoutConfig, this);
     }
 
-    public boolean hasLayout(int number) {
-        return number >= 0 && number < this.layouts.length;
-    }
-
     public Layout getLayout(int number) {
-        return this.layouts[number];
+        return this.layouts.get(number);
     }
 
-    public int supportedLayouts() {
-        return this.layouts.length;
+    @SuppressWarnings({"unused", "Used for serialization."})
+    public Layout[] getLayouts() {
+        return this.layouts.toArray(Layout[]::new);
+    }
+
+    public int getLayoutCount() {
+        return this.layouts.size();
     }
 
     public void setLayout(int number, Layout layout) {
-        this.layouts[number] = layout;
+        this.layouts.set(number, layout);
+    }
+
+    public void addLayout(Layout layout) {
+        this.layouts.add(layout);
+    }
+
+    public void removeLayout(Layout layout) {
+        this.layouts.remove(layout);
     }
 
     @Nullable
@@ -51,12 +59,9 @@ public class LayoutConfig implements PersistentStateComponent<LayoutConfig> {
         return ServiceManager.getService(LayoutConfig.class);
     }
 
-    public Layout[] getLayouts() {
-        return layouts;
-    }
-
+    @SuppressWarnings({"unused", "Used for serialization."})
     public void setLayouts(Layout[] layouts) {
-        this.layouts = layouts;
+        this.layouts = new ArrayList<>(Arrays.asList(layouts));
     }
 }
 

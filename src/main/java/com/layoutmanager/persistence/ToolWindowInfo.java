@@ -1,6 +1,5 @@
 package com.layoutmanager.persistence;
 
-import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowType;
 
 import java.awt.*;
@@ -46,25 +45,5 @@ public class ToolWindowInfo {
 
     public boolean isVisible() {
         return isVisible;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setType(ToolWindowType type) {
-        this.type = type;
-    }
-
-    public void setAnchor(String anchor) {
-        this.anchor = anchor;
-    }
-
-    public void setBounds(Rectangle bounds) {
-        this.bounds = bounds;
-    }
-
-    public void setVisible(boolean visible) {
-        isVisible = visible;
     }
 }

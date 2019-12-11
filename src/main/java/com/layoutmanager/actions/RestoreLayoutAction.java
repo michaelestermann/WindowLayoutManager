@@ -20,33 +20,27 @@ import java.lang.reflect.Method;
 
 public class RestoreLayoutAction extends AnAction {
 
-    private final int number;
+    private final Layout layout;
 
-    public RestoreLayoutAction(int number) {
+    public RestoreLayoutAction(Layout layout) {
         super();
-        this.number = number;
+        this.layout = layout;
 
-        Layout layout = LayoutConfig.getInstance().getLayout(number);
         Presentation presentation = this.getTemplatePresentation();
         presentation.setText(layout.getName());
-        presentation.setIcon(AllIcons.Actions.Export);
-        presentation.setEnabledAndVisible(layout.isDefined());
+        presentation.setIcon(AllIcons.Actions.GroupByModule);
     }
 
     @Override
     public void update(AnActionEvent e) {
-        Layout layout = LayoutConfig.getInstance().getLayout(number);
-        e.getPresentation().setEnabledAndVisible(layout.isDefined());
-        e.getPresentation().setText(layout.getName());
+        e.getPresentation().setText(this.layout.getName());
         super.update(e);
     }
 
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        Layout layout = LayoutConfig.getInstance().getLayout(this.number);
-        applyLayout(event, layout);
-
+        applyLayout(event, this.layout);
     }
 
     private void applyLayout(AnActionEvent event, Layout layout) {

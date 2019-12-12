@@ -4,8 +4,10 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
+import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
+import com.layoutmanager.ui.NotificationHelper;
 import org.jetbrains.annotations.NotNull;
 
 public class OverwriteLayoutAction extends AnAction {
@@ -31,14 +33,22 @@ public class OverwriteLayoutAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
+        Layout previousLayout = LayoutConfig.getInstance().getLayout(number);
         Layout updatedLayout = LayoutCreator.create(event.getProject());
 
         if (updatedLayout != null) {
             this.storeLayout(updatedLayout);
+            showNotification(updatedLayout, previousLayout);
         }
     }
 
     private void storeLayout(Layout layout) {
         LayoutConfig.getInstance().setLayout(this.number, layout);
+    }
+
+    private void showNotification(Layout updatedLayout, Layout previousLayout) {
+        NotificationHelper.info(
+                MessagesHelper.message("StoreLayout.Overwrite.Notification.Title"),
+                MessagesHelper.message("StoreLayout.Overwrite.Notification.Content", previousLayout.getName(), updatedLayout.getName()));
     }
 }

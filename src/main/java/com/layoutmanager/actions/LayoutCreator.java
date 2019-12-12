@@ -31,8 +31,8 @@ public class LayoutCreator {
         String name;
         do {
             name = Messages.showInputDialog(
-                    MessagesHelper.message("DialogLayoutName"),
-                    MessagesHelper.message("DialogLayoutTitle"),
+                    MessagesHelper.message("StoreLayout.Dialog.Title"),
+                    MessagesHelper.message("StoreLayout.Dialog.Content"),
                     AllIcons.Actions.Edit);
         } while (name != null && name.isEmpty());
 

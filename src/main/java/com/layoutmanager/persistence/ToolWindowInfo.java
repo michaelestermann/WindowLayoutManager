@@ -11,6 +11,7 @@ public class ToolWindowInfo {
     private Rectangle bounds;
     private boolean isVisible;
 
+    @SuppressWarnings({"unused", "Used for serialization."})
     public ToolWindowInfo() {
         this.id = null;
         this.type = null;
@@ -45,5 +46,30 @@ public class ToolWindowInfo {
 
     public boolean isVisible() {
         return isVisible;
+    }
+
+    @SuppressWarnings({"unused", "Used for serialization."})
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @SuppressWarnings({"unused", "Used for serialization."})
+    public void setType(ToolWindowType type) {
+        this.type = type;
+    }
+
+    @SuppressWarnings({"unused", "Used for serialization."})
+    public void setAnchor(String anchor) {
+        this.anchor = anchor;
+    }
+
+    @SuppressWarnings({"unused", "Used for serialization."})
+    public void setBounds(Rectangle bounds) {
+        this.bounds = bounds;
+    }
+
+    @SuppressWarnings({"unused", "Used for serialization."})
+    public void setVisible(boolean visible) {
+        isVisible = visible;
     }
 }

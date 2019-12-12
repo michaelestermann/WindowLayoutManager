@@ -6,6 +6,7 @@ import com.layoutmanager.actions.DeleteLayoutAction;
 import com.layoutmanager.actions.NewLayoutAction;
 import com.layoutmanager.actions.OverwriteLayoutAction;
 import com.layoutmanager.actions.RestoreLayoutAction;
+import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
 
@@ -32,9 +33,9 @@ public class WindowMenuService {
     }
 
     private void createMainActions(DefaultActionGroup windowMenu) {
-        this.storeLayout = createMainAction("Store Layout", windowMenu);
-        this.restoreLayout = createMainAction("Restore Layout", windowMenu);
-        this.deleteLayout = createMainAction("Delete Layout", windowMenu);
+        this.storeLayout = createMainAction(MessagesHelper.message("MenuStoreLayout"), windowMenu);
+        this.restoreLayout = createMainAction(MessagesHelper.message("MenuRestoreLayout"), windowMenu);
+        this.deleteLayout = createMainAction(MessagesHelper.message("MenuDeleteLayout"), windowMenu);
     }
 
     private DefaultActionGroup createMainAction(String name, DefaultActionGroup windowMenu){

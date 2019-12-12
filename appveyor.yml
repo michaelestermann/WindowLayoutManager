@@ -4,7 +4,7 @@ environment:
 #
 
 build_script:
-  - gradlew buildPlugin --info
+  - gradlew.bat buildPlugin --warning-mode none
 #
 
 artifacts:
@@ -15,6 +15,6 @@ artifacts:
 deploy_script:
 - ps: >-
     if($env:appveyor_repo_branch -eq 'master') {
-      .\gradlew publishPlugin
+      .\gradlew publishPlugin --warning-mode none
     }
 #

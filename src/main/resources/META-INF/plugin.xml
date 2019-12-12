@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.layoutmanager</id>
   <name>Window Layout Manager</name>
-  <version>1.2.10</version>
+  <version>1.2.1</version>
   <vendor email="michael@estermann.family" url="https://www.estermann.family">Michael Estermann</vendor>
 
 

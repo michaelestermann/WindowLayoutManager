@@ -10,9 +10,10 @@ import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.impl.ToolWindowManagerImpl;
 import com.intellij.openapi.wm.impl.WindowInfoImpl;
+import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
-import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.persistence.ToolWindowInfo;
+import com.layoutmanager.ui.NotificationHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
@@ -41,6 +42,7 @@ public class RestoreLayoutAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         applyLayout(event, this.layout);
+        showNotification(this.layout);
     }
 
     private void applyLayout(AnActionEvent event, Layout layout) {
@@ -78,5 +80,10 @@ public class RestoreLayoutAction extends AnAction {
     private ToolWindowManagerImpl getToolWindowManager(AnActionEvent event) {
         Project project = event.getProject();
         return (ToolWindowManagerImpl) ToolWindowManager.getInstance(project);
+    }
+    private void showNotification(Layout updatedLayout) {
+        NotificationHelper.info(
+                MessagesHelper.message("RestoreLayout.Notification.Title"),
+                MessagesHelper.message("RestoreLayout.Notification.Content", updatedLayout.getName()));
     }
 }

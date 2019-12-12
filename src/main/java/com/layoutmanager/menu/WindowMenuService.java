@@ -33,9 +33,9 @@ public class WindowMenuService {
     }
 
     private void createMainActions(DefaultActionGroup windowMenu) {
-        this.storeLayout = createMainAction(MessagesHelper.message("MenuStoreLayout"), windowMenu);
-        this.restoreLayout = createMainAction(MessagesHelper.message("MenuRestoreLayout"), windowMenu);
-        this.deleteLayout = createMainAction(MessagesHelper.message("MenuDeleteLayout"), windowMenu);
+        this.storeLayout = createMainAction(MessagesHelper.message("StoreLayout.Menu"), windowMenu);
+        this.restoreLayout = createMainAction(MessagesHelper.message("RestoreLayout.Menu"), windowMenu);
+        this.deleteLayout = createMainAction(MessagesHelper.message("DeleteLayout.Menu"), windowMenu);
     }
 
     private DefaultActionGroup createMainAction(String name, DefaultActionGroup windowMenu){

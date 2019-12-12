@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.components.ServiceManager;
+import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.menu.WindowMenuService;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
@@ -12,11 +13,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class NewLayoutAction extends AnAction {
 
-    private static final String CAPTION = "New layout";
-
     public NewLayoutAction() {
         Presentation presentation = this.getTemplatePresentation();
-        presentation.setText(CAPTION);
+        presentation.setText(MessagesHelper.message("MenuStoreNewLayout"));
         presentation.setIcon(AllIcons.Welcome.CreateNewProject);
     }
 

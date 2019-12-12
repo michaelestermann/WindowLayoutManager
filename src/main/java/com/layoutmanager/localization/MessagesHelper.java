@@ -12,14 +12,14 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class Messages {
+public class MessagesHelper {
     @NonNls
     public static final String BUNDLE_NAME = "com.layoutmanager.ui.messages";
 
     private static Reference<ResourceBundle> thisBundle;
 
     private static ResourceBundle getBundle() {
-        ResourceBundle bundle = com.intellij.reference.SoftReference.dereference(thisBundle);
+        ResourceBundle bundle = SoftReference.dereference(thisBundle);
         if (bundle == null) {
             try {
                 bundle = ResourceBundle.getBundle(BUNDLE_NAME);

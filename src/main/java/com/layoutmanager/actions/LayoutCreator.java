@@ -6,6 +6,7 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.impl.WindowInfoImpl;
+import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.ToolWindowInfo;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +30,10 @@ public class LayoutCreator {
     private static String getLayoutName() {
         String name;
         do {
-            name = Messages.showInputDialog("Enter the name for the layout.", "Layout name", AllIcons.Actions.Edit);
+            name = Messages.showInputDialog(
+                    MessagesHelper.message("DialogLayoutName"),
+                    MessagesHelper.message("DialogLayoutTitle"),
+                    AllIcons.Actions.Edit);
         } while (name != null && name.isEmpty());
 
         return name;

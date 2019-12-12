@@ -1,2 +1,11 @@
+pluginManagement {
+    repositories {
+        maven {
+            url 'https://cache-redirector.jetbrains.com/plugins.gradle.org'
+        }
+    }
+}
+
 rootProject.name = 'window-layout-manager'
+includeBuild '..'
 

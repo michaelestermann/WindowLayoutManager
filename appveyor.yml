@@ -14,7 +14,7 @@ artifacts:
 
 deploy_script:
 - ps: >-
-    if ($env:APPVEYOR_REPO_TAG -eq $TRUE -And $env:APPVEYOR_REPO_TAG_NAME -match '^\d+\.\d+(\.\d+)?$') {
+    if ($env:APPVEYOR_REPO_TAG -eq $TRUE -And $env:APPVEYOR_REPO_TAG_NAME -match '^V\d+\.\d+(\.\d+)?$') {
       .\gradlew publishPlugin --warning-mode none
     }
 #

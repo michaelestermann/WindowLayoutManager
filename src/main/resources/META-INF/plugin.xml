@@ -1,7 +1,6 @@
 <idea-plugin>
   <id>com.layoutmanager</id>
   <name>Window Layout Manager</name>
-  <version>1.2.1</version>
   <vendor email="michael@estermann.family" url="https://www.estermann.family">Michael Estermann</vendor>
 
 
@@ -22,6 +21,8 @@
           <li>Sept 12, 2019 (ver 1.0) - Initial version</li>
           <li>Nov 29, 2019 (ver 1.1.1) - Support of the latest IDE versions</li>
           <li>Dec 11, 2019 (ver 1.2) - Support variable amount of windows</li>
+          <li>Dec 11, 2019 (ver 1.2.1) - Support of other languages and notifications</li>
+          <li>Dec 11, 2019 (ver 1.2.2) - Support of the latest IDE versions 2019.3</li>
         </ul>
     ]]></change-notes>
 

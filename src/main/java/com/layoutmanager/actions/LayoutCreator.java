@@ -8,11 +8,13 @@ import com.intellij.openapi.wm.impl.ToolWindowImpl;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.ToolWindowInfo;
+import com.layoutmanager.ui.NotificationHelper;
 import com.layoutmanager.ui.ToolWindowHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class LayoutCreator {
 
@@ -40,8 +42,10 @@ public class LayoutCreator {
 
     private static Layout createLayout(ToolWindowManager toolWindowManager, String name) {
         List<ToolWindowInfo> toolWindows = getToolWindows(toolWindowManager);
+        Layout layout = new Layout(name, toolWindows.toArray(ToolWindowInfo[]::new));
+        validateLayout(layout);
 
-        return new Layout(name, toolWindows.toArray(ToolWindowInfo[]::new));
+        return layout;
     }
 
     @NotNull
@@ -59,6 +63,22 @@ public class LayoutCreator {
                     toolWindow.isVisible());
             toolWindows.add(info);
         }
+
         return toolWindows;
+    }
+
+    private static void validateLayout(Layout layout) {
+        ToolWindowInfo[] invalidToolWindows = LayoutValidationHelper.retrieveToolWindowsOutsideOfScreen(layout);
+        if (invalidToolWindows.length != 0) {
+            String invalidToolWindowNames = String.join(
+                    ", ",
+                    Stream.of(invalidToolWindows)
+                            .map(ToolWindowInfo::getId)
+                            .toArray(String[]::new));
+
+            NotificationHelper.warning(
+                    MessagesHelper.message("StoreLayout.Validation.ToolWindowOutOfScreen.Title"),
+                    MessagesHelper.message("StoreLayout.Validation.ToolWindowOutOfScreen.Content", invalidToolWindowNames));
+        }
     }
 }

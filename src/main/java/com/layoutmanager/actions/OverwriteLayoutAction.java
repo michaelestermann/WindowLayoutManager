@@ -36,7 +36,7 @@ public class OverwriteLayoutAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         Layout previousLayout = LayoutConfig.getInstance().getLayout(number);
-        Layout updatedLayout = LayoutCreator.create(event.getProject());
+        Layout updatedLayout = LayoutCreator.create(event.getProject(), previousLayout.getName());
 
         if (updatedLayout != null) {
             this.storeLayout(updatedLayout);

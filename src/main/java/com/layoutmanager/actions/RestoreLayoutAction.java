@@ -5,19 +5,15 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.openapi.wm.impl.ToolWindowManagerImpl;
-import com.intellij.openapi.wm.impl.WindowInfoImpl;
+import com.intellij.openapi.wm.impl.ToolWindowImpl;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.ToolWindowInfo;
 import com.layoutmanager.ui.NotificationHelper;
+import com.layoutmanager.ui.ToolWindowHelper;
 import org.jetbrains.annotations.NotNull;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 public class RestoreLayoutAction extends AnAction {
 
@@ -46,40 +42,29 @@ public class RestoreLayoutAction extends AnAction {
     }
 
     private void applyLayout(AnActionEvent event, Layout layout) {
-        ToolWindowManagerImpl toolWindowManager = getToolWindowManager(event);
+        ToolWindowManager toolWindowManager = getToolWindowManager(event);
         for (ToolWindowInfo toolWindow : layout.getToolWindows()) {
             applyToolWindowLayout(toolWindowManager, toolWindow);
         }
     }
 
-    private void applyToolWindowLayout(ToolWindowManagerImpl toolWindowManager, ToolWindowInfo info) {
-        ToolWindow toolWindow = toolWindowManager.getToolWindow(info.getId());
+    private void applyToolWindowLayout(ToolWindowManager toolWindowManager, ToolWindowInfo info) {
+        ToolWindowImpl toolWindow = (ToolWindowImpl)toolWindowManager.getToolWindow(info.getId());
 
         if (toolWindow != null) {
             toolWindow.hide(null);
             if (info.isVisible()) {
-                setBounds(toolWindowManager, info);
                 toolWindow.setAnchor(ToolWindowAnchor.fromText(info.getAnchor()), null);
                 toolWindow.setType(info.getType(), null);
                 toolWindow.show(null);
+                ToolWindowHelper.setBounds(toolWindow, info.getBounds());
             }
         }
     }
 
-    private void setBounds(ToolWindowManager toolWindowManager, ToolWindowInfo toolWindow) {
-        try {
-            Method method = toolWindowManager.getClass().getDeclaredMethod("getRegisteredInfoOrLogError", String.class);
-            method.setAccessible(true);
-            WindowInfoImpl info = (WindowInfoImpl)method.invoke(toolWindowManager, toolWindow.getId());
-            info.setFloatingBounds(toolWindow.getBounds());
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private ToolWindowManagerImpl getToolWindowManager(AnActionEvent event) {
+    private ToolWindowManager getToolWindowManager(AnActionEvent event) {
         Project project = event.getProject();
-        return (ToolWindowManagerImpl) ToolWindowManager.getInstance(project);
+        return ToolWindowManager.getInstance(project);
     }
     private void showNotification(Layout updatedLayout) {
         NotificationHelper.info(

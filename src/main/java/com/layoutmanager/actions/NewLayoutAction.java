@@ -22,7 +22,7 @@ public class NewLayoutAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        Layout updatedLayout = LayoutCreator.create(event.getProject());
+        Layout updatedLayout = LayoutCreator.create(event.getProject(), "");
 
         if (updatedLayout != null) {
             this.storeLayout(updatedLayout);
@@ -31,13 +31,13 @@ public class NewLayoutAction extends AnAction {
         }
     }
 
+    private void storeLayout(Layout layout) {
+        LayoutConfig.getInstance().addLayout(layout);
+    }
+
     private void updateWindowMenuItems() {
         WindowMenuService windowMenuService = ServiceManager.getService(WindowMenuService.class);
         windowMenuService.recreate();
-    }
-
-    private void storeLayout(Layout layout) {
-        LayoutConfig.getInstance().addLayout(layout);
     }
 
     private void showNotification(Layout updatedLayout) {

@@ -4,13 +4,15 @@ plugins {
 } 
  
 group 'com.layoutmanager' 
-version '1.2.2' 
+version '1.2.3'
  
 sourceCompatibility = 1.8 
 
 buildSearchableOptions.enabled = false
 
 intellij {
+    type = 'RD'
+    version = "2020.1-SNAPSHOT"
 	updateSinceUntilBuild = false
 }
 

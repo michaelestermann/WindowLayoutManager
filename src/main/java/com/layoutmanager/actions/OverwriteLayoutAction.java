@@ -4,7 +4,9 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.components.ServiceManager;
 import com.layoutmanager.localization.MessagesHelper;
+import com.layoutmanager.menu.WindowMenuService;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.NotificationHelper;
@@ -34,16 +36,22 @@ public class OverwriteLayoutAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         Layout previousLayout = LayoutConfig.getInstance().getLayout(number);
-        Layout updatedLayout = LayoutCreator.create(event.getProject());
+        Layout updatedLayout = LayoutCreator.create(event.getProject(), previousLayout.getName());
 
         if (updatedLayout != null) {
             this.storeLayout(updatedLayout);
+            updateWindowMenuItems();
             showNotification(updatedLayout, previousLayout);
         }
     }
 
     private void storeLayout(Layout layout) {
         LayoutConfig.getInstance().setLayout(this.number, layout);
+    }
+
+    private void updateWindowMenuItems() {
+        WindowMenuService windowMenuService = ServiceManager.getService(WindowMenuService.class);
+        windowMenuService.recreate();
     }
 
     private void showNotification(Layout updatedLayout, Layout previousLayout) {

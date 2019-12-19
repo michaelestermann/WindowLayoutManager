@@ -68,11 +68,12 @@ public class RestoreLayoutAction extends AnAction {
             toolWindow.setAnchor(ToolWindowAnchor.fromText(info.getAnchor()), null);
             toolWindow.setType(info.getType(), null);
             toolWindow.setSplitMode(info.isToolWindow(), null);
-            ToolWindowHelper.setBounds(toolWindow, info.getBounds());
 
             if (info.isVisible()) {
                 toolWindow.show(null);
             }
+
+            ToolWindowHelper.setBounds(toolWindow, info.getBounds());
         }
     }
 

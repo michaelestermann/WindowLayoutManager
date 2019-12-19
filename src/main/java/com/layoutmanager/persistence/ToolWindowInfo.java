@@ -10,6 +10,7 @@ public class ToolWindowInfo {
     private String anchor;
     private Rectangle bounds;
     private boolean isVisible;
+    private boolean isToolWindow;
 
     @SuppressWarnings({"unused", "Used for serialization."})
     public ToolWindowInfo() {
@@ -18,14 +19,22 @@ public class ToolWindowInfo {
         this.anchor = "top";
         this.bounds = null;
         this.isVisible = false;
+        this.isToolWindow = false;
     }
 
-    public ToolWindowInfo(String id, ToolWindowType type, String anchor, Rectangle bounds, boolean isVisible) {
+    public ToolWindowInfo(
+            String id,
+            ToolWindowType type,
+            String anchor,
+            Rectangle bounds,
+            boolean isVisible,
+            boolean isToolWindow) {
         this.id = id;
         this.type = type;
         this.anchor = anchor;
         this.bounds = bounds;
         this.isVisible = isVisible;
+        this.isToolWindow = isToolWindow;
     }
 
     public String getId() {
@@ -33,7 +42,7 @@ public class ToolWindowInfo {
     }
 
     public ToolWindowType getType() {
-        return type;
+        return this.type;
     }
 
     public String getAnchor() {
@@ -41,11 +50,15 @@ public class ToolWindowInfo {
     }
 
     public Rectangle getBounds() {
-        return bounds;
+        return this.bounds;
     }
 
     public boolean isVisible() {
-        return isVisible;
+        return this.isVisible;
+    }
+
+    public boolean isToolWindow() {
+        return this.isToolWindow;
     }
 
     @SuppressWarnings({"unused", "Used for serialization."})
@@ -70,6 +83,11 @@ public class ToolWindowInfo {
 
     @SuppressWarnings({"unused", "Used for serialization."})
     public void setVisible(boolean visible) {
-        isVisible = visible;
+        this.isVisible = visible;
+    }
+
+    @SuppressWarnings({"unused", "Used for serialization."})
+    public void setIsToolWindow(boolean isSplit) {
+        this.isToolWindow = isToolWindow;
     }
 }

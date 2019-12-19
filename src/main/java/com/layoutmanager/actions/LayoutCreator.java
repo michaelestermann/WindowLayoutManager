@@ -1,6 +1,7 @@
 package com.layoutmanager.actions;
 
 import com.intellij.icons.AllIcons;
+import com.intellij.ide.ui.UISettings;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -42,7 +43,10 @@ public class LayoutCreator {
 
     private static Layout createLayout(ToolWindowManager toolWindowManager, String name) {
         List<ToolWindowInfo> toolWindows = getToolWindows(toolWindowManager);
-        Layout layout = new Layout(name, toolWindows.toArray(ToolWindowInfo[]::new));
+        Layout layout = new Layout(
+                name,
+                toolWindows.toArray(ToolWindowInfo[]::new),
+                getEditorPlacement());
         validateLayout(layout);
 
         return layout;
@@ -60,7 +64,8 @@ public class LayoutCreator {
                     toolWindow.getType(),
                     toolWindow.getAnchor().toString(),
                     ToolWindowHelper.getBounds(toolWindow),
-                    toolWindow.isVisible());
+                    toolWindow.isVisible(),
+                    toolWindow.isSplitMode());
             toolWindows.add(info);
         }
 
@@ -80,5 +85,9 @@ public class LayoutCreator {
                     MessagesHelper.message("StoreLayout.Validation.ToolWindowOutOfScreen.Title"),
                     MessagesHelper.message("StoreLayout.Validation.ToolWindowOutOfScreen.Content", invalidToolWindowNames));
         }
+    }
+
+    private static int getEditorPlacement() {
+        return UISettings.getInstance().getEditorTabPlacement();
     }
 }

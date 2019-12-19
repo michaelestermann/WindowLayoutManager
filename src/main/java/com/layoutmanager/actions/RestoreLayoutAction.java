@@ -1,6 +1,7 @@
 package com.layoutmanager.actions;
 
 import com.intellij.icons.AllIcons;
+import com.intellij.ide.ui.UISettings;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
@@ -42,9 +43,19 @@ public class RestoreLayoutAction extends AnAction {
     }
 
     private void applyLayout(AnActionEvent event, Layout layout) {
+        applyEditorTabPlacement(layout);
         ToolWindowManager toolWindowManager = getToolWindowManager(event);
         for (ToolWindowInfo toolWindow : layout.getToolWindows()) {
             applyToolWindowLayout(toolWindowManager, toolWindow);
+        }
+    }
+
+    private void applyEditorTabPlacement(Layout layout) {
+
+        if (layout.getEditorPlacement() >= 0) {
+            UISettings uiSettings = UISettings.getInstance();
+            uiSettings.setEditorTabPlacement(layout.getEditorPlacement());
+            uiSettings.fireUISettingsChanged();
         }
     }
 
@@ -53,11 +64,14 @@ public class RestoreLayoutAction extends AnAction {
 
         if (toolWindow != null) {
             toolWindow.hide(null);
+
+            toolWindow.setAnchor(ToolWindowAnchor.fromText(info.getAnchor()), null);
+            toolWindow.setType(info.getType(), null);
+            toolWindow.setSplitMode(info.isToolWindow(), null);
+            ToolWindowHelper.setBounds(toolWindow, info.getBounds());
+
             if (info.isVisible()) {
-                toolWindow.setAnchor(ToolWindowAnchor.fromText(info.getAnchor()), null);
-                toolWindow.setType(info.getType(), null);
                 toolWindow.show(null);
-                ToolWindowHelper.setBounds(toolWindow, info.getBounds());
             }
         }
     }

@@ -39,6 +39,8 @@
     <applicationService serviceImplementation="com.layoutmanager.menu.WindowMenuService"/>
     <applicationService serviceImplementation="com.layoutmanager.cleanup.EmptyLayoutRemoverService"/>
 
+    <projectConfigurable id="settings.windowlayoutmanager" instance="com.layoutmanager.ui.settings"/>
+
     <postStartupActivity implementation="com.layoutmanager.startup.PluginBootstrapper"/>
   </extensions>
 </idea-plugin>

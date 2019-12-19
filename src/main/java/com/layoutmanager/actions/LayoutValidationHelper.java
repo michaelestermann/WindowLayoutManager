@@ -12,7 +12,7 @@ public class LayoutValidationHelper {
     public static ToolWindowInfo[] retrieveToolWindowsOutsideOfScreen(Layout layout){
         return Stream
                 .of(layout.getToolWindows())
-                .filter(x -> isWindowType(x) && !isValid(x))
+                .filter(x -> x.isVisible() && isWindowType(x) && !isValid(x))
                 .toArray(ToolWindowInfo[]::new);
     }
 

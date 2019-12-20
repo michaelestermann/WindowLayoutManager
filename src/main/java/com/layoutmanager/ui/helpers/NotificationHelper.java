@@ -1,4 +1,4 @@
-package com.layoutmanager.ui;
+package com.layoutmanager.ui.helpers;
 
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationDisplayType;

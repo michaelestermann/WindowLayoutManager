@@ -1,4 +1,4 @@
-package com.layoutmanager.ui;
+package com.layoutmanager.ui.helpers;
 
 import com.intellij.openapi.wm.ToolWindowType;
 import com.intellij.openapi.wm.impl.FloatingDecorator;

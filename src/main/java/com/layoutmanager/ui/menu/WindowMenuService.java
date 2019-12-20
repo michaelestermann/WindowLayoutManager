@@ -1,11 +1,13 @@
-package com.layoutmanager.menu;
+package com.layoutmanager.ui.menu;
 
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.layoutmanager.actions.DeleteLayoutAction;
-import com.layoutmanager.actions.NewLayoutAction;
-import com.layoutmanager.actions.OverwriteLayoutAction;
-import com.layoutmanager.actions.RestoreLayoutAction;
+import com.layoutmanager.layout.delete.DeleteLayoutAction;
+import com.layoutmanager.layout.store.LayoutCreator;
+import com.layoutmanager.layout.store.create.NewLayoutAction;
+import com.layoutmanager.layout.store.overwrite.OverwriteLayoutAction;
+import com.layoutmanager.layout.restore.RestoreLayoutAction;
+import com.layoutmanager.layout.store.smartdock.SmartDockerFactory;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
@@ -53,15 +55,17 @@ public class WindowMenuService {
     }
 
     private void addStoreLayoutActions(LayoutConfig config) {
+        LayoutCreator layoutCreator = new LayoutCreator(new SmartDockerFactory());
+
         for (int index = 0; index < config.getLayoutCount(); index++) {
-            this.storeLayout.add(new OverwriteLayoutAction(index));
+            this.storeLayout.add(new OverwriteLayoutAction(layoutCreator, index));
         }
 
         if (config.getLayoutCount() > 0) {
             this.storeLayout.addSeparator();
         }
 
-        this.storeLayout.add(new NewLayoutAction());
+        this.storeLayout.add(new NewLayoutAction(layoutCreator));
     }
 
     private void addRestoreLayoutActions(LayoutConfig config) {

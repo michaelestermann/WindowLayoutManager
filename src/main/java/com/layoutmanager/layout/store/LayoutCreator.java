@@ -1,16 +1,18 @@
-package com.layoutmanager.actions;
+package com.layoutmanager.layout.store;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.ui.UISettings;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.impl.ToolWindowImpl;
+import com.layoutmanager.layout.store.smartdock.SmartDocker;
+import com.layoutmanager.layout.store.smartdock.SmartDockerFactory;
+import com.layoutmanager.layout.store.validation.LayoutValidationHelper;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.ToolWindowInfo;
-import com.layoutmanager.ui.NotificationHelper;
-import com.layoutmanager.ui.ToolWindowHelper;
+import com.layoutmanager.ui.helpers.NotificationHelper;
+import com.layoutmanager.ui.helpers.ToolWindowHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -19,15 +21,21 @@ import java.util.stream.Stream;
 
 public class LayoutCreator {
 
-    public static Layout create(Project project, String defaultName) {
+    private final SmartDockerFactory smartDockerFactory;
+
+    public LayoutCreator(SmartDockerFactory smartDockerFactory) {
+        this.smartDockerFactory = smartDockerFactory;
+    }
+
+    public Layout create(ToolWindowManager toolWindowManager, String defaultName) {
 
         String name = getLayoutName(defaultName);
         return name != null ?
-                createLayout(ToolWindowManager.getInstance(project), name) :
+                createLayout(toolWindowManager, name) :
                 null;
     }
 
-    private static String getLayoutName(String defaultName) {
+    private String getLayoutName(String defaultName) {
         String name;
         do {
             name = Messages.showInputDialog(
@@ -41,12 +49,14 @@ public class LayoutCreator {
         return name;
     }
 
-    private static Layout createLayout(ToolWindowManager toolWindowManager, String name) {
+    private Layout createLayout(ToolWindowManager toolWindowManager, String name) {
         List<ToolWindowInfo> toolWindows = getToolWindows(toolWindowManager);
         Layout layout = new Layout(
                 name,
                 toolWindows.toArray(ToolWindowInfo[]::new),
                 getEditorPlacement());
+
+        dock(toolWindowManager, layout);
         validateLayout(layout);
 
         return layout;
@@ -70,6 +80,11 @@ public class LayoutCreator {
         }
 
         return toolWindows;
+    }
+
+    private void dock(ToolWindowManager toolWindowManager, Layout layout) {
+        SmartDocker smartDocker = smartDockerFactory.create(toolWindowManager);
+        smartDocker.dock(layout);
     }
 
     private static void validateLayout(Layout layout) {

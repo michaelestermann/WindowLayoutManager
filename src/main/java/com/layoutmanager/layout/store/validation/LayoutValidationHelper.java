@@ -1,4 +1,4 @@
-package com.layoutmanager.actions;
+package com.layoutmanager.layout.store.validation;
 
 import com.intellij.openapi.wm.ToolWindowType;
 import com.intellij.openapi.wm.WindowManager;

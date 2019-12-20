@@ -1,4 +1,4 @@
-package com.layoutmanager.ui;
+package com.layoutmanager.ui.settings;
 
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 
-public class settings implements Configurable {
+public class SettingsPage implements Configurable {
     @Nls(capitalization = Nls.Capitalization.Title)
     @Override
     public String getDisplayName() {

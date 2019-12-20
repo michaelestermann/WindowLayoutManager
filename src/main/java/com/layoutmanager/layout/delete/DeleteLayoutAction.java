@@ -1,4 +1,4 @@
-package com.layoutmanager.actions;
+package com.layoutmanager.layout.delete;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -6,10 +6,10 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.components.ServiceManager;
 import com.layoutmanager.localization.MessagesHelper;
-import com.layoutmanager.menu.WindowMenuService;
+import com.layoutmanager.ui.menu.WindowMenuService;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
-import com.layoutmanager.ui.NotificationHelper;
+import com.layoutmanager.ui.helpers.NotificationHelper;
 import org.jetbrains.annotations.NotNull;
 
 public class DeleteLayoutAction extends AnAction {

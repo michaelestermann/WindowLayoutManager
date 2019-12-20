@@ -1,4 +1,4 @@
-package com.layoutmanager.actions;
+package com.layoutmanager.layout.restore;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.ui.UISettings;
@@ -12,8 +12,8 @@ import com.intellij.openapi.wm.impl.ToolWindowImpl;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.ToolWindowInfo;
-import com.layoutmanager.ui.NotificationHelper;
-import com.layoutmanager.ui.ToolWindowHelper;
+import com.layoutmanager.ui.helpers.NotificationHelper;
+import com.layoutmanager.ui.helpers.ToolWindowHelper;
 import org.jetbrains.annotations.NotNull;
 
 public class RestoreLayoutAction extends AnAction {

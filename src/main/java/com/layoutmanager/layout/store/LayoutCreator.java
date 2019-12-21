@@ -5,6 +5,7 @@ import com.intellij.ide.ui.UISettings;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.impl.ToolWindowImpl;
+
 import com.layoutmanager.layout.store.smartdock.SmartDocker;
 import com.layoutmanager.layout.store.smartdock.SmartDockerFactory;
 import com.layoutmanager.layout.store.validation.LayoutValidationHelper;
@@ -13,11 +14,12 @@ import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.ToolWindowInfo;
 import com.layoutmanager.ui.helpers.NotificationHelper;
 import com.layoutmanager.ui.helpers.ToolWindowHelper;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+
+import org.jetbrains.annotations.NotNull;
 
 public class LayoutCreator {
 
@@ -29,9 +31,9 @@ public class LayoutCreator {
 
     public Layout create(ToolWindowManager toolWindowManager, String defaultName) {
 
-        String name = getLayoutName(defaultName);
+        String name = this.getLayoutName(defaultName);
         return name != null ?
-                createLayout(toolWindowManager, name) :
+                this.createLayout(toolWindowManager, name) :
                 null;
     }
 
@@ -56,7 +58,7 @@ public class LayoutCreator {
                 toolWindows.toArray(ToolWindowInfo[]::new),
                 getEditorPlacement());
 
-        dock(toolWindowManager, layout);
+        this.dock(toolWindowManager, layout);
         validateLayout(layout);
 
         return layout;
@@ -83,7 +85,7 @@ public class LayoutCreator {
     }
 
     private void dock(ToolWindowManager toolWindowManager, Layout layout) {
-        SmartDocker smartDocker = smartDockerFactory.create(toolWindowManager);
+        SmartDocker smartDocker = this.smartDockerFactory.create(toolWindowManager);
         smartDocker.dock(layout);
     }
 

@@ -6,12 +6,14 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.wm.ToolWindowManager;
+
 import com.layoutmanager.layout.store.LayoutCreator;
 import com.layoutmanager.localization.MessagesHelper;
-import com.layoutmanager.ui.menu.WindowMenuService;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.helpers.NotificationHelper;
+import com.layoutmanager.ui.menu.WindowMenuService;
+
 import org.jetbrains.annotations.NotNull;
 
 public class NewLayoutAction extends AnAction {
@@ -28,12 +30,12 @@ public class NewLayoutAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(event.getProject());
-        Layout updatedLayout = layoutCreator.create(toolWindowManager, "");
+        Layout updatedLayout = this.layoutCreator.create(toolWindowManager, "");
 
         if (updatedLayout != null) {
             this.storeLayout(updatedLayout);
-            updateWindowMenuItems();
-            showNotification(updatedLayout);
+            this.updateWindowMenuItems();
+            this.showNotification(updatedLayout);
         }
     }
 

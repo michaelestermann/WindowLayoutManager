@@ -3,7 +3,7 @@ package com.layoutmanager.layout.store.smartdock;
 import com.intellij.openapi.wm.impl.ToolWindowImpl;
 import com.layoutmanager.persistence.ToolWindowInfo;
 
-import java.awt.*;
+import java.awt.Rectangle;
 
 public class ToolWindowDocking {
 
@@ -28,46 +28,46 @@ public class ToolWindowDocking {
     }
 
     public ToolWindowImpl getToolWindow() {
-        return toolWindow;
+        return this.toolWindow;
     }
 
     public Rectangle getContainingScreen() {
-        return containingScreen;
+        return this.containingScreen;
     }
 
     public Rectangle getBounds() {
-        return toolWindowInfo.getBounds();
+        return this.toolWindowInfo.getBounds();
     }
 
     public Rectangle getLeftDockingBounds() {
         return new Rectangle(
-                (int) Math.max(0, toolWindowInfo.getBounds().getX() - threshold),
-                (int) toolWindowInfo.getBounds().getY(),
-                threshold * 2,
-                (int) toolWindowInfo.getBounds().getHeight());
+                (int) Math.max(0, this.toolWindowInfo.getBounds().getX() - threshold),
+                (int) this.toolWindowInfo.getBounds().getY(),
+                this.threshold * 2,
+                (int) this.toolWindowInfo.getBounds().getHeight());
     }
 
     public Rectangle getTopDockingBounds() {
         return new Rectangle(
-                (int) toolWindowInfo.getBounds().getX(),
-                (int) Math.max(0, toolWindowInfo.getBounds().getY() - threshold),
-                (int) toolWindowInfo.getBounds().getWidth(),
-                threshold * 2);
+                (int) this.toolWindowInfo.getBounds().getX(),
+                (int) Math.max(0, this.toolWindowInfo.getBounds().getY() - threshold),
+                (int) this.toolWindowInfo.getBounds().getWidth(),
+                this.threshold * 2);
     }
 
     public Rectangle getRightDockingBounds() {
         return new Rectangle(
-                (int) (toolWindowInfo.getBounds().getMaxX() - threshold),
-                (int) toolWindowInfo.getBounds().getY(),
-                (int) Math.min(threshold * 2, threshold + containingScreen.getMaxX() - toolWindowInfo.getBounds().getMaxX()),
-                (int) toolWindowInfo.getBounds().getHeight());
+                (int) (this.toolWindowInfo.getBounds().getMaxX() - threshold),
+                (int) this.toolWindowInfo.getBounds().getY(),
+                (int) Math.min(this.threshold * 2, this.threshold + this.containingScreen.getMaxX() - this.toolWindowInfo.getBounds().getMaxX()),
+                (int) this.toolWindowInfo.getBounds().getHeight());
     }
 
     public Rectangle getBottomDockingBounds() {
         return new Rectangle(
-                (int) toolWindowInfo.getBounds().getX(),
-                (int) toolWindowInfo.getBounds().getMaxY() - threshold,
-                (int) toolWindowInfo.getBounds().getWidth(),
-                (int) Math.min(threshold * 2, threshold + containingScreen.getMaxY() - toolWindowInfo.getBounds().getMaxY()));
+                (int) this.toolWindowInfo.getBounds().getX(),
+                (int) this.toolWindowInfo.getBounds().getMaxY() - threshold,
+                (int) this.toolWindowInfo.getBounds().getWidth(),
+                (int) Math.min(this.threshold * 2, this.threshold + this.containingScreen.getMaxY() - this.toolWindowInfo.getBounds().getMaxY()));
     }
 }

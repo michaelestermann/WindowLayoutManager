@@ -5,11 +5,11 @@ import com.intellij.openapi.wm.WindowManager;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.ToolWindowInfo;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.util.stream.Stream;
 
 public class LayoutValidationHelper {
-    public static ToolWindowInfo[] retrieveToolWindowsOutsideOfScreen(Layout layout){
+    public static ToolWindowInfo[] retrieveToolWindowsOutsideOfScreen(Layout layout) {
         return Stream
                 .of(layout.getToolWindows())
                 .filter(x -> x.isVisible() && isWindowType(x) && !isValid(x))

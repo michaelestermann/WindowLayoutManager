@@ -6,10 +6,11 @@ public class Layout {
     private int editorTabPlacement;
     private ToolWindowInfo[] toolWindows;
 
+    @SuppressWarnings({"unused", "Used for serialization."})
     public Layout() {
-        name = "";
-        toolWindows = new ToolWindowInfo[0];
-        editorTabPlacement = -1;
+        this.name = "";
+        this.toolWindows = new ToolWindowInfo[0];
+        this.editorTabPlacement = -1;
     }
 
     public Layout(String name, ToolWindowInfo[] toolWindows, int editorTabPlacement) {
@@ -28,7 +29,7 @@ public class Layout {
     }
 
     public int getEditorPlacement() {
-        return editorTabPlacement;
+        return this.editorTabPlacement;
     }
 
     @SuppressWarnings({"unused", "Used for serialization."})
@@ -37,7 +38,7 @@ public class Layout {
     }
 
     public ToolWindowInfo[] getToolWindows() {
-        return toolWindows;
+        return this.toolWindows;
     }
 
     @SuppressWarnings({"unused", "Used for serialization."})

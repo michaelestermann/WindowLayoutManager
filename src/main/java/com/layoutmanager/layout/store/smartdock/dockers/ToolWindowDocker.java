@@ -2,15 +2,16 @@ package com.layoutmanager.layout.store.smartdock.dockers;
 
 import com.layoutmanager.layout.store.smartdock.ToolWindowDocking;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.util.Arrays;
 import java.util.Comparator;
 
 public class ToolWindowDocker {
     public void dock(ToolWindowDocking[] floatedOrWindowsToolWindows) {
-        dockLeft(floatedOrWindowsToolWindows);
-        dockTop(floatedOrWindowsToolWindows);
+        this.dockLeft(floatedOrWindowsToolWindows);
+        this.dockTop(floatedOrWindowsToolWindows);
         // TODO: Add bottom and left in a more generic way...
+        // Idea: Introduce class DockingBounds and use this in the ToolWindowDocking
     }
 
     private void dockLeft(ToolWindowDocking[] floatedOrWindowsToolWindows) {
@@ -21,7 +22,9 @@ public class ToolWindowDocker {
 
         for (ToolWindowDocking toolWindowDocking : sortedByLeftPosition) {
             ToolWindowDocking[] intersectionToolWindows = Arrays.stream(floatedOrWindowsToolWindows)
-                    .filter(x -> x.getToolWindowInfo().getId() != toolWindowDocking.getToolWindowInfo().getId() && x.getRightDockingBounds().intersects(toolWindowDocking.getLeftDockingBounds()))
+                    .filter(x ->
+                            !x.getToolWindowInfo().getId().equals(toolWindowDocking.getToolWindowInfo().getId()) &&
+                            x.getRightDockingBounds().intersects(toolWindowDocking.getLeftDockingBounds()))
                     .sorted(Comparator.comparingInt(x -> (int) x.getBounds().getY()))
                     .toArray(ToolWindowDocking[]::new);
 
@@ -46,7 +49,9 @@ public class ToolWindowDocker {
 
         for (ToolWindowDocking toolWindowDocking : sortedByTopPosition) {
             ToolWindowDocking[] intersectionToolWindows = Arrays.stream(floatedOrWindowsToolWindows)
-                    .filter(x -> x.getToolWindowInfo().getId() != toolWindowDocking.getToolWindowInfo().getId() && x.getBottomDockingBounds().intersects(toolWindowDocking.getTopDockingBounds()))
+                    .filter(x ->
+                            !x.getToolWindowInfo().getId().equals(toolWindowDocking.getToolWindowInfo().getId()) &&
+                            x.getBottomDockingBounds().intersects(toolWindowDocking.getTopDockingBounds()))
                     .sorted(Comparator.comparingInt(x -> (int) x.getBounds().getX()))
                     .toArray(ToolWindowDocking[]::new);
 

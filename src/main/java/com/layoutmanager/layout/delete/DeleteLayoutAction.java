@@ -5,11 +5,13 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.components.ServiceManager;
+
 import com.layoutmanager.localization.MessagesHelper;
-import com.layoutmanager.ui.menu.WindowMenuService;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.helpers.NotificationHelper;
+import com.layoutmanager.ui.menu.WindowMenuService;
+
 import org.jetbrains.annotations.NotNull;
 
 public class DeleteLayoutAction extends AnAction {
@@ -25,9 +27,9 @@ public class DeleteLayoutAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        deleteLayout();
-        updateWindowMenuItems();
-        showNotification();
+        this.deleteLayout();
+        this.updateWindowMenuItems();
+        this.showNotification();
     }
 
     private void deleteLayout() {

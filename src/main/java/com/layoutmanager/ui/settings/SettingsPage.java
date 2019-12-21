@@ -1,12 +1,13 @@
 package com.layoutmanager.ui.settings;
 
 import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.ui.JBColor;
+
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class SettingsPage implements Configurable {
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -19,7 +20,7 @@ public class SettingsPage implements Configurable {
     @Override
     public JComponent createComponent() {
         JPanel panel = new JPanel();
-        panel.setBackground(Color.red);
+        panel.setBackground(JBColor.red);
         return panel;
     }
 
@@ -29,7 +30,7 @@ public class SettingsPage implements Configurable {
     }
 
     @Override
-    public void apply() throws ConfigurationException {
+    public void apply() {
 
     }
 

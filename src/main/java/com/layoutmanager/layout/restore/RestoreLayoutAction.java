@@ -38,15 +38,15 @@ public class RestoreLayoutAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        applyLayout(event, this.layout);
-        showNotification(this.layout);
+        this.applyLayout(event, this.layout);
+        this.showNotification(this.layout);
     }
 
     private void applyLayout(AnActionEvent event, Layout layout) {
-        applyEditorTabPlacement(layout);
-        ToolWindowManager toolWindowManager = getToolWindowManager(event);
+        this.applyEditorTabPlacement(layout);
+        ToolWindowManager toolWindowManager = this.getToolWindowManager(event);
         for (ToolWindowInfo toolWindow : layout.getToolWindows()) {
-            applyToolWindowLayout(toolWindowManager, toolWindow);
+            this.applyToolWindowLayout(toolWindowManager, toolWindow);
         }
     }
 
@@ -81,6 +81,7 @@ public class RestoreLayoutAction extends AnAction {
         Project project = event.getProject();
         return ToolWindowManager.getInstance(project);
     }
+
     private void showNotification(Layout updatedLayout) {
         NotificationHelper.info(
                 MessagesHelper.message("RestoreLayout.Notification.Title"),

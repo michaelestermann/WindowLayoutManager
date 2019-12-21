@@ -5,10 +5,13 @@ import com.intellij.openapi.wm.impl.FloatingDecorator;
 import com.intellij.openapi.wm.impl.InternalDecorator;
 import com.intellij.openapi.wm.impl.ToolWindowImpl;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Rectangle;
+import java.awt.Window;
+import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
+
+import org.jetbrains.annotations.Nullable;
 
 public class ToolWindowHelper {
     public static Rectangle getBounds(ToolWindowImpl toolWindow) {

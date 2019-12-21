@@ -1,19 +1,22 @@
 package com.layoutmanager.ui.helpers;
 
 import com.layoutmanager.persistence.ToolWindowInfo;
-import sun.java2d.SunGraphicsEnvironment;
 
-import java.awt.*;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+
 import java.util.Arrays;
 import java.util.Comparator;
+
+import sun.java2d.SunGraphicsEnvironment;
 
 public class ScreenSizeHelper {
     public static Rectangle getContainingScreenBounds(ToolWindowInfo toolWindow) {
         return Arrays
                 .stream(GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices())
-                .map(x -> getScreenRectangle(x))
-                .sorted(Comparator.comparingInt(x -> 0 - getIntersectionSize(x, toolWindow.getBounds())))
-                .findFirst()
+                .map(ScreenSizeHelper::getScreenRectangle)
+                .min(Comparator.comparingInt(x -> -getIntersectionSize(x, toolWindow.getBounds())))
                 .orElse(new Rectangle());
     }
 

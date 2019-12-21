@@ -6,12 +6,14 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.wm.ToolWindowManager;
+
 import com.layoutmanager.layout.store.LayoutCreator;
 import com.layoutmanager.localization.MessagesHelper;
-import com.layoutmanager.ui.menu.WindowMenuService;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.helpers.NotificationHelper;
+import com.layoutmanager.ui.menu.WindowMenuService;
+
 import org.jetbrains.annotations.NotNull;
 
 public class OverwriteLayoutAction extends AnAction {
@@ -33,21 +35,21 @@ public class OverwriteLayoutAction extends AnAction {
 
     @Override
     public void update(AnActionEvent e) {
-        Layout layout = LayoutConfig.getInstance().getLayout(number);
+        Layout layout = LayoutConfig.getInstance().getLayout(this.number);
         e.getPresentation().setText(layout.getName());
         super.update(e);
     }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        Layout previousLayout = LayoutConfig.getInstance().getLayout(number);
+        Layout previousLayout = LayoutConfig.getInstance().getLayout(this.number);
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(event.getProject());
-        Layout updatedLayout = layoutCreator.create(toolWindowManager, previousLayout.getName());
+        Layout updatedLayout = this.layoutCreator.create(toolWindowManager, previousLayout.getName());
 
         if (updatedLayout != null) {
             this.storeLayout(updatedLayout);
-            updateWindowMenuItems();
-            showNotification(updatedLayout, previousLayout);
+            this.updateWindowMenuItems();
+            this.showNotification(updatedLayout, previousLayout);
         }
     }
 

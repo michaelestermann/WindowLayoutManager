@@ -2,11 +2,12 @@ package com.layoutmanager.ui.menu;
 
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
+
 import com.layoutmanager.layout.delete.DeleteLayoutAction;
+import com.layoutmanager.layout.restore.RestoreLayoutAction;
 import com.layoutmanager.layout.store.LayoutCreator;
 import com.layoutmanager.layout.store.create.NewLayoutAction;
 import com.layoutmanager.layout.store.overwrite.OverwriteLayoutAction;
-import com.layoutmanager.layout.restore.RestoreLayoutAction;
 import com.layoutmanager.layout.store.smartdock.SmartDockerFactory;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
@@ -18,12 +19,12 @@ public class WindowMenuService {
     private DefaultActionGroup deleteLayout;
 
     public void create() {
-        if (storeLayout != null) {
+        if (this.storeLayout != null) {
             throw new IllegalStateException("Menu items already created");
         }
 
-        createMainActions( (DefaultActionGroup) ActionManager.getInstance().getAction("WindowMenu"));
-        createStoreRestoreActions();
+        this.createMainActions((DefaultActionGroup) ActionManager.getInstance().getAction("WindowMenu"));
+        this.createStoreRestoreActions();
     }
 
     public void recreate() {
@@ -31,16 +32,16 @@ public class WindowMenuService {
         this.storeLayout.removeAll();
         this.deleteLayout.removeAll();
 
-        createStoreRestoreActions();
+        this.createStoreRestoreActions();
     }
 
     private void createMainActions(DefaultActionGroup windowMenu) {
-        this.storeLayout = createMainAction(MessagesHelper.message("StoreLayout.Menu"), windowMenu);
-        this.restoreLayout = createMainAction(MessagesHelper.message("RestoreLayout.Menu"), windowMenu);
-        this.deleteLayout = createMainAction(MessagesHelper.message("DeleteLayout.Menu"), windowMenu);
+        this.storeLayout = this.createMainAction(MessagesHelper.message("StoreLayout.Menu"), windowMenu);
+        this.restoreLayout = this.createMainAction(MessagesHelper.message("RestoreLayout.Menu"), windowMenu);
+        this.deleteLayout = this.createMainAction(MessagesHelper.message("DeleteLayout.Menu"), windowMenu);
     }
 
-    private DefaultActionGroup createMainAction(String name, DefaultActionGroup windowMenu){
+    private DefaultActionGroup createMainAction(String name, DefaultActionGroup windowMenu) {
         DefaultActionGroup windowMenuItem = new DefaultActionGroup(name, true);
         windowMenu.add(windowMenuItem);
 
@@ -49,9 +50,9 @@ public class WindowMenuService {
 
     private void createStoreRestoreActions() {
         LayoutConfig config = LayoutConfig.getInstance();
-        addStoreLayoutActions(config);
-        addRestoreLayoutActions(config);
-        addDeleteLayoutActions(config);
+        this.addStoreLayoutActions(config);
+        this.addRestoreLayoutActions(config);
+        this.addDeleteLayoutActions(config);
     }
 
     private void addStoreLayoutActions(LayoutConfig config) {

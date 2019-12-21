@@ -32,11 +32,11 @@ public class SmartDocker {
     }
 
     public void dock(Layout layout) {
-        ToolWindowDocking[] floatedOrWindowsToolWindows = getFloatedOrWindowsToolWindows(layout);
+        ToolWindowDocking[] floatedOrWindowsToolWindows = this.getFloatedOrWindowsToolWindows(layout);
 
-        shrinker.shrink(floatedOrWindowsToolWindows);
-        toolWindowDocker.dock(floatedOrWindowsToolWindows);
-        screenBorderDocker.dock(floatedOrWindowsToolWindows, THRESHOLD);
+        this.shrinker.shrink(floatedOrWindowsToolWindows);
+        this.toolWindowDocker.dock(floatedOrWindowsToolWindows);
+        this.screenBorderDocker.dock(floatedOrWindowsToolWindows, THRESHOLD);
     }
 
 
@@ -45,14 +45,14 @@ public class SmartDocker {
                 .filter(this::isFloatingOrWindowedToolWindow)
                 .map(x -> new ToolWindowDocking(
                         x,
-                        (ToolWindowImpl)toolWindowManager.getToolWindow(x.getId()),
+                        (ToolWindowImpl)this.toolWindowManager.getToolWindow(x.getId()),
                         ScreenSizeHelper.getContainingScreenBounds(x),
                         THRESHOLD))
                 .toArray(ToolWindowDocking[]::new);
     }
 
     private boolean isFloatingOrWindowedToolWindow(ToolWindowInfo toolWindow) {
-        return toolWindowManager.getToolWindow(toolWindow.getId()) != null &&
+        return this.toolWindowManager.getToolWindow(toolWindow.getId()) != null &&
                 toolWindow.getType() == ToolWindowType.FLOATING ||
                 toolWindow.getType() == ToolWindowType.WINDOWED;
     }

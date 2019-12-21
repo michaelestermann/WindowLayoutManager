@@ -9,7 +9,7 @@ public class EmptyLayoutRemoverService {
         LayoutConfig layoutConfig = ServiceManager.getService(LayoutConfig.class);
 
         for (Layout layout : layoutConfig.getLayouts()) {
-            if (isEmpty(layout)) {
+            if (this.isEmpty(layout)) {
                 layoutConfig.removeLayout(layout);
             }
         }

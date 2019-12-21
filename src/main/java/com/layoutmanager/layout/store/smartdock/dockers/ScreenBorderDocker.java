@@ -2,68 +2,64 @@ package com.layoutmanager.layout.store.smartdock.dockers;
 
 import com.layoutmanager.layout.store.smartdock.ToolWindowDocking;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class ScreenBorderDocker {
     public void dock(ToolWindowDocking[] floatedOrWindowsToolWindows, int threshold) {
-        pinLeft(floatedOrWindowsToolWindows, threshold);
-        pinTop(floatedOrWindowsToolWindows, threshold);
-        pinRight(floatedOrWindowsToolWindows, threshold);
-        pinBottom(floatedOrWindowsToolWindows, threshold);
+        this.pinLeft(floatedOrWindowsToolWindows, threshold);
+        this.pinTop(floatedOrWindowsToolWindows, threshold);
+        this.pinRight(floatedOrWindowsToolWindows, threshold);
+        this.pinBottom(floatedOrWindowsToolWindows, threshold);
     }
 
     private void pinLeft(ToolWindowDocking[] floatedOrWindowsToolWindows, int threshold) {
-        pinToScreenBorder(
-                floatedOrWindowsToolWindows,
-                threshold,
-                toolWindowDocking -> (int)(toolWindowDocking.getBounds().getX() - toolWindowDocking.getContainingScreen().getX()),
-                (toolWindowDocking, difference) -> new Rectangle(
-                        (int)toolWindowDocking.getContainingScreen().getX(),
-                        (int)toolWindowDocking.getBounds().getY(),
-                        (int)(toolWindowDocking.getBounds().getWidth()+ difference),
-                        (int)toolWindowDocking.getBounds().getHeight())
-                );
+        this.pinToScreenBorder(
+            floatedOrWindowsToolWindows,
+            threshold,
+            toolWindowDocking -> (int)(toolWindowDocking.getBounds().getX() - toolWindowDocking.getContainingScreen().getX()),
+            (toolWindowDocking, difference) -> new Rectangle(
+                (int)toolWindowDocking.getContainingScreen().getX(),
+                (int)toolWindowDocking.getBounds().getY(),
+                (int)(toolWindowDocking.getBounds().getWidth() + difference),
+                (int)toolWindowDocking.getBounds().getHeight()));
     }
 
     private void pinTop(ToolWindowDocking[] floatedOrWindowsToolWindows, int threshold) {
-        pinToScreenBorder(
-                floatedOrWindowsToolWindows,
-                threshold,
-                x -> (int)(x.getBounds().getY() - x.getContainingScreen().getY()),
-                (toolWindowDocking, difference) -> new Rectangle(
-                        (int)toolWindowDocking.getBounds().getX(),
-                        (int)toolWindowDocking.getContainingScreen().getY(),
-                        (int)toolWindowDocking.getBounds().getWidth(),
-                        (int)(toolWindowDocking.getBounds().getHeight() + 5)
-                ));
+        this.pinToScreenBorder(
+            floatedOrWindowsToolWindows,
+            threshold,
+            x -> (int)(x.getBounds().getY() - x.getContainingScreen().getY()),
+            (toolWindowDocking, difference) -> new Rectangle(
+                (int)toolWindowDocking.getBounds().getX(),
+                (int)toolWindowDocking.getContainingScreen().getY(),
+                (int)toolWindowDocking.getBounds().getWidth(),
+                (int)(toolWindowDocking.getBounds().getHeight() + 5)));
     }
 
     private void pinRight(ToolWindowDocking[] floatedOrWindowsToolWindows, int threshold) {
-        pinToScreenBorder(
-                floatedOrWindowsToolWindows,
-                threshold,
-                toolWindowDocking -> (int)(toolWindowDocking.getContainingScreen().getMaxX() - toolWindowDocking.getBounds().getMaxX()),
-                (toolWindowDocking, difference) ->  new Rectangle(
-                        (int)toolWindowDocking.getBounds().getX(),
-                        (int)toolWindowDocking.getBounds().getY(),
-                        (int)(toolWindowDocking.getBounds().getWidth() + difference),
-                        (int)toolWindowDocking.getBounds().getHeight())
-                );
+        this.pinToScreenBorder(
+            floatedOrWindowsToolWindows,
+            threshold,
+            toolWindowDocking -> (int)(toolWindowDocking.getContainingScreen().getMaxX() - toolWindowDocking.getBounds().getMaxX()),
+            (toolWindowDocking, difference) ->  new Rectangle(
+                (int)toolWindowDocking.getBounds().getX(),
+                (int)toolWindowDocking.getBounds().getY(),
+                (int)(toolWindowDocking.getBounds().getWidth() + difference),
+                (int)toolWindowDocking.getBounds().getHeight()));
     }
 
     private void pinBottom(ToolWindowDocking[] floatedOrWindowsToolWindows, int threshold) {
-        pinToScreenBorder(
-                floatedOrWindowsToolWindows,
-                threshold,
-                toolWindowDocking -> (int)(toolWindowDocking.getBounds().getY() - toolWindowDocking.getContainingScreen().getY()),
-                (toolWindowDocking, difference) ->  new Rectangle(
+        this.pinToScreenBorder(
+            floatedOrWindowsToolWindows,
+            threshold,
+            toolWindowDocking -> (int)(toolWindowDocking.getBounds().getY() - toolWindowDocking.getContainingScreen().getY()),
+            (toolWindowDocking, difference) ->  new Rectangle(
                 (int)toolWindowDocking.getBounds().getX(),
                 (int)toolWindowDocking.getBounds().getY(),
                 (int)toolWindowDocking.getBounds().getWidth(),
-                (int)(toolWindowDocking.getBounds().getHeight() + difference))
-        );
+                (int)(toolWindowDocking.getBounds().getHeight() + difference)));
     }
 
     private void pinToScreenBorder(

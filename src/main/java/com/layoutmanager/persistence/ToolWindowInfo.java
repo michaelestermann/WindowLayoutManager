@@ -2,7 +2,7 @@ package com.layoutmanager.persistence;
 
 import com.intellij.openapi.wm.ToolWindowType;
 
-import java.awt.*;
+import java.awt.Rectangle;
 
 public class ToolWindowInfo {
     private String id;
@@ -87,7 +87,7 @@ public class ToolWindowInfo {
     }
 
     @SuppressWarnings({"unused", "Used for serialization."})
-    public void setIsToolWindow(boolean isSplit) {
+    public void setIsToolWindow(boolean isToolWindow) {
         this.isToolWindow = isToolWindow;
     }
 }

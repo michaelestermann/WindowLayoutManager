@@ -45,7 +45,9 @@ public class LayoutCreator {
         List<ToolWindowInfo> toolWindows = getToolWindows(toolWindowManager);
         Layout layout = new Layout(
                 name,
-                toolWindows.toArray(ToolWindowInfo[]::new),
+                toolWindows
+                    .stream()
+                    .toArray(ToolWindowInfo[]::new),
                 getEditorPlacement());
         validateLayout(layout);
 

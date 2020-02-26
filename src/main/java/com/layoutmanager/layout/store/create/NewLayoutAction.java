@@ -30,12 +30,12 @@ public class NewLayoutAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(event.getProject());
-        Layout updatedLayout = this.layoutCreator.create(toolWindowManager, "");
+        Layout newLayout = this.layoutCreator.create(toolWindowManager, "");
 
-        if (updatedLayout != null) {
-            this.storeLayout(updatedLayout);
+        if (newLayout != null) {
+            this.storeLayout(newLayout);
             this.updateWindowMenuItems();
-            this.showNotification(updatedLayout);
+            this.showNotification(newLayout);
         }
     }
 
@@ -48,9 +48,9 @@ public class NewLayoutAction extends AnAction {
         windowMenuService.recreate();
     }
 
-    private void showNotification(Layout updatedLayout) {
+    private void showNotification(Layout newLayout) {
         NotificationHelper.info(
                 MessagesHelper.message("StoreLayout.New.Notification.Title"),
-                MessagesHelper.message("StoreLayout.New.Notification.Content", updatedLayout.getName()));
+                MessagesHelper.message("StoreLayout.New.Notification.Content", newLayout.getName()));
     }
 }

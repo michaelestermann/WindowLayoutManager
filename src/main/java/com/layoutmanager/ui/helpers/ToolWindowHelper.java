@@ -13,6 +13,7 @@ import javax.swing.SwingUtilities;
 
 import org.jetbrains.annotations.Nullable;
 
+// TODO: Add fix when window is not visible...
 public class ToolWindowHelper {
     public static Rectangle getBounds(ToolWindowImpl toolWindow) {
         if (toolWindow.getType() == ToolWindowType.FLOATING) {

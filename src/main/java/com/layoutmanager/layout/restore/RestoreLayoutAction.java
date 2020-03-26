@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.impl.ToolWindowImpl;
@@ -15,6 +16,10 @@ import com.layoutmanager.persistence.ToolWindowInfo;
 import com.layoutmanager.ui.helpers.NotificationHelper;
 import com.layoutmanager.ui.helpers.ToolWindowHelper;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class RestoreLayoutAction extends AnAction {
 
@@ -43,11 +48,19 @@ public class RestoreLayoutAction extends AnAction {
     }
 
     private void applyLayout(AnActionEvent event, Layout layout) {
-        this.applyEditorTabPlacement(layout);
-        ToolWindowManager toolWindowManager = this.getToolWindowManager(event);
-        for (ToolWindowInfo toolWindow : layout.getToolWindows()) {
-            this.applyToolWindowLayout(toolWindowManager, toolWindow);
-        }
+        applyEditorTabPlacement(layout);
+        ToolWindowManager toolWindowManager = getToolWindowManager(event);
+
+        Map<ToolWindowInfo, ToolWindowImpl> toolWindows = getToolWindows(toolWindowManager, layout.getToolWindows());
+        hideAllToolWindows(toolWindows);
+        applyToolWindowLayout(toolWindows);
+    }
+
+    private Map<ToolWindowInfo, ToolWindowImpl> getToolWindows(ToolWindowManager toolWindowManager, ToolWindowInfo[] toolWindows) {
+        return Stream.of(toolWindows)
+                .map(x -> new Pair<ToolWindowInfo, ToolWindowImpl>(x, (ToolWindowImpl)toolWindowManager.getToolWindow(x.getId())))
+                .filter(x -> x.second != null)
+                .collect(Collectors.toMap(x -> x.first, x -> x.second));
     }
 
     private void applyEditorTabPlacement(Layout layout) {
@@ -59,11 +72,19 @@ public class RestoreLayoutAction extends AnAction {
         }
     }
 
-    private void applyToolWindowLayout(ToolWindowManager toolWindowManager, ToolWindowInfo info) {
-        ToolWindowImpl toolWindow = (ToolWindowImpl)toolWindowManager.getToolWindow(info.getId());
-
-        if (toolWindow != null) {
+    private void hideAllToolWindows(Map<ToolWindowInfo, ToolWindowImpl> toolWindows) {
+        toolWindows.forEach((info, toolWindow) -> {
             toolWindow.hide(null);
+        });
+    }
+
+    private void applyToolWindowLayout(Map<ToolWindowInfo, ToolWindowImpl> toolWindows) {
+
+        toolWindows.forEach((info, toolWindow) -> {
+            // !! Workaround !!
+            // decorator is not set and throws exception. When calling this method, the content manager lazy variable will be loaded and therefor also the decorator...
+            // See: https://github.com/JetBrains/intellij-community/blob/a63286c3b29fe467399fb353c71ed15cd65db8dd/platform/platform-impl/src/com/intellij/openapi/wm/impl/ToolWindowImpl.kt
+            toolWindow.getComponent();
 
             toolWindow.setAnchor(ToolWindowAnchor.fromText(info.getAnchor()), null);
             toolWindow.setType(info.getType(), null);
@@ -74,7 +95,7 @@ public class RestoreLayoutAction extends AnAction {
             }
 
             ToolWindowHelper.setBounds(toolWindow, info.getBounds());
-        }
+        });
     }
 
     private ToolWindowManager getToolWindowManager(AnActionEvent event) {

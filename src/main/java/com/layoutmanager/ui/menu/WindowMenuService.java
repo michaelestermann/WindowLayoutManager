@@ -20,7 +20,7 @@ public class WindowMenuService {
 
     public void create() {
         if (this.storeLayout != null) {
-            throw new IllegalStateException("Menu items already created");
+            return;
         }
 
         this.createMainActions((DefaultActionGroup) ActionManager.getInstance().getAction("WindowMenu"));

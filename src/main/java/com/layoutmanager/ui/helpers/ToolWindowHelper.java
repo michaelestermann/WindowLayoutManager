@@ -13,27 +13,30 @@ import javax.swing.SwingUtilities;
 
 import org.jetbrains.annotations.Nullable;
 
-// TODO: Add fix when window is not visible...
 public class ToolWindowHelper {
     public static Rectangle getBounds(ToolWindowImpl toolWindow) {
-        if (toolWindow.getType() == ToolWindowType.FLOATING) {
-            FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
-            return floatingDecorator.getBounds();
-        } else if (toolWindow.getType() == ToolWindowType.WINDOWED) {
-            Window window = getWindow(toolWindow);
-            return window.getBounds();
+        if (toolWindow.isVisible()) {
+            if (toolWindow.getType() == ToolWindowType.FLOATING) {
+                FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
+                return floatingDecorator.getBounds();
+            } else if (toolWindow.getType() == ToolWindowType.WINDOWED) {
+                Window window = getWindow(toolWindow);
+                return window.getBounds();
+            }
         }
 
         return new Rectangle(0, 0, 0, 0);
     }
 
     public static void setBounds(ToolWindowImpl toolWindow, Rectangle bounds) {
-        if (toolWindow.getType() == ToolWindowType.FLOATING) {
-            FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
-            floatingDecorator.setBounds(bounds);
-        } else if (toolWindow.getType() == ToolWindowType.WINDOWED) {
-            Window window = getWindow(toolWindow);
-            window.setBounds(bounds);
+        if (toolWindow.isVisible()) {
+            if (toolWindow.getType() == ToolWindowType.FLOATING) {
+                FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
+                floatingDecorator.setBounds(bounds);
+            } else if (toolWindow.getType() == ToolWindowType.WINDOWED) {
+                Window window = getWindow(toolWindow);
+                window.setBounds(bounds);
+            }
         }
     }
 

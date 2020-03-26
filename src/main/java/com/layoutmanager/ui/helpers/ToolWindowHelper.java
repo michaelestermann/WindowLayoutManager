@@ -1,9 +1,8 @@
 package com.layoutmanager.ui.helpers;
 
+import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowType;
-import com.intellij.openapi.wm.impl.FloatingDecorator;
-import com.intellij.openapi.wm.impl.InternalDecorator;
-import com.intellij.openapi.wm.impl.ToolWindowImpl;
+import com.intellij.openapi.wm.impl.*;
 import com.intellij.util.ui.UIUtil;
 
 import java.awt.Rectangle;
@@ -22,6 +21,9 @@ public class ToolWindowHelper {
             } else if (toolWindow.getType() == ToolWindowType.WINDOWED) {
                 Window window = getWindow(toolWindow);
                 return window.getBounds();
+            } else {
+                InternalDecorator decorator = toolWindow.getDecorator();
+                return decorator.getBounds();
             }
         }
 
@@ -36,6 +38,13 @@ public class ToolWindowHelper {
             } else if (toolWindow.getType() == ToolWindowType.WINDOWED) {
                 Window window = getWindow(toolWindow);
                 window.setBounds(bounds);
+            } else {
+                Rectangle currentBounds = toolWindow.getDecorator().getBounds();
+                if (toolWindow.getAnchor() == ToolWindowAnchor.TOP || toolWindow.getAnchor() == ToolWindowAnchor.BOTTOM) {
+                    toolWindow.stretchHeight(bounds.height - currentBounds.height);
+                } else {
+                    toolWindow.stretchWidth(bounds.width - currentBounds.width);
+                }
             }
         }
     }

@@ -1,11 +1,10 @@
 package com.layoutmanager.ui.settings;
 
 import com.intellij.openapi.options.Configurable;
-import com.intellij.ui.JBColor;
 
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 
+import com.layoutmanager.persistence.LayoutConfig;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,9 +18,8 @@ public class SettingsPage implements Configurable {
     @Nullable
     @Override
     public JComponent createComponent() {
-        JPanel panel = new JPanel();
-        panel.setBackground(JBColor.red);
-        return panel;
+        return new LayoutManagerSettingsPanel(LayoutConfig.getInstance().getLayouts())
+                .getPanel();
     }
 
     @Override

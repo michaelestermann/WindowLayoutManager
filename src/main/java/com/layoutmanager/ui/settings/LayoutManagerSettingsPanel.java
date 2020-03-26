@@ -1,21 +1,35 @@
 package com.layoutmanager.ui.settings;
 
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import com.layoutmanager.persistence.Layout;
+import com.layoutmanager.persistence.LayoutConfig;
+import com.layoutmanager.ui.dialogs.LayoutNameDialog;
+import com.layoutmanager.ui.menu.WindowMenuService;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.EventObject;
 
 public class LayoutManagerSettingsPanel {
+    private final LayoutConfig layoutConfig;
+    private final LayoutNameDialog layoutNameDialog;
+    private ArrayList<Layout> currentLayouts = new ArrayList<>();
     private JCheckBox useSmartDockingCheckbox;
     private JButton deleteButton;
     private JButton renameButton;
     private JButton exportButton;
-    private JButton buttonImport;
+    private JButton importButton;
     private JPanel settingsPanel;
     private JTable tableLayouts;
 
@@ -26,24 +40,95 @@ public class LayoutManagerSettingsPanel {
         $$$setupUI$$$();
     }
 
-    public LayoutManagerSettingsPanel(Layout[] layouts) {
-        DefaultTableModel table = createTableContent(layouts);
+    public LayoutManagerSettingsPanel(
+            LayoutConfig layoutConfig,
+            LayoutNameDialog layoutNameDialog) {
+        this.layoutConfig = layoutConfig;
+        this.layoutNameDialog = layoutNameDialog;
+
+        Collections.addAll(this.currentLayouts, layoutConfig.getLayouts());
+
+        DefaultTableModel table = createTableContent();
         this.tableLayouts.setModel(table);
+        this.tableLayouts.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        useSmartDockingCheckbox.setSelected(layoutConfig.getSettings().getUseSmartDock());
+
+        this.tableLayouts.getSelectionModel().addListSelectionListener(listSelectionEvent -> {
+            deleteButton.setEnabled(this.tableLayouts.getSelectedRow() >= 0);
+            renameButton.setEnabled(this.tableLayouts.getSelectedRow() >= 0);
+        });
+
+        this.deleteButton.addActionListener(e ->
+                ((DefaultTableModel)this.tableLayouts.getModel())
+                    .removeRow(this.tableLayouts.getSelectedRow()));
+        this.renameButton.addActionListener(e -> {
+            int selectedRow = this.tableLayouts.getSelectedRow();
+            String newName = this.layoutNameDialog.show(this.currentLayouts.get(selectedRow).getName());
+            if (newName != null) {
+                this.tableLayouts.setValueAt(newName, selectedRow, 0);
+            }
+        });
+    }
+
+    public boolean hasChanged() {
+        return this.useSmartDockingCheckbox.isSelected() != this.layoutConfig.getSettings().getUseSmartDock() ||
+                !Arrays.equals(
+                        this.layoutConfig.getLayouts(),
+                        this.currentLayouts
+                            .stream()
+                            .toArray(Layout[]::new));
+    }
+
+    public void apply() {
+        this.layoutConfig.getSettings().setUseSmartDock(this.useSmartDockingCheckbox.isSelected());
+        this.layoutConfig.setLayouts(this.currentLayouts
+            .stream()
+            .toArray(Layout[]::new));
+
+        WindowMenuService windowMenuService = ServiceManager.getService(WindowMenuService.class);
+        windowMenuService.recreate();
     }
 
     @NotNull
-    private DefaultTableModel createTableContent(Layout[] layouts) {
-        DefaultTableModel model = new DefaultTableModel(new String[] { "Name", "Configured Windows" }, 0) {
+    private DefaultTableModel createTableContent() {
+        DefaultTableModel model = new DefaultTableModel(new String[] { "Name", "Configured Windows" }, currentLayouts.size()) {
 
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false;
+                return column == 0;
+            }
+
+            @Override
+            public void setValueAt(Object aValue, int row, int column) {
+                currentLayouts.get(row).setName(aValue.toString());
+                this.fireTableChanged(new TableModelEvent(this, row));
+            }
+
+            @Override
+            public int getRowCount() {
+                return currentLayouts.size();
+            }
+
+            @Override
+            public void removeRow(int row) {
+                currentLayouts.remove(row);
+                this.fireTableRowsDeleted(row, row);
+            }
+
+            @Override
+            public Object getValueAt(int row, int column) {
+                Layout layout = currentLayouts.get(row);
+
+                switch(column) {
+                    case 0:
+                        return layout.getName();
+                    case 1:
+                        return layout.getToolWindows().length;
+                }
+                return null;
             }
         };
-
-        for (Layout layout : layouts) {
-            model.addRow(new Object[] {layout.getName(), layout.getToolWindows().length });
-        }
 
         return model;
     }
@@ -94,12 +179,12 @@ public class LayoutManagerSettingsPanel {
         exportButton.setMnemonic('E');
         exportButton.setDisplayedMnemonicIndex(0);
         panel1.add(exportButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        buttonImport = new JButton();
-        buttonImport.setEnabled(false);
-        buttonImport.setText("Import");
-        buttonImport.setMnemonic('I');
-        buttonImport.setDisplayedMnemonicIndex(0);
-        panel1.add(buttonImport, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        importButton = new JButton();
+        importButton.setEnabled(false);
+        importButton.setText("Import");
+        importButton.setMnemonic('I');
+        importButton.setDisplayedMnemonicIndex(0);
+        panel1.add(importButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         panel1.add(spacer1, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
     }

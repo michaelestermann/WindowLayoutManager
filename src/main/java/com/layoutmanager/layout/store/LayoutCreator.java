@@ -1,54 +1,45 @@
 package com.layoutmanager.layout.store;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.ui.UISettings;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.impl.ToolWindowImpl;
-
 import com.layoutmanager.layout.store.smartdock.SmartDocker;
 import com.layoutmanager.layout.store.smartdock.SmartDockerFactory;
 import com.layoutmanager.layout.store.validation.LayoutValidationHelper;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
+import com.layoutmanager.persistence.LayoutConfig;
+import com.layoutmanager.persistence.LayoutSettings;
 import com.layoutmanager.persistence.ToolWindowInfo;
+import com.layoutmanager.ui.dialogs.LayoutNameDialog;
 import com.layoutmanager.ui.helpers.NotificationHelper;
 import com.layoutmanager.ui.helpers.ToolWindowHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.jetbrains.annotations.NotNull;
-
 public class LayoutCreator {
-
+    private final LayoutSettings layoutSettings;
     private final SmartDockerFactory smartDockerFactory;
+    private final LayoutNameDialog layoutNameDialog;
 
-    public LayoutCreator(SmartDockerFactory smartDockerFactory) {
+    public LayoutCreator(
+            LayoutSettings layoutSettings,
+            SmartDockerFactory smartDockerFactory,
+            LayoutNameDialog layoutNameDialog) {
+        this.layoutSettings = layoutSettings;
         this.smartDockerFactory = smartDockerFactory;
+        this.layoutNameDialog = layoutNameDialog;
     }
 
     public Layout create(ToolWindowManager toolWindowManager, String defaultName) {
 
-        String name = this.getLayoutName(defaultName);
+        String name = this.layoutNameDialog.show(defaultName);
         return name != null ?
                 this.createLayout(toolWindowManager, name) :
                 null;
-    }
-
-    private String getLayoutName(String defaultName) {
-        String name;
-        do {
-            name = Messages.showInputDialog(
-                    MessagesHelper.message("StoreLayout.Dialog.Title"),
-                    MessagesHelper.message("StoreLayout.Dialog.Content"),
-                    AllIcons.Actions.Edit,
-                    defaultName,
-                    null);
-        } while (name != null && name.isEmpty());
-
-        return name;
     }
 
     private Layout createLayout(ToolWindowManager toolWindowManager, String name) {
@@ -60,7 +51,10 @@ public class LayoutCreator {
                     .toArray(ToolWindowInfo[]::new),
                 getEditorPlacement());
 
-        this.dock(toolWindowManager, layout);
+        if (this.layoutSettings.getUseSmartDock()) {
+            this.dock(toolWindowManager, layout);
+        }
+
         validateLayout(layout);
 
         return layout;

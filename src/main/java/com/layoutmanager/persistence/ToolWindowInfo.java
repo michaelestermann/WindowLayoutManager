@@ -3,6 +3,7 @@ package com.layoutmanager.persistence;
 import com.intellij.openapi.wm.ToolWindowType;
 
 import java.awt.Rectangle;
+import java.util.Objects;
 
 public class ToolWindowInfo {
     private String id;
@@ -89,5 +90,29 @@ public class ToolWindowInfo {
     @SuppressWarnings({"unused", "Used for serialization."})
     public void setIsToolWindow(boolean isToolWindow) {
         this.isToolWindow = isToolWindow;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+
+        ToolWindowInfo that = (ToolWindowInfo) other;
+        return this.isVisible == that.isVisible &&
+                this.isToolWindow == that.isToolWindow &&
+                this.id.equals(that.id) &&
+                this.type == that.type &&
+                this.anchor.equals(that.anchor) &&
+                this.bounds.equals(that.bounds);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id, this.type, this.anchor, this.bounds, this.isVisible, this.isToolWindow);
     }
 }

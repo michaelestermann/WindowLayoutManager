@@ -12,6 +12,7 @@ import com.layoutmanager.layout.store.smartdock.SmartDockerFactory;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
+import com.layoutmanager.ui.dialogs.LayoutNameDialog;
 
 public class WindowMenuService {
     private DefaultActionGroup storeLayout;
@@ -19,7 +20,7 @@ public class WindowMenuService {
     private DefaultActionGroup deleteLayout;
 
     public void create() {
-        if (this.storeLayout != null) {
+        if (this.hasBeenCreated()) {
             return;
         }
 
@@ -28,11 +29,19 @@ public class WindowMenuService {
     }
 
     public void recreate() {
+        if (!this.hasBeenCreated()) {
+            return;
+        }
+
         this.restoreLayout.removeAll();
         this.storeLayout.removeAll();
         this.deleteLayout.removeAll();
 
         this.createStoreRestoreActions();
+    }
+
+    private boolean hasBeenCreated() {
+        return this.storeLayout != null;
     }
 
     private void createMainActions(DefaultActionGroup windowMenu) {
@@ -56,7 +65,10 @@ public class WindowMenuService {
     }
 
     private void addStoreLayoutActions(LayoutConfig config) {
-        LayoutCreator layoutCreator = new LayoutCreator(new SmartDockerFactory());
+        LayoutCreator layoutCreator = new LayoutCreator(
+                config.getSettings(),
+                new SmartDockerFactory(),
+                new LayoutNameDialog());
 
         for (int index = 0; index < config.getLayoutCount(); index++) {
             this.storeLayout.add(new OverwriteLayoutAction(layoutCreator, index));

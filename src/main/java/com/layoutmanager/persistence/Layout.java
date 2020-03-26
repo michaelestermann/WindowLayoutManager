@@ -1,6 +1,9 @@
 package com.layoutmanager.persistence;
 
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class Layout {
     private String name;
     private int editorTabPlacement;
@@ -44,5 +47,28 @@ public class Layout {
     @SuppressWarnings({"unused", "Used for serialization."})
     public void setToolWindows(ToolWindowInfo[] toolWindows) {
         this.toolWindows = toolWindows;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+
+        Layout that = (Layout) other;
+        return this.editorTabPlacement == that.editorTabPlacement &&
+                this.name.equals(that.name) &&
+                Arrays.equals(this.toolWindows, that.toolWindows);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(this.name, this.editorTabPlacement);
+        result = 31 * result + Arrays.hashCode(toolWindows);
+        return result;
     }
 }

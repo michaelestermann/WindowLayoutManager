@@ -32,6 +32,7 @@
             Mar 26, 2020 (ver 1.4.0)
             - Introduced settings page.
             - Introduced smart docking when saving a layout (Configurable).
+            - Store docked tool window sizes and restore them accordingly.
           </li>
         </ul>
     ]]></change-notes>

@@ -4,6 +4,7 @@ import com.intellij.openapi.options.Configurable;
 
 import javax.swing.JComponent;
 
+import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.dialogs.LayoutNameDialog;
 import org.jetbrains.annotations.Nls;
@@ -19,7 +20,7 @@ public class SettingsPage implements Configurable {
     @Nls(capitalization = Nls.Capitalization.Title)
     @Override
     public String getDisplayName() {
-        return "Window Layout Manager";
+        return MessagesHelper.message("SettingsPage.Title");
     }
 
     @Nullable

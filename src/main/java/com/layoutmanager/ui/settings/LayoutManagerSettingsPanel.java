@@ -4,6 +4,7 @@ import blazing.chain.LZSEncoding;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.intellij.openapi.components.ServiceManager;
+import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.dialogs.LayoutNameDialog;
@@ -51,8 +52,8 @@ public class LayoutManagerSettingsPanel {
             exportButton.setEnabled(this.layoutsTable.getSelectedRow() >= 0);
         });
         this.deleteButton.addActionListener(e ->
-                ((DefaultTableModel)this.layoutsTable.getModel())
-                    .removeRow(this.layoutsTable.getSelectedRow()));
+                ((DefaultTableModel) this.layoutsTable.getModel())
+                        .removeRow(this.layoutsTable.getSelectedRow()));
         this.renameButton.addActionListener(e -> {
             int selectedRow = this.layoutsTable.getSelectedRow();
             String newName = this.layoutNameDialog.show(this.currentLayouts.get(selectedRow).getName());
@@ -82,7 +83,7 @@ public class LayoutManagerSettingsPanel {
             JDialog parent = getParentDialog();
             if (importDialog.showDialogInCenterOf(parent) == ImportDialog.OK_RESULT) {
                 this.currentLayouts.add(importDialog.getImportedLayout());
-                ((DefaultTableModel)layoutsTable.getModel()).fireTableDataChanged();
+                ((DefaultTableModel) layoutsTable.getModel()).fireTableDataChanged();
             }
         });
     }
@@ -90,7 +91,7 @@ public class LayoutManagerSettingsPanel {
     private void showDialog(JComponent component) {
         // TODO: Extract to class
         JDialog parent = getParentDialog();
-        final JDialog dialog = new JDialog(parent, "Export layout", true); // TODO: Resources
+        final JDialog dialog = new JDialog(parent, MessagesHelper.message("ExportPage.Title"), true); // TODO: Resources
         dialog.getContentPane().add(component);
         dialog.pack();
         dialog.setLocationRelativeTo(parent);
@@ -104,18 +105,18 @@ public class LayoutManagerSettingsPanel {
 
     public boolean hasChanged() {
         return this.useSmartDockingCheckbox.isSelected() != this.layoutConfig.getSettings().getUseSmartDock() ||
-            !Arrays.equals(
-                this.layoutConfig.getLayouts(),
-                this.currentLayouts
-                    .stream()
-                    .toArray(Layout[]::new));
+                !Arrays.equals(
+                        this.layoutConfig.getLayouts(),
+                        this.currentLayouts
+                                .stream()
+                                .toArray(Layout[]::new));
     }
 
     public void apply() {
         this.layoutConfig.getSettings().setUseSmartDock(this.useSmartDockingCheckbox.isSelected());
         this.layoutConfig.setLayouts(this.currentLayouts
-            .stream()
-            .toArray(Layout[]::new));
+                .stream()
+                .toArray(Layout[]::new));
 
         WindowMenuService windowMenuService = ServiceManager.getService(WindowMenuService.class);
         windowMenuService.recreate();
@@ -123,7 +124,12 @@ public class LayoutManagerSettingsPanel {
 
     @NotNull
     private DefaultTableModel createTableContent() {
-        DefaultTableModel model = new DefaultTableModel(new String[] { "Name", "Configured Windows" }, currentLayouts.size()) {
+        DefaultTableModel model = new DefaultTableModel(
+                new String[]{
+                        MessagesHelper.message("SettingsPage.NameColumn"),
+                        MessagesHelper.message("SettingsPage.ConfiguredWindowsColumn")
+                },
+                currentLayouts.size()) {
 
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -151,7 +157,7 @@ public class LayoutManagerSettingsPanel {
             public Object getValueAt(int row, int column) {
                 Layout layout = currentLayouts.get(row);
 
-                switch(column) {
+                switch (column) {
                     case 0:
                         return layout.getName();
                     case 1:

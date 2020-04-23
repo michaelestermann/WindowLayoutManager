@@ -3,6 +3,7 @@ package com.layoutmanager.ui.settings;
 import blazing.chain.LZSEncoding;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 
 import javax.swing.*;
@@ -68,9 +69,9 @@ public class ImportDialog extends JDialog {
 
         fileButton.addActionListener(actionEvent -> {
             JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Select layout file"); // TODO: Resources
+            fileChooser.setDialogTitle(MessagesHelper.message("ImportDialog.SelectFileTitle"));
             fileChooser.setAcceptAllFileFilterUsed(false);
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("Window layouts", ExportPage.FILE_ENDING); // TODO: Window layouts is also a constant, which must be shared...
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(ImportExportConstants.FILE_TYPE_NAME, ImportExportConstants.FILE_ENDING);
             fileChooser.setFileFilter(filter);
 
             int result = fileChooser.showOpenDialog(null);
@@ -86,6 +87,10 @@ public class ImportDialog extends JDialog {
                 }
             }
         });
+    }
+
+    public Layout getImportedLayout() {
+        return this.importedLayout;
     }
 
     public int showDialogInCenterOf(JDialog parent) {
@@ -123,9 +128,5 @@ public class ImportDialog extends JDialog {
         this.layoutConfiguredWindowCountLabel.setText(Integer.toString(this.importedLayout.getToolWindows().length));
 
         this.importButton.setEnabled(true);
-    }
-
-    public Layout getImportedLayout() {
-        return this.importedLayout;
     }
 }

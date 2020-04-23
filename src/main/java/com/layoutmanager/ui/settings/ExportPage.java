@@ -4,6 +4,7 @@ import com.intellij.openapi.ui.MessageType;
 import com.intellij.openapi.ui.popup.Balloon;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.ui.awt.RelativePoint;
+import com.layoutmanager.localization.MessagesHelper;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -17,10 +18,6 @@ import java.nio.file.Paths;
 
 // TODO: Change to dialog and cleanup
 public class ExportPage {
-    // TODO: Move to common class
-    public static final String FILE_ENDING = "wl";
-    public static final String FILE_ENDING_WITH_DOT = "." + FILE_ENDING;
-
     private JTextArea exportTextBox;
     private JPanel importPanel;
     private JButton exportToFileButton;
@@ -49,15 +46,15 @@ public class ExportPage {
                 .setContents(
                     new StringSelection(this.exportTextBox.getText()),
                     null);
-            showNotificationOnComponent(this.exportToClipboardButton, "Copied to clipboard!", MessageType.INFO); // TODO: Resources
+            showNotificationOnComponent(this.exportToClipboardButton, MessagesHelper.message("ExportPage.CopiedToClipboard"), MessageType.INFO);
         });
 
         exportToFileButton.addActionListener(actionEvent -> {
             JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Specify a file to save"); // TODO: Resources
-            fileChooser.setSelectedFile(new File(this.layoutName + FILE_ENDING_WITH_DOT));
+            fileChooser.setDialogTitle(MessagesHelper.message("ExportPage.SaveFileTitle"));
+            fileChooser.setSelectedFile(new File(this.layoutName + ImportExportConstants.FILE_ENDING_WITH_DOT));
             fileChooser.setAcceptAllFileFilterUsed(false);
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("Window layouts", FILE_ENDING); // TODO: Window layouts to constant
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(ImportExportConstants.FILE_TYPE_NAME, ImportExportConstants.FILE_ENDING);
             fileChooser.setFileFilter(filter);
 
             int userSelection = fileChooser.showSaveDialog(null);
@@ -67,16 +64,16 @@ public class ExportPage {
 
                 byte[] encodedContent = this.content.getBytes();
                 String fullPath = fileToSave.getAbsolutePath();
-                if (!fullPath.toLowerCase().endsWith(FILE_ENDING_WITH_DOT)) {
-                    fullPath += FILE_ENDING_WITH_DOT;
+                if (!fullPath.toLowerCase().endsWith(ImportExportConstants.FILE_ENDING_WITH_DOT)) {
+                    fullPath += ImportExportConstants.FILE_ENDING_WITH_DOT;
                 }
 
                 Path path = Paths.get(fullPath);
                 try {
                     Files.write(path, encodedContent);
-                    showNotificationOnComponent(this.exportToFileButton, "Saved to file " + path.getFileName().toString() +" !", MessageType.INFO); // TODO: Resources
+                    showNotificationOnComponent(this.exportToFileButton, MessagesHelper.message("ExportPage.SavedTo", path.getFileName().toString()), MessageType.INFO);
                 } catch (IOException e) {
-                    showNotificationOnComponent(this.exportToFileButton, "Failed to write export file: " + e.getMessage(), MessageType.ERROR); // TODO: Resources
+                    showNotificationOnComponent(this.exportToFileButton, MessagesHelper.message("ExportPage.FailedToWriteFile", e.getMessage()), MessageType.ERROR);
                 }
             }
         });

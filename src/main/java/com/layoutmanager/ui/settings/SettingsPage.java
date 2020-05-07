@@ -19,7 +19,8 @@ public class SettingsPage implements Configurable {
         this.panel = new LayoutManagerSettingsPanel(
                 LayoutConfig.getInstance(),
                 new LayoutNameDialog(layoutNameValidator),
-                layoutNameValidator);
+                layoutNameValidator,
+                new LayoutSerializer());
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)

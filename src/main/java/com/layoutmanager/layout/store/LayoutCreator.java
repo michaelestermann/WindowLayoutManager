@@ -8,11 +8,10 @@ import com.layoutmanager.layout.store.smartdock.SmartDockerFactory;
 import com.layoutmanager.layout.store.validation.LayoutValidationHelper;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
-import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.persistence.LayoutSettings;
 import com.layoutmanager.persistence.ToolWindowInfo;
 import com.layoutmanager.ui.dialogs.LayoutNameDialog;
-import com.layoutmanager.ui.helpers.NotificationHelper;
+import com.layoutmanager.ui.helpers.BaloonNotificationHelper;
 import com.layoutmanager.ui.helpers.ToolWindowHelper;
 import org.jetbrains.annotations.NotNull;
 
@@ -94,7 +93,7 @@ public class LayoutCreator {
                             .map(ToolWindowInfo::getId)
                             .toArray(String[]::new));
 
-            NotificationHelper.warning(
+            BaloonNotificationHelper.warning(
                     MessagesHelper.message("StoreLayout.Validation.ToolWindowOutOfScreen.Title"),
                     MessagesHelper.message("StoreLayout.Validation.ToolWindowOutOfScreen.Content", invalidToolWindowNames));
         }

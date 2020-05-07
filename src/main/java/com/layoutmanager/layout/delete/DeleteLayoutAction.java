@@ -9,7 +9,7 @@ import com.intellij.openapi.components.ServiceManager;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
-import com.layoutmanager.ui.helpers.NotificationHelper;
+import com.layoutmanager.ui.helpers.BaloonNotificationHelper;
 import com.layoutmanager.ui.menu.WindowMenuService;
 
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +38,7 @@ public class DeleteLayoutAction extends AnAction {
     }
 
     private void showNotification() {
-        NotificationHelper.info(
+        BaloonNotificationHelper.info(
                 MessagesHelper.message("DeleteLayout.Notification.Title"),
                 MessagesHelper.message("DeleteLayout.Notification.Content", this.layout.getName()));
     }

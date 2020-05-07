@@ -13,6 +13,7 @@ import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.dialogs.LayoutNameDialog;
+import com.layoutmanager.ui.dialogs.LayoutNameValidator;
 
 public class WindowMenuService {
     private DefaultActionGroup storeLayout;
@@ -68,7 +69,7 @@ public class WindowMenuService {
         LayoutCreator layoutCreator = new LayoutCreator(
                 config.getSettings(),
                 new SmartDockerFactory(),
-                new LayoutNameDialog());
+                new LayoutNameDialog(new LayoutNameValidator()));
 
         for (int index = 0; index < config.getLayoutCount(); index++) {
             this.storeLayout.add(new OverwriteLayoutAction(layoutCreator, index));

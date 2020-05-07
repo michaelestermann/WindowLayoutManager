@@ -13,7 +13,7 @@ import com.intellij.openapi.wm.impl.ToolWindowImpl;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.ToolWindowInfo;
-import com.layoutmanager.ui.helpers.NotificationHelper;
+import com.layoutmanager.ui.helpers.BaloonNotificationHelper;
 import com.layoutmanager.ui.helpers.ToolWindowHelper;
 import org.jetbrains.annotations.NotNull;
 
@@ -104,7 +104,7 @@ public class RestoreLayoutAction extends AnAction {
     }
 
     private void showNotification(Layout updatedLayout) {
-        NotificationHelper.info(
+        BaloonNotificationHelper.info(
                 MessagesHelper.message("RestoreLayout.Notification.Title"),
                 MessagesHelper.message("RestoreLayout.Notification.Content", updatedLayout.getName()));
     }

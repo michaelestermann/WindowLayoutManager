@@ -6,6 +6,13 @@ import com.layoutmanager.localization.MessagesHelper;
 
 public class LayoutNameDialog {
 
+    private final LayoutNameValidator layoutNameValidator;
+
+    public LayoutNameDialog(LayoutNameValidator layoutNameValidator) {
+
+        this.layoutNameValidator = layoutNameValidator;
+    }
+
     public String show(String defaultName) {
             String name;
             do {
@@ -15,8 +22,9 @@ public class LayoutNameDialog {
                         AllIcons.Actions.Edit,
                         defaultName,
                         null);
-            } while (name != null && name.isEmpty());
+            } while (!this.layoutNameValidator.isValid(name));
 
             return name;
     }
 }
+

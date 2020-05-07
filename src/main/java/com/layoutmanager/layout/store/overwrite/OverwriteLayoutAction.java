@@ -11,7 +11,7 @@ import com.layoutmanager.layout.store.LayoutCreator;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
-import com.layoutmanager.ui.helpers.NotificationHelper;
+import com.layoutmanager.ui.helpers.BaloonNotificationHelper;
 import com.layoutmanager.ui.menu.WindowMenuService;
 
 import org.jetbrains.annotations.NotNull;
@@ -63,7 +63,7 @@ public class OverwriteLayoutAction extends AnAction {
     }
 
     private void showNotification(Layout updatedLayout, Layout previousLayout) {
-        NotificationHelper.info(
+        BaloonNotificationHelper.info(
                 MessagesHelper.message("StoreLayout.Overwrite.Notification.Title"),
                 MessagesHelper.message("StoreLayout.Overwrite.Notification.Content", previousLayout.getName(), updatedLayout.getName()));
     }

@@ -7,6 +7,7 @@ import javax.swing.JComponent;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.dialogs.LayoutNameDialog;
+import com.layoutmanager.ui.dialogs.LayoutNameValidator;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +15,11 @@ public class SettingsPage implements Configurable {
     private final LayoutManagerSettingsPanel panel;
 
     public SettingsPage() {
-        this.panel = new LayoutManagerSettingsPanel(LayoutConfig.getInstance(), new LayoutNameDialog());
+        LayoutNameValidator layoutNameValidator = new LayoutNameValidator();
+        this.panel = new LayoutManagerSettingsPanel(
+                LayoutConfig.getInstance(),
+                new LayoutNameDialog(layoutNameValidator),
+                layoutNameValidator);
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)

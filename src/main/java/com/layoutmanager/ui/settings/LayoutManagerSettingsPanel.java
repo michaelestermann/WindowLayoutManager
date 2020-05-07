@@ -8,7 +8,11 @@ import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.dialogs.LayoutNameDialog;
+import com.layoutmanager.ui.dialogs.LayoutNameValidator;
+import com.layoutmanager.ui.helpers.ComponentNotificationHelper;
 import com.layoutmanager.ui.menu.WindowMenuService;
+import com.layoutmanager.ui.settings.exporting.ExportPage;
+import com.layoutmanager.ui.settings.importing.ImportDialog;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +26,7 @@ import java.util.Collections;
 public class LayoutManagerSettingsPanel {
     private final LayoutConfig layoutConfig;
     private final LayoutNameDialog layoutNameDialog;
+    private final LayoutNameValidator layoutNameValidator;
 
     private ArrayList<Layout> currentLayouts = new ArrayList<>();
     private JCheckBox useSmartDockingCheckbox;
@@ -34,10 +39,22 @@ public class LayoutManagerSettingsPanel {
 
     public LayoutManagerSettingsPanel(
             LayoutConfig layoutConfig,
-            LayoutNameDialog layoutNameDialog) {
+            LayoutNameDialog layoutNameDialog,
+            LayoutNameValidator layoutNameValidator) {
         this.layoutConfig = layoutConfig;
         this.layoutNameDialog = layoutNameDialog;
+        this.layoutNameValidator = layoutNameValidator;
 
+        this.loadSettings(layoutConfig);
+
+        this.layoutsTable.getSelectionModel().addListSelectionListener(listSelectionEvent -> this.selectedLayoutChanged());
+        this.deleteButton.addActionListener(e -> this.deleteLayout());
+        this.renameButton.addActionListener(e -> this.renameLayout());
+        this.exportButton.addActionListener(actionEvent -> this.exportLayout());
+        this.importButton.addActionListener(actionEvent -> this.importLayout());
+    }
+
+    private void loadSettings(LayoutConfig layoutConfig) {
         Collections.addAll(this.currentLayouts, layoutConfig.getLayouts());
 
         DefaultTableModel table = createTableContent();
@@ -45,53 +62,55 @@ public class LayoutManagerSettingsPanel {
         this.layoutsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         useSmartDockingCheckbox.setSelected(layoutConfig.getSettings().getUseSmartDock());
+    }
 
-        this.layoutsTable.getSelectionModel().addListSelectionListener(listSelectionEvent -> {
-            deleteButton.setEnabled(this.layoutsTable.getSelectedRow() >= 0);
-            renameButton.setEnabled(this.layoutsTable.getSelectedRow() >= 0);
-            exportButton.setEnabled(this.layoutsTable.getSelectedRow() >= 0);
-        });
-        this.deleteButton.addActionListener(e ->
-                ((DefaultTableModel) this.layoutsTable.getModel())
-                        .removeRow(this.layoutsTable.getSelectedRow()));
-        this.renameButton.addActionListener(e -> {
-            int selectedRow = this.layoutsTable.getSelectedRow();
-            String newName = this.layoutNameDialog.show(this.currentLayouts.get(selectedRow).getName());
+    private void selectedLayoutChanged() {
+        deleteButton.setEnabled(this.layoutsTable.getSelectedRow() >= 0);
+        renameButton.setEnabled(this.layoutsTable.getSelectedRow() >= 0);
+        exportButton.setEnabled(this.layoutsTable.getSelectedRow() >= 0);
+    }
 
-            if (newName != null) {
-                this.layoutsTable.setValueAt(newName, selectedRow, 0);
-            }
-        });
+    private void deleteLayout() {
+        DefaultTableModel table = (DefaultTableModel)this.layoutsTable.getModel();
+        table.removeRow(this.layoutsTable.getSelectedRow());
+    }
 
-        exportButton.addActionListener(actionEvent -> {
-            int selectedRow = this.layoutsTable.getSelectedRow();
-            Layout selectedLayout = this.currentLayouts.get(selectedRow);
+    private void renameLayout() {
+        int selectedRow = this.layoutsTable.getSelectedRow();
+        String newName = this.layoutNameDialog.show(this.currentLayouts.get(selectedRow).getName());
 
-            // TODO: Extract to class
-            Gson gson = new GsonBuilder().create();
-            String jsonContent = gson.toJson(selectedLayout);
-            String lzEncodedContent = LZSEncoding.compressToBase64(jsonContent);
+        if (newName != null) {
+            this.layoutsTable.setValueAt(newName, selectedRow, 0);
+        }
+    }
 
-            ExportPage exportPage = new ExportPage(selectedLayout.getName(), lzEncodedContent);
+    private void exportLayout() {
+        int selectedRow = this.layoutsTable.getSelectedRow();
+        Layout selectedLayout = this.currentLayouts.get(selectedRow);
 
-            showDialog(exportPage.getPanel());
+        // TODO: Extract to class
+        Gson gson = new GsonBuilder().create();
+        String jsonContent = gson.toJson(selectedLayout);
+        String lzEncodedContent = LZSEncoding.compressToBase64(jsonContent);
 
-        });
+        ExportPage exportPage = new ExportPage(selectedLayout.getName(), lzEncodedContent);
 
-        importButton.addActionListener(actionEvent -> {
-            ImportDialog importDialog = new ImportDialog();
-            JDialog parent = getParentDialog();
-            if (importDialog.showDialogInCenterOf(parent) == ImportDialog.OK_RESULT) {
-                this.currentLayouts.add(importDialog.getImportedLayout());
-                ((DefaultTableModel) layoutsTable.getModel()).fireTableDataChanged();
-            }
-        });
+        showDialog(exportPage.getPanel());
+    }
+
+    private void importLayout() {
+        ImportDialog importDialog = new ImportDialog(this.layoutNameValidator);
+        JDialog parent = getParentDialog();
+        if (importDialog.showDialogInCenterOf(parent) == ImportDialog.OK_RESULT) {
+            this.currentLayouts.add(importDialog.getImportedLayout());
+            ((DefaultTableModel) layoutsTable.getModel()).fireTableDataChanged();
+        }
     }
 
     private void showDialog(JComponent component) {
         // TODO: Extract to class
         JDialog parent = getParentDialog();
-        final JDialog dialog = new JDialog(parent, MessagesHelper.message("ExportPage.Title"), true); // TODO: Resources
+        final JDialog dialog = new JDialog(parent, MessagesHelper.message("ExportPage.Title"), true);
         dialog.getContentPane().add(component);
         dialog.pack();
         dialog.setLocationRelativeTo(parent);
@@ -122,6 +141,10 @@ public class LayoutManagerSettingsPanel {
         windowMenuService.recreate();
     }
 
+    public JPanel getPanel() {
+        return this.settingsPanel;
+    }
+
     @NotNull
     private DefaultTableModel createTableContent() {
         DefaultTableModel model = new DefaultTableModel(
@@ -138,8 +161,13 @@ public class LayoutManagerSettingsPanel {
 
             @Override
             public void setValueAt(Object aValue, int row, int column) {
-                currentLayouts.get(row).setName(aValue.toString());
-                this.fireTableChanged(new TableModelEvent(this, row));
+                String newLayoutName = aValue.toString();
+                if (layoutNameValidator.isValid(newLayoutName)) {
+                    currentLayouts.get(row).setName(aValue.toString());
+                    this.fireTableChanged(new TableModelEvent(this, row));
+                } else {
+                    ComponentNotificationHelper.error(layoutsTable, MessagesHelper.message("LayoutNameValidation.InvalidName"));
+                }
             }
 
             @Override
@@ -168,9 +196,5 @@ public class LayoutManagerSettingsPanel {
         };
 
         return model;
-    }
-
-    public JPanel getPanel() {
-        return this.settingsPanel;
     }
 }

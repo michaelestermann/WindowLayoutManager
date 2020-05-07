@@ -16,9 +16,13 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+
+import static javax.swing.JComponent.WHEN_FOCUSED;
 
 public class LayoutManagerSettingsPanel {
     private final LayoutConfig layoutConfig;
@@ -58,10 +62,26 @@ public class LayoutManagerSettingsPanel {
         Collections.addAll(this.currentLayouts, layoutConfig.getLayouts());
 
         DefaultTableModel table = this.createTableContent();
+        this.setKeyBindings(table);
         this.layoutsTable.setModel(table);
         this.layoutsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         this.useSmartDockingCheckbox.setSelected(layoutConfig.getSettings().getUseSmartDock());
+    }
+
+    private void setKeyBindings(DefaultTableModel tableModel){
+        InputMap inputMap = layoutsTable.getInputMap(WHEN_FOCUSED);
+        ActionMap actionMap = layoutsTable.getActionMap();
+
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "delete");
+        actionMap.put("delete", new AbstractAction() {
+            public void actionPerformed(ActionEvent evt) {
+                int selectedRow = layoutsTable.getSelectedRow();
+                if (selectedRow >= 0) {
+                    tableModel.removeRow(selectedRow);
+                }
+            }
+        });
     }
 
     private void selectedLayoutChanged() {

@@ -22,7 +22,7 @@ public class LayoutNameDialog {
                         AllIcons.Actions.Edit,
                         defaultName,
                         null);
-            } while (!this.layoutNameValidator.isValid(name));
+            } while (name != null && !this.layoutNameValidator.isValid(name));
 
             return name;
     }

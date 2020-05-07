@@ -145,6 +145,7 @@ public class ImportDialog extends JDialog {
         this.importButton.setEnabled(false);
         this.layoutNameTextBox.setText("");
         this.layoutNameTextBox.setEnabled(false);
+        this.layoutConfiguredWindowCountLabel.setText("-");
     }
 
     private void onOK() {
@@ -152,7 +153,7 @@ public class ImportDialog extends JDialog {
             ComponentNotificationHelper.error(this.importButton, MessagesHelper.message("LayoutNameValidation.InvalidName"));
             return;
         }
-
+        this.importedLayout.setName(this.layoutNameTextBox.getText());
 
         this.result = OK_RESULT;
         dispose();

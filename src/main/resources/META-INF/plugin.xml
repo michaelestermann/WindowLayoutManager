@@ -27,7 +27,13 @@
           <li>Dec 19, 2019 (ver 1.3.0) - Store placement of editor tabs and tool window labels.</li>
           <li>Dec 26, 2019 (ver 1.3.1) - Fix support of Java 8.</li>
           <li>Jan 07, 2020 (ver 1.3.2) - Minor bugfixes.</li>
-          <li>Jan 07, 2020 (ver 1.3.3) - Issues when storing and restoring invisible windows fixed.</li>
+          <li>Feb 25, 2020 (ver 1.3.3) - Issues when storing and restoring invisible windows fixed.</li>
+          <li>
+            May 8, 2020 (ver 1.4.0)
+            - Introduced settings page.
+            - Introduced smart docking when saving a layout (Configurable).
+            - Store docked tool window sizes and restore them accordingly.
+          </li>
         </ul>
     ]]></change-notes>
 
@@ -39,8 +45,10 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <applicationService serviceImplementation="com.layoutmanager.persistence.LayoutConfig"/>
-    <applicationService serviceImplementation="com.layoutmanager.menu.WindowMenuService"/>
+    <applicationService serviceImplementation="com.layoutmanager.ui.menu.WindowMenuService"/>
     <applicationService serviceImplementation="com.layoutmanager.cleanup.EmptyLayoutRemoverService"/>
+
+    <projectConfigurable id="settings.windowlayoutmanager" instance="com.layoutmanager.ui.settings.SettingsPage"/>
 
     <postStartupActivity implementation="com.layoutmanager.startup.PluginBootstrapper"/>
   </extensions>

@@ -1,23 +1,30 @@
-package com.layoutmanager.actions;
+package com.layoutmanager.layout.store.overwrite;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.wm.ToolWindowManager;
+
+import com.layoutmanager.layout.store.LayoutCreator;
 import com.layoutmanager.localization.MessagesHelper;
-import com.layoutmanager.menu.WindowMenuService;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
-import com.layoutmanager.ui.NotificationHelper;
+import com.layoutmanager.ui.helpers.BaloonNotificationHelper;
+import com.layoutmanager.ui.menu.WindowMenuService;
+
 import org.jetbrains.annotations.NotNull;
 
 public class OverwriteLayoutAction extends AnAction {
 
+    private final LayoutCreator layoutCreator;
     public final int number;
 
-    public OverwriteLayoutAction(int number) {
-
+    public OverwriteLayoutAction(
+            LayoutCreator layoutCreator,
+            int number) {
+        this.layoutCreator = layoutCreator;
         this.number = number;
 
         Layout layout = LayoutConfig.getInstance().getLayout(number);
@@ -28,20 +35,21 @@ public class OverwriteLayoutAction extends AnAction {
 
     @Override
     public void update(AnActionEvent e) {
-        Layout layout = LayoutConfig.getInstance().getLayout(number);
+        Layout layout = LayoutConfig.getInstance().getLayout(this.number);
         e.getPresentation().setText(layout.getName());
         super.update(e);
     }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        Layout previousLayout = LayoutConfig.getInstance().getLayout(number);
-        Layout updatedLayout = LayoutCreator.create(event.getProject(), previousLayout.getName());
+        Layout previousLayout = LayoutConfig.getInstance().getLayout(this.number);
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(event.getProject());
+        Layout updatedLayout = this.layoutCreator.create(toolWindowManager, previousLayout.getName());
 
         if (updatedLayout != null) {
             this.storeLayout(updatedLayout);
-            updateWindowMenuItems();
-            showNotification(updatedLayout, previousLayout);
+            this.updateWindowMenuItems();
+            this.showNotification(updatedLayout, previousLayout);
         }
     }
 
@@ -55,7 +63,7 @@ public class OverwriteLayoutAction extends AnAction {
     }
 
     private void showNotification(Layout updatedLayout, Layout previousLayout) {
-        NotificationHelper.info(
+        BaloonNotificationHelper.info(
                 MessagesHelper.message("StoreLayout.Overwrite.Notification.Title"),
                 MessagesHelper.message("StoreLayout.Overwrite.Notification.Content", previousLayout.getName(), updatedLayout.getName()));
     }

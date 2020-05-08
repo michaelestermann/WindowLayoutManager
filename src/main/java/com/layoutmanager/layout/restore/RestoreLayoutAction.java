@@ -1,4 +1,4 @@
-package com.layoutmanager.actions;
+package com.layoutmanager.layout.restore;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.ui.UISettings;
@@ -13,8 +13,8 @@ import com.intellij.openapi.wm.impl.ToolWindowImpl;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.ToolWindowInfo;
-import com.layoutmanager.ui.NotificationHelper;
-import com.layoutmanager.ui.ToolWindowHelper;
+import com.layoutmanager.ui.helpers.BaloonNotificationHelper;
+import com.layoutmanager.ui.helpers.ToolWindowHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -43,8 +43,8 @@ public class RestoreLayoutAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        applyLayout(event, this.layout);
-        showNotification(this.layout);
+        this.applyLayout(event, this.layout);
+        this.showNotification(this.layout);
     }
 
     private void applyLayout(AnActionEvent event, Layout layout) {
@@ -58,9 +58,9 @@ public class RestoreLayoutAction extends AnAction {
 
     private Map<ToolWindowInfo, ToolWindowImpl> getToolWindows(ToolWindowManager toolWindowManager, ToolWindowInfo[] toolWindows) {
         return Stream.of(toolWindows)
-            .map(x -> new Pair<ToolWindowInfo, ToolWindowImpl>(x, (ToolWindowImpl)toolWindowManager.getToolWindow(x.getId())))
-            .filter(x -> x.second != null)
-            .collect(Collectors.toMap(x -> x.first, x -> x.second));
+                .map(x -> new Pair<ToolWindowInfo, ToolWindowImpl>(x, (ToolWindowImpl)toolWindowManager.getToolWindow(x.getId())))
+                .filter(x -> x.second != null)
+                .collect(Collectors.toMap(x -> x.first, x -> x.second));
     }
 
     private void applyEditorTabPlacement(Layout layout) {
@@ -102,8 +102,9 @@ public class RestoreLayoutAction extends AnAction {
         Project project = event.getProject();
         return ToolWindowManager.getInstance(project);
     }
+
     private void showNotification(Layout updatedLayout) {
-        NotificationHelper.info(
+        BaloonNotificationHelper.info(
                 MessagesHelper.message("RestoreLayout.Notification.Title"),
                 MessagesHelper.message("RestoreLayout.Notification.Content", updatedLayout.getName()));
     }

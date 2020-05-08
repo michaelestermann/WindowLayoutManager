@@ -29,7 +29,7 @@
           <li>Jan 07, 2020 (ver 1.3.2) - Minor bugfixes.</li>
           <li>Feb 25, 2020 (ver 1.3.3) - Issues when storing and restoring invisible windows fixed.</li>
           <li>
-            Mar 26, 2020 (ver 1.4.0)
+            May 8, 2020 (ver 1.4.0)
             - Introduced settings page.
             - Introduced smart docking when saving a layout (Configurable).
             - Store docked tool window sizes and restore them accordingly.

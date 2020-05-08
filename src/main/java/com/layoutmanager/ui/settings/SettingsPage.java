@@ -44,8 +44,4 @@ public class SettingsPage implements Configurable {
     public void apply() {
         this.panel.apply();
     }
-
-    @Override
-    public void reset() {
-    }
 }

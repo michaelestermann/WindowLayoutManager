@@ -2,7 +2,9 @@ package com.layoutmanager.ui.helpers;
 
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowType;
-import com.intellij.openapi.wm.impl.*;
+import com.intellij.openapi.wm.impl.FloatingDecorator;
+import com.intellij.openapi.wm.impl.InternalDecorator;
+import com.intellij.openapi.wm.impl.ToolWindowImpl;
 import com.intellij.util.ui.UIUtil;
 
 import java.awt.Rectangle;

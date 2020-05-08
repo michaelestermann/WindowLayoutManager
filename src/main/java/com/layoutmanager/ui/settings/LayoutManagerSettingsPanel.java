@@ -200,8 +200,9 @@ public class LayoutManagerSettingsPanel {
                         return layout.getName();
                     case 1:
                         return layout.getToolWindows().length;
+                    default:
+                        return null;
                 }
-                return null;
             }
         };
     }

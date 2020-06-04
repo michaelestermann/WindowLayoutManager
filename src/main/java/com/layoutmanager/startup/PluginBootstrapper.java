@@ -1,15 +1,14 @@
 package com.layoutmanager.startup;
 
+import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.startup.StartupActivity;
 import com.layoutmanager.cleanup.EmptyLayoutRemoverService;
 import com.layoutmanager.ui.menu.WindowMenuService;
-import org.jetbrains.annotations.NotNull;
 
-public class PluginBootstrapper implements StartupActivity {
-
-    public void runActivity(@NotNull Project project) {
+public class PluginBootstrapper implements ProjectComponent
+{
+    @Override
+    public void projectOpened() {
         EmptyLayoutRemoverService emptyLayoutRemoverService = ServiceManager.getService(EmptyLayoutRemoverService.class);
         emptyLayoutRemoverService.execute();
 
@@ -17,3 +16,4 @@ public class PluginBootstrapper implements StartupActivity {
         windowMenuService.create();
     }
 }
+

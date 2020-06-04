@@ -43,13 +43,17 @@
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
   <depends>com.intellij.modules.lang</depends>
 
+  <project-components>
+    <component>
+      <implementation-class>com.layoutmanager.startup.PluginBootstrapper</implementation-class>
+    </component>
+  </project-components>
+
   <extensions defaultExtensionNs="com.intellij">
     <applicationService serviceImplementation="com.layoutmanager.persistence.LayoutConfig"/>
     <applicationService serviceImplementation="com.layoutmanager.ui.menu.WindowMenuService"/>
     <applicationService serviceImplementation="com.layoutmanager.cleanup.EmptyLayoutRemoverService"/>
 
-    <projectConfigurable id="settings.windowlayoutmanager" instance="com.layoutmanager.ui.settings.SettingsPage"/>
-
-    <postStartupActivity implementation="com.layoutmanager.startup.PluginBootstrapper"/>
+    <applicationConfigurable id="settings.windowlayoutmanager" instance="com.layoutmanager.ui.settings.SettingsPage"/>
   </extensions>
 </idea-plugin>

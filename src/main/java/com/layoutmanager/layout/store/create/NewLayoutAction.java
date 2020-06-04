@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.wm.ToolWindowManager;
 
 import com.layoutmanager.layout.store.LayoutCreator;
@@ -16,7 +17,7 @@ import com.layoutmanager.ui.menu.WindowMenuService;
 
 import org.jetbrains.annotations.NotNull;
 
-public class NewLayoutAction extends AnAction {
+public class NewLayoutAction extends AnAction implements DumbAware {
 
     private final LayoutCreator layoutCreator;
 

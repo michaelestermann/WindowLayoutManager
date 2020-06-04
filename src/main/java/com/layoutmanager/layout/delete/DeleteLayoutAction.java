@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.components.ServiceManager;
 
+import com.intellij.openapi.project.DumbAware;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
@@ -14,7 +15,7 @@ import com.layoutmanager.ui.menu.WindowMenuService;
 
 import org.jetbrains.annotations.NotNull;
 
-public class DeleteLayoutAction extends AnAction {
+public class DeleteLayoutAction extends AnAction implements DumbAware {
 
     private final Layout layout;
 

@@ -3,6 +3,7 @@ package com.layoutmanager.ui.menu;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 
+import com.intellij.openapi.extensions.PluginId;
 import com.layoutmanager.layout.delete.DeleteLayoutAction;
 import com.layoutmanager.layout.restore.RestoreLayoutAction;
 import com.layoutmanager.layout.store.LayoutCreator;
@@ -15,6 +16,12 @@ import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.dialogs.LayoutNameDialog;
 import com.layoutmanager.ui.dialogs.LayoutNameValidator;
 
+import javax.swing.*;
+
+// TODO: Not recreate menu
+//  - Register actions by name (WindowLayoutManager.Restore.XY)
+//  - Unregister an action when it gets deleted
+//  - Register NewLayout as action (WindowLayoutManager.New.)
 public class WindowMenuService {
     private DefaultActionGroup storeLayout;
     private DefaultActionGroup restoreLayout;
@@ -84,7 +91,11 @@ public class WindowMenuService {
 
     private void addRestoreLayoutActions(LayoutConfig config) {
         for (Layout layout : config.getLayouts()) {
-            this.restoreLayout.add(new RestoreLayoutAction(layout));
+            RestoreLayoutAction action = new RestoreLayoutAction(layout);
+            this.restoreLayout.add(action);
+
+            PluginId pluginId = PluginId.findId("com.layoutmanager");
+            ActionManager.getInstance().registerAction("WindowLayoutManager." + layout.getName(), action, pluginId);
         }
     }
 

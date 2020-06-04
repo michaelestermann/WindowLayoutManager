@@ -17,6 +17,10 @@ import com.layoutmanager.ui.menu.WindowMenuService;
 
 import org.jetbrains.annotations.NotNull;
 
+// TODO:
+//  - Add new layout to all buttons (Restore, delete, apply) -> Do not create a new action
+//  - Pass layout as variable (Ctor)
+//  - Layout must notify, when name has changed, so all buttons can update their captions
 public class OverwriteLayoutAction extends AnAction implements DumbAware {
 
     private final LayoutCreator layoutCreator;
@@ -55,12 +59,12 @@ public class OverwriteLayoutAction extends AnAction implements DumbAware {
     }
 
     private void storeLayout(Layout layout) {
-        LayoutConfig.getInstance().setLayout(this.number, layout);
+        //LayoutConfig.getInstance().setLayout(this.number, layout);
     }
 
     private void updateWindowMenuItems() {
-        WindowMenuService windowMenuService = ServiceManager.getService(WindowMenuService.class);
-        windowMenuService.recreate();
+        //WindowMenuService windowMenuService = ServiceManager.getService(WindowMenuService.class);
+        //windowMenuService.recreate();
     }
 
     private void showNotification(Layout updatedLayout, Layout previousLayout) {

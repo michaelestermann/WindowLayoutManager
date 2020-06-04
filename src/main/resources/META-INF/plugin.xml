@@ -43,11 +43,11 @@
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
   <depends>com.intellij.modules.lang</depends>
 
-  <project-components>
+  <application-components>
     <component>
       <implementation-class>com.layoutmanager.startup.PluginBootstrapper</implementation-class>
     </component>
-  </project-components>
+  </application-components>
 
   <extensions defaultExtensionNs="com.intellij">
     <applicationService serviceImplementation="com.layoutmanager.persistence.LayoutConfig"/>

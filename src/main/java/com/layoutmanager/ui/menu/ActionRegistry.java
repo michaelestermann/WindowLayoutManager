@@ -51,8 +51,8 @@ public class ActionRegistry {
     }
 
     private String getActionNameForLayout(LayoutAction layoutAction) {
-        String className = layoutAction.getClass().getName();
-        String typeName = className.substring(className.length() - "LayoutAction".length());
+        String className = layoutAction.getClass().getSimpleName();
+        String typeName = className.substring(0, className.length() - "LayoutAction".length());
 
         return getActionNameForLayout(layoutAction.getLayout().getName(), typeName);
     }

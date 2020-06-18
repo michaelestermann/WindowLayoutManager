@@ -112,7 +112,9 @@ public class WindowMenuService {
             this.storeLayout.addSeparator();
         }
 
-        this.storeLayout.add(new NewLayoutAction(layoutCreator));
+        NewLayoutAction newLayoutAction = new NewLayoutAction(layoutCreator);
+        this.storeLayout.add(newLayoutAction);
+        // TODO: Add new button in the action registry to support key shortcuts
     }
 
     private void addOverwriteLayoutActionAtTheEnd(Layout layout, LayoutCreator layoutCreator){

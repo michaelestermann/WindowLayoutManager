@@ -7,6 +7,7 @@ import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.components.ServiceManager;
 
 import com.intellij.openapi.project.DumbAware;
+import com.layoutmanager.layout.LayoutAction;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
@@ -15,7 +16,9 @@ import com.layoutmanager.ui.menu.WindowMenuService;
 
 import org.jetbrains.annotations.NotNull;
 
-public class DeleteLayoutAction extends AnAction implements DumbAware {
+public class DeleteLayoutAction
+        extends LayoutAction
+        implements DumbAware {
 
     private final Layout layout;
 
@@ -33,6 +36,16 @@ public class DeleteLayoutAction extends AnAction implements DumbAware {
         this.showNotification();
     }
 
+    @Override
+    public void update(AnActionEvent e) {
+        e.getPresentation().setText(this.layout.getName());
+        super.update(e);
+    }
+
+    public Layout getLayout() {
+        return this.layout;
+    }
+
     private void deleteLayout() {
         LayoutConfig layoutConfig = ServiceManager.getService(LayoutConfig.class);
         layoutConfig.removeLayout(this.layout);
@@ -46,6 +59,6 @@ public class DeleteLayoutAction extends AnAction implements DumbAware {
 
     private void updateWindowMenuItems() {
         WindowMenuService windowMenuService = ServiceManager.getService(WindowMenuService.class);
-        windowMenuService.recreate();
+        windowMenuService.deleteLayout(this.layout);
     }
 }

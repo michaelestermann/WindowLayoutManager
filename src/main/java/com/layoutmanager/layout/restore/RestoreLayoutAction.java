@@ -11,6 +11,7 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.impl.ToolWindowImpl;
+import com.layoutmanager.layout.LayoutAction;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.ToolWindowInfo;
@@ -22,7 +23,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class RestoreLayoutAction extends AnAction implements DumbAware {
+public class RestoreLayoutAction
+        extends LayoutAction
+        implements DumbAware  {
 
     private final Layout layout;
 
@@ -46,6 +49,10 @@ public class RestoreLayoutAction extends AnAction implements DumbAware {
     public void actionPerformed(@NotNull AnActionEvent event) {
         this.applyLayout(event, this.layout);
         this.showNotification(this.layout);
+    }
+
+    public Layout getLayout() {
+        return this.layout;
     }
 
     private void applyLayout(AnActionEvent event, Layout layout) {

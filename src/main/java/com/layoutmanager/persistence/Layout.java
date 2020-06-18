@@ -26,7 +26,6 @@ public class Layout {
         return this.name;
     }
 
-    @SuppressWarnings({"unused", "Used for serialization."})
     public void setName(String name) {
         this.name = name;
     }
@@ -35,7 +34,6 @@ public class Layout {
         return this.editorTabPlacement;
     }
 
-    @SuppressWarnings({"unused", "Used for serialization."})
     public void setEditorPlacement(int editorTabPlacement) {
         this.editorTabPlacement = editorTabPlacement;
     }
@@ -44,7 +42,6 @@ public class Layout {
         return this.toolWindows;
     }
 
-    @SuppressWarnings({"unused", "Used for serialization."})
     public void setToolWindows(ToolWindowInfo[] toolWindows) {
         this.toolWindows = toolWindows;
     }

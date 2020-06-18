@@ -4,8 +4,6 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.ui.Messages;
 import com.layoutmanager.localization.MessagesHelper;
 
-// TODO: Adapt version
-// Ideas: Copy Paste in the settings
 public class LayoutNameDialog {
 
     private final LayoutNameValidator layoutNameValidator;

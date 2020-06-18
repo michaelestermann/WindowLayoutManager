@@ -147,8 +147,9 @@ public class LayoutManagerSettingsPanel {
                 .stream()
                 .toArray(Layout[]::new));
 
-        WindowMenuService windowMenuService = ServiceManager.getService(WindowMenuService.class);
-        windowMenuService.recreate();
+        // TODO: Make a diff and call methods accordingly (Rename, delete)
+        //WindowMenuService windowMenuService = ServiceManager.getService(WindowMenuService.class);
+        //windowMenuService.recreate();
     }
 
     public JPanel getPanel() {

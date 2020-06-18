@@ -5,7 +5,7 @@ import com.intellij.openapi.components.ServiceManager;
 import com.layoutmanager.cleanup.EmptyLayoutRemoverService;
 import com.layoutmanager.ui.menu.WindowMenuService;
 
-// TODO: Not use this deplrecated way, see api documentation.
+// TODO: Not use this deprecated way, see api documentation.
 public class PluginBootstrapper implements ApplicationComponent {
 
     @Override

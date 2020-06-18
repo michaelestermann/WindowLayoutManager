@@ -1,9 +1,9 @@
 package com.layoutmanager.ui.menu;
 
 import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
-
-import com.intellij.openapi.extensions.PluginId;
+import com.layoutmanager.layout.LayoutAction;
 import com.layoutmanager.layout.delete.DeleteLayoutAction;
 import com.layoutmanager.layout.restore.RestoreLayoutAction;
 import com.layoutmanager.layout.store.LayoutCreator;
@@ -16,40 +16,69 @@ import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.dialogs.LayoutNameDialog;
 import com.layoutmanager.ui.dialogs.LayoutNameValidator;
 
-import javax.swing.*;
+import java.util.Arrays;
 
-// TODO: Not recreate menu
-//  - Register actions by name (WindowLayoutManager.Restore.XY)
-//  - Unregister an action when it gets deleted
-//  - Register NewLayout as action (WindowLayoutManager.New.)
 public class WindowMenuService {
+    private final ActionRegistry actionRegistry;
+
     private DefaultActionGroup storeLayout;
     private DefaultActionGroup restoreLayout;
     private DefaultActionGroup deleteLayout;
 
-    public void create() {
-        if (this.hasBeenCreated()) {
-            return;
-        }
+    public WindowMenuService() {
+        this.actionRegistry = new ActionRegistry();
+    }
 
+    public void create() {
         this.createMainActions((DefaultActionGroup) ActionManager.getInstance().getAction("WindowMenu"));
         this.createStoreRestoreActions();
     }
 
-    public void recreate() {
-        if (!this.hasBeenCreated()) {
-            return;
-        }
+    public void addLayout(Layout layout) {
+        LayoutCreator layoutCreator = createLayoutCreator();
 
-        this.restoreLayout.removeAll();
-        this.storeLayout.removeAll();
-        this.deleteLayout.removeAll();
-
-        this.createStoreRestoreActions();
+        this.addStoreLayoutActionBeforeSeparator(layout, layoutCreator);
+        this.addRestoreLayoutAction(layout);
+        this.addDeleteLayout(layout);
     }
 
-    private boolean hasBeenCreated() {
-        return this.storeLayout != null;
+    public void deleteLayout(Layout layout) {
+        deleteActionInGroup(layout, this.storeLayout, false);
+        deleteActionInGroup(layout, this.restoreLayout, true);
+        deleteActionInGroup(layout, this.deleteLayout, false);
+    }
+
+    public void renameLayout(Layout layout) {
+        LayoutAction layoutAction = getActionForLayout(this.restoreLayout, layout);
+        actionRegistry.rename(layoutAction);
+    }
+
+    private void deleteActionInGroup(Layout layout, DefaultActionGroup actionGroup, boolean unregister) {
+        LayoutAction layoutAction = this.getActionForLayout(actionGroup, layout);
+
+        if (unregister) {
+            this.actionRegistry.unregister(layoutAction);
+        }
+
+        actionGroup.remove(layoutAction);
+    }
+
+    private LayoutAction getActionForLayout(DefaultActionGroup group, Layout layout) {
+        return Arrays.stream(group.getChildActionsOrStubs())
+                .filter(x ->
+                        x instanceof LayoutAction &&
+                                ((LayoutAction)x).getLayout() == layout)
+                .map(x -> (LayoutAction)x)
+                .findFirst()
+                .orElse(null);
+    }
+
+    private LayoutCreator createLayoutCreator() {
+        LayoutConfig config = LayoutConfig.getInstance();
+        return new LayoutCreator(
+                config.getSettings(),
+                new SmartDockerFactory(),
+                new LayoutNameDialog(new LayoutNameValidator()));
     }
 
     private void createMainActions(DefaultActionGroup windowMenu) {
@@ -73,13 +102,10 @@ public class WindowMenuService {
     }
 
     private void addStoreLayoutActions(LayoutConfig config) {
-        LayoutCreator layoutCreator = new LayoutCreator(
-                config.getSettings(),
-                new SmartDockerFactory(),
-                new LayoutNameDialog(new LayoutNameValidator()));
+        LayoutCreator layoutCreator = createLayoutCreator();
 
-        for (int index = 0; index < config.getLayoutCount(); index++) {
-            this.storeLayout.add(new OverwriteLayoutAction(layoutCreator, index));
+        for (Layout layout : config.getLayouts()) {
+            addOverwriteLayoutActionAtTheEnd(layout, layoutCreator);
         }
 
         if (config.getLayoutCount() > 0) {
@@ -89,19 +115,43 @@ public class WindowMenuService {
         this.storeLayout.add(new NewLayoutAction(layoutCreator));
     }
 
+    private void addOverwriteLayoutActionAtTheEnd(Layout layout, LayoutCreator layoutCreator){
+        this.storeLayout.add(new OverwriteLayoutAction(layoutCreator, layout));
+    }
+
+    private void addStoreLayoutActionBeforeSeparator(Layout layout, LayoutCreator layoutCreator) {
+        AnAction[] actions = this.storeLayout.getChildActionsOrStubs();
+        AnAction separator = actions[actions.length - 2];
+        AnAction newLayoutAction = actions[actions.length - 1];
+
+        this.storeLayout.remove(separator);
+        this.storeLayout.remove(newLayoutAction);
+
+        addOverwriteLayoutActionAtTheEnd(layout, layoutCreator);
+
+        this.storeLayout.add(separator);
+        this.storeLayout.add(newLayoutAction);
+    }
+
     private void addRestoreLayoutActions(LayoutConfig config) {
         for (Layout layout : config.getLayouts()) {
-            RestoreLayoutAction action = new RestoreLayoutAction(layout);
-            this.restoreLayout.add(action);
-
-            PluginId pluginId = PluginId.findId("com.layoutmanager");
-            ActionManager.getInstance().registerAction("WindowLayoutManager." + layout.getName(), action, pluginId);
+            this.addRestoreLayoutAction(layout);
         }
+    }
+
+    private void addRestoreLayoutAction(Layout layout) {
+        RestoreLayoutAction restoreLayoutAction = new RestoreLayoutAction(layout);
+        this.restoreLayout.add(restoreLayoutAction);
+        this.actionRegistry.register(restoreLayoutAction);
     }
 
     private void addDeleteLayoutActions(LayoutConfig config) {
         for (Layout layout : config.getLayouts()) {
-            this.deleteLayout.add(new DeleteLayoutAction(layout));
+            this.addDeleteLayout(layout);
         }
+    }
+
+    private void addDeleteLayout(Layout layout) {
+        this.deleteLayout.add(new DeleteLayoutAction(layout));
     }
 }

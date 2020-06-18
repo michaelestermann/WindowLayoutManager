@@ -17,7 +17,9 @@ import com.layoutmanager.ui.menu.WindowMenuService;
 
 import org.jetbrains.annotations.NotNull;
 
-public class NewLayoutAction extends AnAction implements DumbAware {
+public class NewLayoutAction
+        extends AnAction
+        implements DumbAware {
 
     private final LayoutCreator layoutCreator;
 
@@ -35,7 +37,7 @@ public class NewLayoutAction extends AnAction implements DumbAware {
 
         if (newLayout != null) {
             this.storeLayout(newLayout);
-            this.updateWindowMenuItems();
+            this.updateWindowMenuItems(newLayout);
             this.showNotification(newLayout);
         }
     }
@@ -44,9 +46,9 @@ public class NewLayoutAction extends AnAction implements DumbAware {
         LayoutConfig.getInstance().addLayout(layout);
     }
 
-    private void updateWindowMenuItems() {
+    private void updateWindowMenuItems(Layout newLayout) {
         WindowMenuService windowMenuService = ServiceManager.getService(WindowMenuService.class);
-        windowMenuService.recreate();
+        windowMenuService.addLayout(newLayout);
     }
 
     private void showNotification(Layout newLayout) {

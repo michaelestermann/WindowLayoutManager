@@ -5,7 +5,9 @@ import com.intellij.openapi.components.ServiceManager;
 import com.layoutmanager.cleanup.EmptyLayoutRemoverService;
 import com.layoutmanager.ui.menu.WindowMenuService;
 
-// TODO: Not use this deprecated way, see api documentation.
+// TODO:
+//  - Not use this deplrecated way, see api documentation.
+//   - Ensure no name is used twice by editing the xml file manually
 public class PluginBootstrapper implements ApplicationComponent {
 
     @Override
@@ -18,4 +20,3 @@ public class PluginBootstrapper implements ApplicationComponent {
 
     }
 }
-

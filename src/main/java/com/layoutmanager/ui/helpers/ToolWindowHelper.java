@@ -33,6 +33,7 @@ public class ToolWindowHelper {
     }
 
     public static void setBounds(ToolWindowImpl toolWindow, Rectangle bounds) {
+        // TODO: To fix the issue with to small screen on multi dpi screens -> Move window when not on screen, then resize it
         if (toolWindow.isVisible()) {
             if (toolWindow.getType() == ToolWindowType.FLOATING) {
                 FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);

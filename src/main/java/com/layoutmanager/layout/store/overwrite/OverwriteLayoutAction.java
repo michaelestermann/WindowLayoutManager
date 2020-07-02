@@ -14,8 +14,6 @@ import com.layoutmanager.ui.helpers.BaloonNotificationHelper;
 import com.layoutmanager.ui.menu.WindowMenuService;
 import org.jetbrains.annotations.NotNull;
 
-// TODO:
-// - If the window is currently not on the screen where it should be restored, restore it twice... (Workaround)
 public class OverwriteLayoutAction
         extends LayoutAction
         implements DumbAware {

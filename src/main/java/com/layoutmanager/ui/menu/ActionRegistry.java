@@ -1,6 +1,7 @@
 package com.layoutmanager.ui.menu;
 
 import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.Shortcut;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.keymap.Keymap;
@@ -10,12 +11,21 @@ import org.jetbrains.annotations.Nullable;
 
 public class ActionRegistry {
     private static final String PLUGIN_ID = "com.layoutmanager";
+    private static final String ACTION_PREFIX = "WindowLayoutManager.";
 
     public void register(LayoutAction layoutAction) {
         PluginId pluginId = this.getPluginId();
         String actionName = this.getActionNameForLayout(layoutAction);
 
         ActionManager.getInstance().registerAction(actionName, layoutAction, pluginId);
+    }
+
+    public void register(AnAction action, String name) {
+        PluginId pluginId = this.getPluginId();
+        String actionName = ACTION_PREFIX + name;
+
+        ActionManager.getInstance().registerAction(actionName, action, pluginId);
+
     }
 
     public void unregister(LayoutAction layoutAction) {
@@ -58,7 +68,7 @@ public class ActionRegistry {
     }
 
     private String getActionNameForLayout(String layoutName, String typeName) {
-        return "WindowLayoutManager." + typeName + "." + layoutName;
+        return ACTION_PREFIX + typeName + "." + layoutName;
     }
 
 }

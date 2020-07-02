@@ -114,7 +114,7 @@ public class WindowMenuService {
 
         NewLayoutAction newLayoutAction = new NewLayoutAction(layoutCreator);
         this.storeLayout.add(newLayoutAction);
-        // TODO: Add new button in the action registry to support key shortcuts
+        this.actionRegistry.register(newLayoutAction, "NewLayout");
     }
 
     private void addOverwriteLayoutActionAtTheEnd(Layout layout, LayoutCreator layoutCreator){

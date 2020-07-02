@@ -21,9 +21,13 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
 
 import static javax.swing.JComponent.WHEN_FOCUSED;
 
+// TODO:
+// - When aborting, a rename still takes place...
+// - Do not work on the instances used for the menus (Create clones and in the end apply the changes to the one used for the menu)
 public class LayoutManagerSettingsPanel {
     private final LayoutConfig layoutConfig;
     private final LayoutNameDialog layoutNameDialog;
@@ -132,13 +136,14 @@ public class LayoutManagerSettingsPanel {
         return (JDialog) SwingUtilities.getAncestorOfClass(JDialog.class, this.settingsPanel);
     }
 
+    // TODO: Fix this equality issue.
     public boolean hasChanged() {
         return this.useSmartDockingCheckbox.isSelected() != this.layoutConfig.getSettings().getUseSmartDock() ||
                 !Arrays.equals(
                         this.layoutConfig.getLayouts(),
                         this.currentLayouts
                                 .stream()
-                                .toArray(Layout[]::new));
+                                .toArray(Layout[]::new)) || true;
     }
 
     public void apply() {
@@ -147,9 +152,23 @@ public class LayoutManagerSettingsPanel {
                 .stream()
                 .toArray(Layout[]::new));
 
-        // TODO: Make a diff and call methods accordingly (Rename, delete)
-        //WindowMenuService windowMenuService = ServiceManager.getService(WindowMenuService.class);
-        //windowMenuService.recreate();
+        // TODO: Extract to own class
+        WindowMenuService windowMenuService = ServiceManager.getService(WindowMenuService.class);
+        Map<Layout, String> displayedLayoutsWithName = windowMenuService.getDisplayedLayoutsWithName();
+
+        for (Layout configuredLayout : this.currentLayouts) {
+            if (!displayedLayoutsWithName.containsKey(configuredLayout)) {
+                windowMenuService.addLayout(configuredLayout);
+            } else if(displayedLayoutsWithName.get(configuredLayout) != configuredLayout.getName()) {
+                windowMenuService.renameLayout(configuredLayout);
+            }
+        }
+
+        for (Layout previousLayout : displayedLayoutsWithName.keySet()) {
+            if (!this.currentLayouts.contains(previousLayout)) {
+                windowMenuService.deleteLayout(previousLayout);
+            }
+        }
     }
 
     public JPanel getPanel() {

@@ -17,6 +17,8 @@ import com.layoutmanager.ui.dialogs.LayoutNameDialog;
 import com.layoutmanager.ui.dialogs.LayoutNameValidator;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class WindowMenuService {
     private final ActionRegistry actionRegistry;
@@ -51,6 +53,12 @@ public class WindowMenuService {
     public void renameLayout(Layout layout) {
         LayoutAction layoutAction = getActionForLayout(this.restoreLayout, layout);
         actionRegistry.rename(layoutAction);
+    }
+
+    public Map<Layout, String> getDisplayedLayoutsWithName() {
+        return Arrays.stream(this.restoreLayout.getChildren(null))
+                .map(x -> (LayoutAction)x)
+                .collect(Collectors.toMap(x -> x.getLayout(), x -> x.getTemplateText()));
     }
 
     private void deleteActionInGroup(Layout layout, DefaultActionGroup actionGroup, boolean unregister) {

@@ -16,11 +16,14 @@ public class SettingsPage implements Configurable {
 
     public SettingsPage() {
         LayoutNameValidator layoutNameValidator = new LayoutNameValidator();
+        LayoutSerializer layoutSerializer = new LayoutSerializer();
         this.panel = new LayoutManagerSettingsPanel(
                 LayoutConfig.getInstance(),
                 new LayoutNameDialog(layoutNameValidator),
                 layoutNameValidator,
-                new LayoutSerializer());
+                layoutSerializer,
+                new LayoutDuplicator(layoutSerializer),
+                new WindowMenuChangesApplier());
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)

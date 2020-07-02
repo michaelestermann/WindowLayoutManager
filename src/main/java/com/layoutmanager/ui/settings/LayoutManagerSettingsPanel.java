@@ -1,13 +1,11 @@
 package com.layoutmanager.ui.settings;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.dialogs.LayoutNameDialog;
 import com.layoutmanager.ui.dialogs.LayoutNameValidator;
 import com.layoutmanager.ui.helpers.ComponentNotificationHelper;
-import com.layoutmanager.ui.menu.WindowMenuService;
 import com.layoutmanager.ui.settings.exporting.ExportDialog;
 import com.layoutmanager.ui.settings.importing.ImportDialog;
 import org.jetbrains.annotations.NotNull;
@@ -21,20 +19,20 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Map;
 
 import static javax.swing.JComponent.WHEN_FOCUSED;
 
 // TODO:
-// - When aborting, a rename still takes place...
-// - Do not work on the instances used for the menus (Create clones and in the end apply the changes to the one used for the menu)
+// - Ensure layout name exists only once...
 public class LayoutManagerSettingsPanel {
     private final LayoutConfig layoutConfig;
     private final LayoutNameDialog layoutNameDialog;
     private final LayoutNameValidator layoutNameValidator;
     private final LayoutSerializer layoutSerializer;
+    private final LayoutDuplicator layoutDuplicator;
+    private final WindowMenuChangesApplier windowMenuChangesApplier;
+    private final ArrayList<EditLayout> editLayouts = new ArrayList<>();
 
-    private ArrayList<Layout> currentLayouts = new ArrayList<>();
     private JCheckBox useSmartDockingCheckbox;
     private JButton deleteButton;
     private JButton renameButton;
@@ -47,11 +45,15 @@ public class LayoutManagerSettingsPanel {
             LayoutConfig layoutConfig,
             LayoutNameDialog layoutNameDialog,
             LayoutNameValidator layoutNameValidator,
-            LayoutSerializer layoutSerializer) {
+            LayoutSerializer layoutSerializer,
+            LayoutDuplicator layoutDuplicator,
+            WindowMenuChangesApplier windowMenuChangesApplier) {
         this.layoutConfig = layoutConfig;
         this.layoutNameDialog = layoutNameDialog;
         this.layoutNameValidator = layoutNameValidator;
         this.layoutSerializer = layoutSerializer;
+        this.layoutDuplicator = layoutDuplicator;
+        this.windowMenuChangesApplier = windowMenuChangesApplier;
 
         this.loadSettings(layoutConfig);
 
@@ -63,7 +65,12 @@ public class LayoutManagerSettingsPanel {
     }
 
     private void loadSettings(LayoutConfig layoutConfig) {
-        Collections.addAll(this.currentLayouts, layoutConfig.getLayouts());
+        Collections.addAll(
+                this.editLayouts,
+                Arrays
+                    .stream(layoutConfig.getLayouts())
+                    .map(x -> new EditLayout(x, this.layoutDuplicator.duplicate(x)))
+                    .toArray(EditLayout[]::new));
 
         DefaultTableModel table = this.createTableContent();
         this.setKeyBindings(table);
@@ -101,7 +108,11 @@ public class LayoutManagerSettingsPanel {
 
     private void renameLayout() {
         int selectedRow = this.layoutsTable.getSelectedRow();
-        String newName = this.layoutNameDialog.show(this.currentLayouts.get(selectedRow).getName());
+        String newName = this.layoutNameDialog.show(
+                this.editLayouts
+                        .get(selectedRow)
+                        .getEditedLayout()
+                        .getName());
 
         if (newName != null) {
             this.layoutsTable.setValueAt(newName, selectedRow, 0);
@@ -110,10 +121,10 @@ public class LayoutManagerSettingsPanel {
 
     private void exportLayout() {
         int selectedRow = this.layoutsTable.getSelectedRow();
-        Layout selectedLayout = this.currentLayouts.get(selectedRow);
+        EditLayout selectedLayout = this.editLayouts.get(selectedRow);
 
-        String encodedContent = this.layoutSerializer.serialize(selectedLayout);
-        showExportDialog(selectedLayout, encodedContent);
+        String encodedContent = this.layoutSerializer.serialize(selectedLayout.getEditedLayout());
+        showExportDialog(selectedLayout.getEditedLayout(), encodedContent);
     }
 
     private void showExportDialog(Layout selectedLayout, String encodedContent) {
@@ -126,7 +137,7 @@ public class LayoutManagerSettingsPanel {
         ImportDialog importDialog = new ImportDialog(this.layoutNameValidator, this.layoutSerializer);
         JDialog parent = this.getParentDialog();
         if (importDialog.showDialogInCenterOf(parent) == ImportDialog.OK_RESULT) {
-            this.currentLayouts.add(importDialog.getImportedLayout());
+            this.editLayouts.add(new EditLayout(null, importDialog.getImportedLayout()));
             ((DefaultTableModel) layoutsTable.getModel()).fireTableDataChanged();
         }
     }
@@ -136,39 +147,38 @@ public class LayoutManagerSettingsPanel {
         return (JDialog) SwingUtilities.getAncestorOfClass(JDialog.class, this.settingsPanel);
     }
 
-    // TODO: Fix this equality issue.
     public boolean hasChanged() {
         return this.useSmartDockingCheckbox.isSelected() != this.layoutConfig.getSettings().getUseSmartDock() ||
-                !Arrays.equals(
-                        this.layoutConfig.getLayouts(),
-                        this.currentLayouts
-                                .stream()
-                                .toArray(Layout[]::new)) || true;
+                layoutsHasBeenAddedOrRemoved() ||
+                layoutsHasBeenRenamed();
+    }
+
+    private boolean layoutsHasBeenAddedOrRemoved() {
+        return !Arrays.equals(
+                this.layoutConfig.getLayouts(),
+                this.editLayouts
+                        .stream()
+                        .map(x -> x.getOriginalLayout())
+                        .toArray(Layout[]::new));
+    }
+
+    private boolean layoutsHasBeenRenamed() {
+        return editLayouts
+                .stream()
+                .anyMatch(x -> !x.getOriginalLayout().getName().equals(x.getEditedLayout().getName()));
     }
 
     public void apply() {
+        this.windowMenuChangesApplier.apply(this.editLayouts, this.layoutConfig.getLayouts());
+
         this.layoutConfig.getSettings().setUseSmartDock(this.useSmartDockingCheckbox.isSelected());
-        this.layoutConfig.setLayouts(this.currentLayouts
+        this.layoutConfig.setLayouts(this.editLayouts
                 .stream()
+                .map(x ->
+                    x.getOriginalLayout() == null ?
+                        x.getEditedLayout() :
+                        x.getOriginalLayout())
                 .toArray(Layout[]::new));
-
-        // TODO: Extract to own class
-        WindowMenuService windowMenuService = ServiceManager.getService(WindowMenuService.class);
-        Map<Layout, String> displayedLayoutsWithName = windowMenuService.getDisplayedLayoutsWithName();
-
-        for (Layout configuredLayout : this.currentLayouts) {
-            if (!displayedLayoutsWithName.containsKey(configuredLayout)) {
-                windowMenuService.addLayout(configuredLayout);
-            } else if(displayedLayoutsWithName.get(configuredLayout) != configuredLayout.getName()) {
-                windowMenuService.renameLayout(configuredLayout);
-            }
-        }
-
-        for (Layout previousLayout : displayedLayoutsWithName.keySet()) {
-            if (!this.currentLayouts.contains(previousLayout)) {
-                windowMenuService.deleteLayout(previousLayout);
-            }
-        }
     }
 
     public JPanel getPanel() {
@@ -182,7 +192,7 @@ public class LayoutManagerSettingsPanel {
                         MessagesHelper.message("SettingsPage.NameColumn"),
                         MessagesHelper.message("SettingsPage.ConfiguredWindowsColumn")
                 },
-                currentLayouts.size()) {
+                editLayouts.size()) {
 
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -193,7 +203,7 @@ public class LayoutManagerSettingsPanel {
             public void setValueAt(Object aValue, int row, int column) {
                 String newLayoutName = aValue.toString();
                 if (layoutNameValidator.isValid(newLayoutName)) {
-                    currentLayouts.get(row).setName(aValue.toString());
+                    editLayouts.get(row).getEditedLayout().setName(aValue.toString());
                     this.fireTableChanged(new TableModelEvent(this, row));
                 } else {
                     ComponentNotificationHelper.error(layoutsTable, MessagesHelper.message("LayoutNameValidation.InvalidName"));
@@ -202,18 +212,18 @@ public class LayoutManagerSettingsPanel {
 
             @Override
             public int getRowCount() {
-                return currentLayouts.size();
+                return editLayouts.size();
             }
 
             @Override
             public void removeRow(int row) {
-                currentLayouts.remove(row);
+                editLayouts.remove(row);
                 this.fireTableRowsDeleted(row, row);
             }
 
             @Override
             public Object getValueAt(int row, int column) {
-                Layout layout = currentLayouts.get(row);
+                Layout layout = editLayouts.get(row).getEditedLayout();
 
                 switch (column) {
                     case 0:
@@ -227,3 +237,5 @@ public class LayoutManagerSettingsPanel {
         };
     }
 }
+
+

@@ -55,12 +55,6 @@ public class WindowMenuService {
         actionRegistry.rename(layoutAction);
     }
 
-    public Map<Layout, String> getDisplayedLayoutsWithName() {
-        return Arrays.stream(this.restoreLayout.getChildren(null))
-                .map(x -> (LayoutAction)x)
-                .collect(Collectors.toMap(x -> x.getLayout(), x -> x.getTemplateText()));
-    }
-
     private void deleteActionInGroup(Layout layout, DefaultActionGroup actionGroup, boolean unregister) {
         LayoutAction layoutAction = this.getActionForLayout(actionGroup, layout);
 

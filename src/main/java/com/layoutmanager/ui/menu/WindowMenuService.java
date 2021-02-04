@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+// TODO: Fix remove seperator when having no layout (After deleting a layout) => Maybe share code with add (132)
 public class WindowMenuService {
     private final ActionRegistry actionRegistry;
 
@@ -125,15 +126,18 @@ public class WindowMenuService {
 
     private void addStoreLayoutActionBeforeSeparator(Layout layout, LayoutCreator layoutCreator) {
         AnAction[] actions = this.storeLayout.getChildActionsOrStubs();
-        AnAction separator = actions[actions.length - 2];
         AnAction newLayoutAction = actions[actions.length - 1];
 
-        this.storeLayout.remove(separator);
+        if (actions.length > 1) {
+            AnAction separator = actions[actions.length - 2];
+            this.storeLayout.remove(separator);
+        }
+
         this.storeLayout.remove(newLayoutAction);
 
         addOverwriteLayoutActionAtTheEnd(layout, layoutCreator);
 
-        this.storeLayout.add(separator);
+        this.storeLayout.addSeparator();
         this.storeLayout.add(newLayoutAction);
     }
 

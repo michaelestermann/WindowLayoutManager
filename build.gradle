@@ -26,7 +26,7 @@ repositories {
 // https://www.jetbrains.com/intellij-repository/snapshots/
 intellij {
     type = 'RD'
-    version = "2020.2-SNAPSHOT"
+    version = "2020.3-SNAPSHOT"
 	// version = "2019.3.4"
 	// version = "2020.1.0"
 	// version = "2020.1-SNAPSHOT"

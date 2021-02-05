@@ -57,7 +57,7 @@ public class ActionRegistry {
 
     @Nullable
     private PluginId getPluginId() {
-        return PluginId.findId("com.layoutmanager");
+        return PluginId.findId(PLUGIN_ID);
     }
 
     private String getActionNameForLayout(LayoutAction layoutAction) {

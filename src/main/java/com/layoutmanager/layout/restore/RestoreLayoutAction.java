@@ -1,8 +1,6 @@
 package com.layoutmanager.layout.restore;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.ui.UISettings;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.DumbAware;
@@ -10,13 +8,14 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.openapi.wm.impl.ToolWindowImpl;
+import com.intellij.openapi.wm.ex.ToolWindowEx;
 import com.layoutmanager.layout.LayoutAction;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.ToolWindowInfo;
 import com.layoutmanager.ui.helpers.BaloonNotificationHelper;
 import com.layoutmanager.ui.helpers.ToolWindowHelper;
+import com.layoutmanager.ui.icons.Icons;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -35,7 +34,7 @@ public class RestoreLayoutAction
 
         Presentation presentation = this.getTemplatePresentation();
         presentation.setText(layout.getName());
-        presentation.setIcon(AllIcons.Actions.GroupByModule);
+        presentation.setIcon(Icons.Menu.RestoreLayout);
     }
 
     @Override
@@ -59,14 +58,14 @@ public class RestoreLayoutAction
         applyEditorTabPlacement(layout);
         ToolWindowManager toolWindowManager = getToolWindowManager(event);
 
-        Map<ToolWindowInfo, ToolWindowImpl> toolWindows = getToolWindows(toolWindowManager, layout.getToolWindows());
+        Map<ToolWindowInfo, ToolWindowEx> toolWindows = getToolWindows(toolWindowManager, layout.getToolWindows());
         hideAllToolWindows(toolWindows);
         applyToolWindowLayout(toolWindows);
     }
 
-    private Map<ToolWindowInfo, ToolWindowImpl> getToolWindows(ToolWindowManager toolWindowManager, ToolWindowInfo[] toolWindows) {
+    private Map<ToolWindowInfo, ToolWindowEx> getToolWindows(ToolWindowManager toolWindowManager, ToolWindowInfo[] toolWindows) {
         return Stream.of(toolWindows)
-                .map(x -> new Pair<ToolWindowInfo, ToolWindowImpl>(x, (ToolWindowImpl)toolWindowManager.getToolWindow(x.getId())))
+                .map(x -> new Pair<ToolWindowInfo, ToolWindowEx>(x, (ToolWindowEx)toolWindowManager.getToolWindow(x.getId())))
                 .filter(x -> x.second != null)
                 .collect(Collectors.toMap(x -> x.first, x -> x.second));
     }
@@ -80,17 +79,15 @@ public class RestoreLayoutAction
         }
     }
 
-    private void hideAllToolWindows(Map<ToolWindowInfo, ToolWindowImpl> toolWindows) {
-        toolWindows.forEach((info, toolWindow) -> {
-            toolWindow.hide(null);
-        });
+    private void hideAllToolWindows(Map<ToolWindowInfo, ToolWindowEx> toolWindows) {
+        toolWindows.forEach((info, toolWindow) -> toolWindow.hide(null));
     }
 
-    private void applyToolWindowLayout(Map<ToolWindowInfo, ToolWindowImpl> toolWindows) {
+    private void applyToolWindowLayout(Map<ToolWindowInfo, ToolWindowEx> toolWindows) {
 
         toolWindows.forEach((info, toolWindow) -> {
             // !! Workaround !!
-            // decorator is not set and throws exception. When calling this method, the content manager lazy variable will be loaded and therefor also the decorator...
+            // decorator is not set and throws exception. When calling this method, the content manager lazy variable will be loaded and therefore also the decorator...
             // See: https://github.com/JetBrains/intellij-community/blob/a63286c3b29fe467399fb353c71ed15cd65db8dd/platform/platform-impl/src/com/intellij/openapi/wm/impl/ToolWindowImpl.kt
             toolWindow.getComponent();
 

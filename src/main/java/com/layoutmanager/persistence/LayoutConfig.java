@@ -34,6 +34,7 @@ public class LayoutConfig implements PersistentStateComponent<LayoutConfig> {
         XmlSerializerUtil.copyBean(layoutConfig, this);
     }
 
+    @SuppressWarnings({"unused", "Used for serialization."})
     public Layout getLayout(int number) {
         return this.layouts.get(number);
     }
@@ -62,6 +63,7 @@ public class LayoutConfig implements PersistentStateComponent<LayoutConfig> {
         return this.layouts.size();
     }
 
+    @SuppressWarnings({"unused", "Used for serialization."})
     public void setLayout(int number, Layout layout) {
         this.layouts.set(number, layout);
     }

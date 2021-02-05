@@ -1,6 +1,5 @@
 package com.layoutmanager.layout.store.overwrite;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.components.ServiceManager;
@@ -11,6 +10,7 @@ import com.layoutmanager.layout.store.LayoutCreator;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.ui.helpers.BaloonNotificationHelper;
+import com.layoutmanager.ui.icons.Icons;
 import com.layoutmanager.ui.menu.WindowMenuService;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +29,7 @@ public class OverwriteLayoutAction
 
         Presentation presentation = this.getTemplatePresentation();
         presentation.setText(this.layout.getName());
-        presentation.setIcon(AllIcons.Actions.Edit);
+        presentation.setIcon(Icons.Menu.OverwriteLayout);
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.layoutmanager.layout.store;
 
 import com.intellij.ide.ui.UISettings;
 import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.openapi.wm.impl.ToolWindowImpl;
+import com.intellij.openapi.wm.ex.ToolWindowEx;
 import com.layoutmanager.layout.store.smartdock.SmartDocker;
 import com.layoutmanager.layout.store.smartdock.SmartDockerFactory;
 import com.layoutmanager.layout.store.validation.LayoutValidationHelper;
@@ -64,7 +64,7 @@ public class LayoutCreator {
         String[] toolWindowIds = toolWindowManager.getToolWindowIds();
         List<ToolWindowInfo> toolWindows = new ArrayList<>();
         for (String id : toolWindowIds) {
-            ToolWindowImpl toolWindow = (ToolWindowImpl)toolWindowManager.getToolWindow(id);
+            ToolWindowEx toolWindow = (ToolWindowEx)toolWindowManager.getToolWindow(id);
 
             ToolWindowInfo info = new ToolWindowInfo(
                     id,

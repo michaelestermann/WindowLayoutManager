@@ -1,19 +1,16 @@
 package com.layoutmanager.layout.delete;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.components.ServiceManager;
-
 import com.intellij.openapi.project.DumbAware;
 import com.layoutmanager.layout.LayoutAction;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.helpers.BaloonNotificationHelper;
+import com.layoutmanager.ui.icons.Icons;
 import com.layoutmanager.ui.menu.WindowMenuService;
-
 import org.jetbrains.annotations.NotNull;
 
 public class DeleteLayoutAction
@@ -26,7 +23,7 @@ public class DeleteLayoutAction
         this.layout = layout;
         Presentation presentation = this.getTemplatePresentation();
         presentation.setText(layout.getName());
-        presentation.setIcon(AllIcons.Actions.GC);
+        presentation.setIcon(Icons.Menu.DeleteLayout);
     }
 
     @Override

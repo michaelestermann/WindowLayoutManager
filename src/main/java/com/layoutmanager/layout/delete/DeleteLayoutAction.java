@@ -8,7 +8,7 @@ import com.layoutmanager.layout.LayoutAction;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
-import com.layoutmanager.ui.helpers.BaloonNotificationHelper;
+import com.layoutmanager.ui.helpers.BalloonNotificationHelper;
 import com.layoutmanager.ui.icons.Icons;
 import com.layoutmanager.ui.menu.WindowMenuService;
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +49,7 @@ public class DeleteLayoutAction
     }
 
     private void showNotification() {
-        BaloonNotificationHelper.info(
+        BalloonNotificationHelper.info(
                 MessagesHelper.message("DeleteLayout.Notification.Title"),
                 MessagesHelper.message("DeleteLayout.Notification.Content", this.layout.getName()));
     }

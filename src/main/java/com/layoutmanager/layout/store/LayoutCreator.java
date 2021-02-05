@@ -11,7 +11,7 @@ import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutSettings;
 import com.layoutmanager.persistence.ToolWindowInfo;
 import com.layoutmanager.ui.dialogs.LayoutNameDialog;
-import com.layoutmanager.ui.helpers.BaloonNotificationHelper;
+import com.layoutmanager.ui.helpers.BalloonNotificationHelper;
 import com.layoutmanager.ui.helpers.ToolWindowHelper;
 import org.jetbrains.annotations.NotNull;
 
@@ -93,7 +93,7 @@ public class LayoutCreator {
                             .map(ToolWindowInfo::getId)
                             .toArray(String[]::new));
 
-            BaloonNotificationHelper.warning(
+            BalloonNotificationHelper.warning(
                     MessagesHelper.message("StoreLayout.Validation.ToolWindowOutOfScreen.Title"),
                     MessagesHelper.message("StoreLayout.Validation.ToolWindowOutOfScreen.Content", invalidToolWindowNames));
         }

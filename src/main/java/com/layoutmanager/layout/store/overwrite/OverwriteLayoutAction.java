@@ -9,7 +9,7 @@ import com.layoutmanager.layout.LayoutAction;
 import com.layoutmanager.layout.store.LayoutCreator;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
-import com.layoutmanager.ui.helpers.BaloonNotificationHelper;
+import com.layoutmanager.ui.helpers.BalloonNotificationHelper;
 import com.layoutmanager.ui.icons.Icons;
 import com.layoutmanager.ui.menu.WindowMenuService;
 import org.jetbrains.annotations.NotNull;
@@ -69,7 +69,7 @@ public class OverwriteLayoutAction
     }
 
     private void showNotification(String currentLayoutName, String previousLayoutName) {
-        BaloonNotificationHelper.info(
+        BalloonNotificationHelper.info(
                 MessagesHelper.message("StoreLayout.Overwrite.Notification.Title"),
                 MessagesHelper.message("StoreLayout.Overwrite.Notification.Content", previousLayoutName, currentLayoutName));
     }

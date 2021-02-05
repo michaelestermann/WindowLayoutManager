@@ -10,7 +10,7 @@ import com.layoutmanager.layout.store.LayoutCreator;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
-import com.layoutmanager.ui.helpers.BaloonNotificationHelper;
+import com.layoutmanager.ui.helpers.BalloonNotificationHelper;
 import com.layoutmanager.ui.icons.Icons;
 import com.layoutmanager.ui.menu.WindowMenuService;
 import org.jetbrains.annotations.NotNull;
@@ -50,7 +50,7 @@ public class NewLayoutAction
     }
 
     private void showNotification(Layout newLayout) {
-        BaloonNotificationHelper.info(
+        BalloonNotificationHelper.info(
                 MessagesHelper.message("StoreLayout.New.Notification.Title"),
                 MessagesHelper.message("StoreLayout.New.Notification.Content", newLayout.getName()));
     }

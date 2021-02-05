@@ -13,7 +13,7 @@ import com.layoutmanager.layout.LayoutAction;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.ToolWindowInfo;
-import com.layoutmanager.ui.helpers.BaloonNotificationHelper;
+import com.layoutmanager.ui.helpers.BalloonNotificationHelper;
 import com.layoutmanager.ui.helpers.ToolWindowHelper;
 import com.layoutmanager.ui.icons.Icons;
 import org.jetbrains.annotations.NotNull;
@@ -109,7 +109,7 @@ public class RestoreLayoutAction
     }
 
     private void showNotification(Layout updatedLayout) {
-        BaloonNotificationHelper.info(
+        BalloonNotificationHelper.info(
                 MessagesHelper.message("RestoreLayout.Notification.Title"),
                 MessagesHelper.message("RestoreLayout.Notification.Content", updatedLayout.getName()));
     }

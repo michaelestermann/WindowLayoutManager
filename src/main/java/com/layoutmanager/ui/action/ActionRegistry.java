@@ -1,4 +1,4 @@
-package com.layoutmanager.ui.menu;
+package com.layoutmanager.ui.action;
 
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -11,11 +11,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class ActionRegistry {
     private static final String PLUGIN_ID = "com.layoutmanager";
-    private static final String ACTION_PREFIX = "WindowLayoutManager.";
+    public static final String ACTION_PREFIX = "WindowLayoutManager.";
 
     public void register(LayoutAction layoutAction) {
         PluginId pluginId = this.getPluginId();
-        String actionName = this.getActionNameForLayout(layoutAction);
+        String actionName = ActionNameGenerator.getActionNameForLayoutAction(layoutAction);
 
         ActionManager.getInstance().registerAction(actionName, layoutAction, pluginId);
     }
@@ -24,12 +24,13 @@ public class ActionRegistry {
         PluginId pluginId = this.getPluginId();
         String actionName = ACTION_PREFIX + name;
 
-        ActionManager.getInstance().registerAction(actionName, action, pluginId);
-
+        ActionManager
+                .getInstance()
+                .registerAction(actionName, action, pluginId);
     }
 
     public void unregister(LayoutAction layoutAction) {
-        String actionName = this.getActionNameForLayout(layoutAction);
+        String actionName = ActionNameGenerator.getActionNameForLayoutAction(layoutAction);
         ActionManager.getInstance().unregisterAction(actionName);
     }
 
@@ -40,7 +41,7 @@ public class ActionRegistry {
         Shortcut[] shortcuts = activeKeymap.getShortcuts(previousActionId);
 
         if (shortcuts.length > 0) {
-            String newActionName = getActionNameForLayout(layoutAction);
+            String newActionName = ActionNameGenerator.getActionNameForLayoutAction(layoutAction);
             this.reRegisterAction(actionManager, layoutAction, previousActionId, newActionName);
             activeKeymap.removeAllActionShortcuts(previousActionId);
 
@@ -59,16 +60,4 @@ public class ActionRegistry {
     private PluginId getPluginId() {
         return PluginId.findId(PLUGIN_ID);
     }
-
-    private String getActionNameForLayout(LayoutAction layoutAction) {
-        String className = layoutAction.getClass().getSimpleName();
-        String typeName = className.substring(0, className.length() - "LayoutAction".length());
-
-        return getActionNameForLayout(layoutAction.getLayout().getName(), typeName);
-    }
-
-    private String getActionNameForLayout(String layoutName, String typeName) {
-        return ACTION_PREFIX + typeName + "." + layoutName;
-    }
-
 }

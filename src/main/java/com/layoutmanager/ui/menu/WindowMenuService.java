@@ -13,6 +13,7 @@ import com.layoutmanager.layout.store.smartdock.SmartDockerFactory;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
+import com.layoutmanager.ui.action.ActionRegistry;
 import com.layoutmanager.ui.dialogs.LayoutNameDialog;
 import com.layoutmanager.ui.dialogs.LayoutNameValidator;
 
@@ -64,7 +65,8 @@ public class WindowMenuService {
     }
 
     private LayoutAction getActionForLayout(DefaultActionGroup group, Layout layout) {
-        return Arrays.stream(group.getChildActionsOrStubs())
+        return Arrays
+                .stream(group.getChildActionsOrStubs())
                 .filter(x ->
                         x instanceof LayoutAction &&
                                 ((LayoutAction)x).getLayout() == layout)

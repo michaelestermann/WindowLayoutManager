@@ -1,8 +1,12 @@
 package com.layoutmanager.ui.settings;
 
+import com.intellij.openapi.actionSystem.Shortcut;
+import com.intellij.openapi.keymap.Keymap;
+import com.intellij.openapi.keymap.KeymapManager;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
+import com.layoutmanager.ui.action.ActionNameGenerator;
 import com.layoutmanager.ui.dialogs.LayoutNameDialog;
 import com.layoutmanager.ui.dialogs.LayoutNameValidator;
 import com.layoutmanager.ui.helpers.ComponentNotificationHelper;
@@ -19,6 +23,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 import static javax.swing.JComponent.WHEN_FOCUSED;
 
@@ -57,7 +62,9 @@ public class LayoutManagerSettingsPanel {
 
         this.loadSettings(layoutConfig);
 
-        this.layoutsTable.getSelectionModel().addListSelectionListener(listSelectionEvent -> this.selectedLayoutChanged());
+        this.layoutsTable
+                .getSelectionModel()
+                .addListSelectionListener(listSelectionEvent -> this.selectedLayoutChanged());
         this.deleteButton.addActionListener(e -> this.deleteLayout());
         this.renameButton.addActionListener(e -> this.renameLayout());
         this.exportButton.addActionListener(actionEvent -> this.exportLayout());
@@ -158,7 +165,7 @@ public class LayoutManagerSettingsPanel {
                 this.layoutConfig.getLayouts(),
                 this.editLayouts
                         .stream()
-                        .map(x -> x.getOriginalLayout())
+                        .map(EditLayout::getOriginalLayout)
                         .toArray(Layout[]::new));
     }
 
@@ -190,7 +197,8 @@ public class LayoutManagerSettingsPanel {
         return new DefaultTableModel(
                 new String[]{
                         MessagesHelper.message("SettingsPage.NameColumn"),
-                        MessagesHelper.message("SettingsPage.ConfiguredWindowsColumn")
+                        MessagesHelper.message("SettingsPage.ConfiguredWindowsColumn"),
+                        MessagesHelper.message("SettingsPage.ShortcutColumn")
                 },
                 editLayouts.size()) {
 
@@ -203,7 +211,11 @@ public class LayoutManagerSettingsPanel {
             public void setValueAt(Object aValue, int row, int column) {
                 String newLayoutName = aValue.toString();
                 if (layoutNameValidator.isValid(newLayoutName)) {
-                    editLayouts.get(row).getEditedLayout().setName(aValue.toString());
+                    editLayouts
+                            .get(row)
+                            .getEditedLayout()
+                            .setName(aValue.toString());
+
                     this.fireTableChanged(new TableModelEvent(this, row));
                 } else {
                     ComponentNotificationHelper.error(layoutsTable, MessagesHelper.message("LayoutNameValidation.InvalidName"));
@@ -230,9 +242,21 @@ public class LayoutManagerSettingsPanel {
                         return layout.getName();
                     case 1:
                         return layout.getToolWindows().length;
+                    case 2:
+                        return getKeyMap(layout);
                     default:
                         return null;
                 }
+            }
+
+            private String getKeyMap(Layout layout) {
+                Keymap keymap = KeymapManager.getInstance().getActiveKeymap();
+                String actionName = ActionNameGenerator.getActionNameForLayout(layout);
+
+                Shortcut[] shortcuts = keymap.getShortcuts(actionName);
+                return Arrays.stream(shortcuts)
+                        .map(Shortcut::toString)
+                        .collect(Collectors.joining(", "));
             }
         };
     }

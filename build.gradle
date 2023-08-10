@@ -1,16 +1,16 @@
 plugins { 
     id 'java' 
-    id 'org.jetbrains.intellij' version '0.4.15' 
+    id 'org.jetbrains.intellij' version '1.15.0'
     id 'checkstyle'
 } 
 
 dependencies {
-    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
-    compile group: 'com.github.tommyettinger', name: 'blazingchain', version: '1.4.4.2'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
+    implementation group: 'com.github.tommyettinger', name: 'blazingchain', version: '1.4.4.4'
 }
  
 group 'com.layoutmanager' 
-version '1.4.0'
+version '1.5.0'
  
 sourceCompatibility = 1.8 
 
@@ -26,10 +26,8 @@ repositories {
 // https://www.jetbrains.com/intellij-repository/snapshots/
 intellij {
     type = 'RD'
-    version = "2020.3-SNAPSHOT"
-	// version = "2019.3.4"
-	// version = "2020.1.0"
-	// version = "2020.1-SNAPSHOT"
+    version = "2023.2"
+    // version = "RIDER-2023.3-SNAPSHOT"
 	updateSinceUntilBuild = false
 }
 
@@ -38,12 +36,12 @@ publishPlugin {
 }
 
 wrapper {
-    gradleVersion = '6.0.1'
+    gradleVersion = '8.2.1'
     distributionUrl = "https://cache-redirector.jetbrains.com/services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
 }
 
 checkstyle {
-    project.ext.checkstyleVersion = '8.27'
+    project.ext.checkstyleVersion = '10.12.2'
 }
 
 checkstyleMain {

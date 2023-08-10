@@ -41,9 +41,7 @@ public class LayoutConfig implements PersistentStateComponent<LayoutConfig> {
 
     @SuppressWarnings({"unused", "Used for serialization."})
     public Layout[] getLayouts() {
-        return this.layouts
-            .stream()
-            .toArray(Layout[]::new);
+        return this.layouts.toArray(Layout[]::new);
     }
 
     @SuppressWarnings({"unused", "Used for serialization."})

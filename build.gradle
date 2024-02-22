@@ -26,8 +26,7 @@ repositories {
 // https://www.jetbrains.com/intellij-repository/snapshots/
 intellij {
     type = 'RD'
-    version = "2023.2"
-    // version = "RIDER-2023.3-SNAPSHOT"
+    version = "2023.3"
 	updateSinceUntilBuild = false
 }
 
@@ -36,12 +35,12 @@ publishPlugin {
 }
 
 wrapper {
-    gradleVersion = '8.2.1'
+    gradleVersion = '8.6'
     distributionUrl = "https://cache-redirector.jetbrains.com/services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
 }
 
 checkstyle {
-    project.ext.checkstyleVersion = '10.12.2'
+    project.ext.checkstyleVersion = '10.13.0'
 }
 
 checkstyleMain {

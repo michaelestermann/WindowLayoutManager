@@ -19,9 +19,11 @@ import com.layoutmanager.ui.icons.Icons;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@SuppressWarnings({"MissingActionUpdateThread"})
 public class RestoreLayoutAction
         extends LayoutAction
         implements DumbAware  {
@@ -64,14 +66,14 @@ public class RestoreLayoutAction
     }
 
     private Map<ToolWindowInfo, ToolWindowEx> getToolWindows(ToolWindowManager toolWindowManager, ToolWindowInfo[] toolWindows) {
-        return Stream.of(toolWindows)
-                .map(x -> new Pair<ToolWindowInfo, ToolWindowEx>(x, (ToolWindowEx)toolWindowManager.getToolWindow(x.getId())))
+        return Stream
+                .of(toolWindows)
+                .map(x -> new Pair<>(x, (ToolWindowEx) toolWindowManager.getToolWindow(x.getId())))
                 .filter(x -> x.second != null)
                 .collect(Collectors.toMap(x -> x.first, x -> x.second));
     }
 
     private void applyEditorTabPlacement(Layout layout) {
-
         if (layout.getEditorPlacement() >= 0) {
             UISettings uiSettings = UISettings.getInstance();
             uiSettings.setEditorTabPlacement(layout.getEditorPlacement());
@@ -105,7 +107,8 @@ public class RestoreLayoutAction
 
     private ToolWindowManager getToolWindowManager(AnActionEvent event) {
         Project project = event.getProject();
-        return ToolWindowManager.getInstance(project);
+        return ToolWindowManager.getInstance(
+                Objects.requireNonNull(project));
     }
 
     private void showNotification(Layout updatedLayout) {

@@ -1,16 +1,15 @@
 package com.layoutmanager.localization;
 
-import com.intellij.CommonBundle;
+import com.intellij.AbstractBundle;
 import com.intellij.reference.SoftReference;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.PropertyKey;
 
 import java.lang.ref.Reference;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.PropertyKey;
 
 public class MessagesHelper {
     @NonNls
@@ -33,6 +32,6 @@ public class MessagesHelper {
 
     public static String message(@NotNull @PropertyKey(resourceBundle = BUNDLE_NAME) String key,
                                  @NotNull Object... params) {
-        return CommonBundle.message(getBundle(), key, params);
+        return AbstractBundle.message(getBundle(), key, params);
     }
 }

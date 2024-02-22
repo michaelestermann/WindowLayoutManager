@@ -20,8 +20,6 @@ public class ScreenSizeHelper {
                 .orElse(new Rectangle());
     }
 
-
-
     private static Rectangle getScreenRectangle(GraphicsDevice device) {
         Rectangle defaultBounds = SunGraphicsEnvironment.getUsableBounds(device);
         return new Rectangle(

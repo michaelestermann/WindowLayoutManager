@@ -5,21 +5,36 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class Layout {
+    private int id;
     private String name;
     private int editorTabPlacement;
     private ToolWindowInfo[] toolWindows;
 
     @SuppressWarnings({"unused", "Used for serialization."})
     public Layout() {
+        this.id = 0;
         this.name = "";
         this.toolWindows = new ToolWindowInfo[0];
         this.editorTabPlacement = -1;
     }
 
-    public Layout(String name, ToolWindowInfo[] toolWindows, int editorTabPlacement) {
+    public Layout(
+            int id,
+            String name,
+            ToolWindowInfo[] toolWindows,
+            int editorTabPlacement) {
+        this.id = id;
         this.name = name;
         this.toolWindows = toolWindows;
         this.editorTabPlacement = editorTabPlacement;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

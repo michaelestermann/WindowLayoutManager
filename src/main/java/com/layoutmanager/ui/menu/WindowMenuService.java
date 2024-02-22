@@ -31,7 +31,10 @@ public class WindowMenuService {
     }
 
     public void create() {
-        this.createMainActions((DefaultActionGroup) ActionManager.getInstance().getAction("WindowMenu"));
+        DefaultActionGroup windowMenu = (DefaultActionGroup) ActionManager
+                .getInstance()
+                .getAction("WindowMenu");
+        this.createMainActions(windowMenu);
         this.createStoreRestoreActions();
     }
 
@@ -114,7 +117,9 @@ public class WindowMenuService {
             this.storeLayout.addSeparator();
         }
 
-        NewLayoutAction newLayoutAction = new NewLayoutAction(layoutCreator);
+        int nextAvailableId = config.getNextAvailableId();
+
+        NewLayoutAction newLayoutAction = new NewLayoutAction(layoutCreator, nextAvailableId);
         this.storeLayout.add(newLayoutAction);
         this.actionRegistry.register(newLayoutAction, "NewLayout");
     }

@@ -37,7 +37,8 @@ public class BalloonNotificationHelper {
 
     private static void hideAfterTimeSpan(Notification notification) {
         ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        scheduledExecutorService.schedule(() -> notification.expire(),
+        scheduledExecutorService.schedule(
+                notification::expire,
                 NOTIFICATION_DISPLAY_TIME_IN_SECONDS,
                 TimeUnit.SECONDS);
     }

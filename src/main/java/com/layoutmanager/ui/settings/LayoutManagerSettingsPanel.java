@@ -1,8 +1,16 @@
 package com.layoutmanager.ui.settings;
 
-import com.intellij.openapi.actionSystem.Shortcut;
+import com.intellij.ide.IdeBundle;
+import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.keymap.KeyMapBundle;
 import com.intellij.openapi.keymap.Keymap;
 import com.intellij.openapi.keymap.KeymapManager;
+import com.intellij.openapi.keymap.KeymapUtil;
+import com.intellij.openapi.keymap.impl.ActionShortcutRestrictions;
+import com.intellij.openapi.keymap.impl.ShortcutRestrictions;
+import com.intellij.openapi.keymap.impl.SystemShortcuts;
+import com.intellij.openapi.project.DumbAwareAction;
+import com.intellij.openapi.util.text.StringUtil;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
@@ -20,15 +28,16 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+import static com.intellij.openapi.keymap.impl.ui.KeymapPanel.addKeyboardShortcut;
 import static javax.swing.JComponent.WHEN_FOCUSED;
 
-// TODO:
-// - Ensure layout name exists only once...
 public class LayoutManagerSettingsPanel {
     private final LayoutConfig layoutConfig;
     private final LayoutNameDialog layoutNameDialog;
@@ -83,6 +92,7 @@ public class LayoutManagerSettingsPanel {
         this.setKeyBindings(table);
         this.layoutsTable.setModel(table);
         this.layoutsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.layoutsTable.addMouseListener(new DoubleClickOpenShortcutListener());
 
         this.useSmartDockingCheckbox.setSelected(layoutConfig.getSettings().getUseSmartDock());
     }
@@ -175,6 +185,10 @@ public class LayoutManagerSettingsPanel {
                 .anyMatch(x -> !x.getOriginalLayout().getName().equals(x.getEditedLayout().getName()));
     }
 
+    private void keymapChanged() {
+        this.layoutsTable.repaint();
+    }
+
     public void apply() {
         this.windowMenuChangesApplier.apply(this.editLayouts, this.layoutConfig.getLayouts());
 
@@ -255,11 +269,115 @@ public class LayoutManagerSettingsPanel {
 
                 Shortcut[] shortcuts = keymap.getShortcuts(actionName);
                 return Arrays.stream(shortcuts)
-                        .map(Shortcut::toString)
+                        .map(KeymapUtil::getShortcutText)
                         .collect(Collectors.joining(", "));
             }
         };
     }
+
+    private @NotNull DefaultActionGroup createEditActionGroup(@NotNull String actionId, Keymap selectedKeymap) {
+        DefaultActionGroup group = new DefaultActionGroup();
+        final ShortcutRestrictions restrictions = ActionShortcutRestrictions.getInstance().getForActionId(actionId);
+        if (restrictions.allowKeyboardShortcut) {
+            group.add(new AddKeyboardShortcutAction(actionId, restrictions, selectedKeymap));
+        }
+
+        group.addSeparator();
+
+        Shortcut[] shortcuts = selectedKeymap.getShortcuts(actionId);
+        for (Shortcut shortcut : shortcuts) {
+            group.add(new RemoveShortcutAction(shortcut, selectedKeymap, actionId));
+        }
+
+        if (shortcuts.length > 2) {
+            group.add(new Separator());
+            group.add(new RemoveAllShortcuts(selectedKeymap, actionId));
+        }
+
+        return group;
+    }
+
+    private class DoubleClickOpenShortcutListener extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (e.getClickCount() == 2 || SwingUtilities.isRightMouseButton(e)) {
+                JTable table = (JTable) e.getSource();
+                int column = table.getSelectedColumn();
+                if (column == 2) {
+                    EditLayout layout = editLayouts.get(table.getSelectedRow());
+                    String actionId = ActionNameGenerator.getActionNameForLayout(layout.getEditedLayout());
+
+                    DefaultActionGroup group = createEditActionGroup(actionId, KeymapManager.getInstance().getActiveKeymap());
+                    ActionManager.getInstance()
+                            .createActionPopupMenu("popup@Keymap.ActionsTree.Menu", group)
+                            .getComponent()
+                            .show(e.getComponent(), ((MouseEvent)e).getX(), ((MouseEvent)e).getY());
+                }
+            }
+        }
+    }
+
+    private final class AddKeyboardShortcutAction extends DumbAwareAction {
+        private final @NotNull String actionId;
+        private final ShortcutRestrictions restrictions;
+        private final Keymap keymap;
+
+        private AddKeyboardShortcutAction(@NotNull String actionId, ShortcutRestrictions restrictions, Keymap keymap) {
+            super(IdeBundle.messagePointer("action.Anonymous.text.add.keyboard.shortcut"));
+            this.actionId = actionId;
+            this.restrictions = restrictions;
+            this.keymap = keymap;
+        }
+
+        @Override
+        public void actionPerformed(@NotNull AnActionEvent e) {
+            addKeyboardShortcut(
+                    this.actionId,
+                    this.restrictions,
+                    this.keymap,
+                    layoutsTable,
+                    null,
+                    SystemShortcuts.getInstance());
+            keymapChanged();
+        }
+    }
+
+    private final class RemoveShortcutAction extends DumbAwareAction {
+        private final Shortcut shortcut;
+        private final Keymap keymap;
+        private final @NotNull String actionId;
+
+        private RemoveShortcutAction(Shortcut shortcut, Keymap keymap, @NotNull String actionId) {
+            super(IdeBundle.message("action.text.remove.0", KeymapUtil.getShortcutText(shortcut)));
+            this.shortcut = shortcut;
+            this.keymap = keymap;
+            this.actionId = actionId;
+        }
+
+        @Override
+        public void actionPerformed(@NotNull AnActionEvent e) {
+            keymap.removeShortcut(this.actionId, this.shortcut);
+            if (StringUtil.startsWithChar(this.actionId, '$')) {
+                keymap.removeShortcut(KeyMapBundle.message("editor.shortcut", this.actionId.substring(1)), this.shortcut);
+            }
+            keymapChanged();
+        }
+    }
+
+    private final class RemoveAllShortcuts extends DumbAwareAction {
+        private final Keymap keymap;
+        private final String actionId;
+
+        private RemoveAllShortcuts(Keymap selectedKeymap, @NotNull String actionId) {
+            super(IdeBundle.messagePointer("action.text.remove.all.shortcuts"));
+            this.keymap = selectedKeymap;
+            this.actionId = actionId;
+        }
+
+        @Override
+        public void actionPerformed(@NotNull AnActionEvent event) {
+            this.keymap.removeAllActionShortcuts(actionId);
+            keymapChanged();
+        }
+    }
 }
-
-

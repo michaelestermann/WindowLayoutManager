@@ -2,7 +2,7 @@ package com.layoutmanager.layout.store.overwrite;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.layoutmanager.layout.LayoutAction;
@@ -14,6 +14,9 @@ import com.layoutmanager.ui.icons.Icons;
 import com.layoutmanager.ui.menu.WindowMenuService;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
+@SuppressWarnings({"MissingActionUpdateThread"})
 public class OverwriteLayoutAction
         extends LayoutAction
         implements DumbAware {
@@ -40,9 +43,13 @@ public class OverwriteLayoutAction
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(event.getProject());
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(
+                Objects.requireNonNull(event.getProject()));
         String previousName = this.layout.getName();
-        Layout updatedLayout = this.layoutCreator.create(toolWindowManager, this.layout.getName());
+        Layout updatedLayout = this.layoutCreator.create(
+                toolWindowManager,
+                this.layout.getId(),
+                this.layout.getName());
 
         if (updatedLayout != null) {
             this.updateLayout(updatedLayout);
@@ -55,6 +62,7 @@ public class OverwriteLayoutAction
         return this.layout;
     }
 
+
     private void updateLayout(Layout updatedLayout) {
         this.layout.setEditorPlacement(updatedLayout.getEditorPlacement());
         this.layout.setName(updatedLayout.getName());
@@ -63,7 +71,9 @@ public class OverwriteLayoutAction
 
     private void updateWindowMenu(String previousName) {
         if (!previousName.equals(this.layout.getName())) {
-            WindowMenuService windowMenuService = ServiceManager.getService(WindowMenuService.class);
+            WindowMenuService windowMenuService = ApplicationManager
+                    .getApplication()
+                    .getService(WindowMenuService.class);
             windowMenuService.renameLayout(this.layout);
         }
     }

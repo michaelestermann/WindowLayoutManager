@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public class LayoutCreator {
@@ -33,21 +34,23 @@ public class LayoutCreator {
         this.layoutNameDialog = layoutNameDialog;
     }
 
-    public Layout create(ToolWindowManager toolWindowManager, String defaultName) {
+    public Layout create(
+            ToolWindowManager toolWindowManager,
+            int id,
+            String defaultName) {
 
         String name = this.layoutNameDialog.show(defaultName);
         return name != null ?
-                this.createLayout(toolWindowManager, name) :
+                this.createLayout(toolWindowManager, id, name) :
                 null;
     }
 
-    private Layout createLayout(ToolWindowManager toolWindowManager, String name) {
+    private Layout createLayout(ToolWindowManager toolWindowManager, int id, String name) {
         List<ToolWindowInfo> toolWindows = getToolWindows(toolWindowManager);
         Layout layout = new Layout(
+                id,
                 name,
-                toolWindows
-                    .stream()
-                    .toArray(ToolWindowInfo[]::new),
+                toolWindows.toArray(ToolWindowInfo[]::new),
                 getEditorPlacement());
 
         if (this.layoutSettings.getUseSmartDock()) {
@@ -68,7 +71,7 @@ public class LayoutCreator {
 
             ToolWindowInfo info = new ToolWindowInfo(
                     id,
-                    toolWindow.getType(),
+                    Objects.requireNonNull(toolWindow).getType(),
                     toolWindow.getAnchor().toString(),
                     ToolWindowHelper.getBounds(toolWindow),
                     toolWindow.isVisible(),

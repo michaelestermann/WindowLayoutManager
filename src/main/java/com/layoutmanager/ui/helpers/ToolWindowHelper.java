@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
 
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ToolWindowHelper {
     public static Rectangle getBounds(ToolWindowEx toolWindow) {
         if (toolWindow.isVisible()) {

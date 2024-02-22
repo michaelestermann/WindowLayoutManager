@@ -2,7 +2,7 @@ package com.layoutmanager.layout.delete;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.DumbAware;
 import com.layoutmanager.layout.LayoutAction;
 import com.layoutmanager.localization.MessagesHelper;
@@ -13,6 +13,8 @@ import com.layoutmanager.ui.icons.Icons;
 import com.layoutmanager.ui.menu.WindowMenuService;
 import org.jetbrains.annotations.NotNull;
 
+
+@SuppressWarnings({"MissingActionUpdateThread"})
 public class DeleteLayoutAction
         extends LayoutAction
         implements DumbAware {
@@ -44,7 +46,7 @@ public class DeleteLayoutAction
     }
 
     private void deleteLayout() {
-        LayoutConfig layoutConfig = ServiceManager.getService(LayoutConfig.class);
+        LayoutConfig layoutConfig = LayoutConfig.getInstance();
         layoutConfig.removeLayout(this.layout);
     }
 
@@ -55,7 +57,9 @@ public class DeleteLayoutAction
     }
 
     private void updateWindowMenuItems() {
-        WindowMenuService windowMenuService = ServiceManager.getService(WindowMenuService.class);
+        WindowMenuService windowMenuService = ApplicationManager
+                .getApplication()
+                .getService(WindowMenuService.class);
         windowMenuService.deleteLayout(this.layout);
     }
 }

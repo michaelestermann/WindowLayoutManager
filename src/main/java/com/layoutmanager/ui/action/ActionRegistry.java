@@ -7,7 +7,8 @@ import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.keymap.Keymap;
 import com.intellij.openapi.keymap.KeymapManager;
 import com.layoutmanager.layout.LayoutAction;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public class ActionRegistry {
     private static final String PLUGIN_ID = "com.layoutmanager";
@@ -43,7 +44,7 @@ public class ActionRegistry {
         if (shortcuts.length > 0) {
             String newActionName = ActionNameGenerator.getActionNameForLayoutAction(layoutAction);
             this.reRegisterAction(actionManager, layoutAction, previousActionId, newActionName);
-            activeKeymap.removeAllActionShortcuts(previousActionId);
+            activeKeymap.removeAllActionShortcuts(Objects.requireNonNull(previousActionId));
 
             for (Shortcut shortcut : shortcuts) {
                 activeKeymap.addShortcut(newActionName, shortcut);
@@ -56,8 +57,8 @@ public class ActionRegistry {
         actionManager.registerAction(newActionName, layoutAction, getPluginId());
     }
 
-    @Nullable
+
     private PluginId getPluginId() {
-        return PluginId.findId(PLUGIN_ID);
+        return PluginId.getId(PLUGIN_ID);
     }
 }

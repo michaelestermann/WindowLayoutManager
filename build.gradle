@@ -46,3 +46,4 @@ checkstyle {
 checkstyleMain {
     source ='src/main/java'
 }
+targetCompatibility = JavaVersion.VERSION_11

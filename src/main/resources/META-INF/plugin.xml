@@ -34,11 +34,17 @@
             - Introduced smart docking when saving a layout (Configurable).
             - Store docked tool window sizes and restore them accordingly.
           </li>
+          <li>
+            Aug 10, 2023 (ver 1.5.0)
+            - Hide hints after a short time
+            - Support key-shortcuts for layouts
+            - Improved icons
+          </li>
         </ul>
     ]]></change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="193.0"/>
+  <idea-version since-build="193.5233.102"/>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
   <depends>com.intellij.modules.lang</depends>
@@ -51,7 +57,11 @@
     <applicationService serviceImplementation="com.layoutmanager.persistence.LayoutConfig"/>
     <applicationService serviceImplementation="com.layoutmanager.ui.menu.WindowMenuService"/>
     <applicationService serviceImplementation="com.layoutmanager.cleanup.EmptyLayoutRemoverService"/>
+    <applicationService serviceImplementation="com.layoutmanager.migration.LayoutMigratorService"/>
 
-    <applicationConfigurable id="settings.windowlayoutmanager" instance="com.layoutmanager.ui.settings.SettingsPage"/>
+    <applicationConfigurable
+      id="settings.windowlayoutmanager"
+      instance="com.layoutmanager.ui.settings.SettingsPage"
+      displayName="Window Layout Manager"/>
   </extensions>
 </idea-plugin>

@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.DumbAware;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.layoutmanager.layout.LayoutAction;
 import com.layoutmanager.layout.store.LayoutCreator;
@@ -43,18 +44,19 @@ public class OverwriteLayoutAction
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(
-                Objects.requireNonNull(event.getProject()));
-        String previousName = this.layout.getName();
-        Layout updatedLayout = this.layoutCreator.create(
-                toolWindowManager,
-                this.layout.getId(),
-                this.layout.getName());
+        if(this.isProjectLoaded(event)) {
+            ToolWindowManager toolWindowManager = this.getToolWindowManager(event);
+            String previousName = this.layout.getName();
+            Layout updatedLayout = this.layoutCreator.create(
+                    toolWindowManager,
+                    this.layout.getId(),
+                    this.layout.getName());
 
-        if (updatedLayout != null) {
-            this.updateLayout(updatedLayout);
-            this.updateWindowMenu(previousName);
-            this.showNotification(this.layout.getName(), previousName);
+            if (updatedLayout != null) {
+                this.updateLayout(updatedLayout);
+                this.updateWindowMenu(previousName);
+                this.showNotification(this.layout.getName(), previousName);
+            }
         }
     }
 
@@ -82,5 +84,15 @@ public class OverwriteLayoutAction
         BalloonNotificationHelper.info(
                 MessagesHelper.message("StoreLayout.Overwrite.Notification.Title"),
                 MessagesHelper.message("StoreLayout.Overwrite.Notification.Content", previousLayoutName, currentLayoutName));
+    }
+
+    private ToolWindowManager getToolWindowManager(AnActionEvent event) {
+        Project project = event.getProject();
+        return ToolWindowManager.getInstance(
+                Objects.requireNonNull(project));
+    }
+
+    private boolean isProjectLoaded(AnActionEvent event) {
+        return event.getProject() != null;
     }
 }

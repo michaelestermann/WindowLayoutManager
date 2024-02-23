@@ -40,16 +40,21 @@ public class RestoreLayoutAction
     }
 
     @Override
-    public void update(AnActionEvent e) {
-        e.getPresentation().setText(this.layout.getName());
-        super.update(e);
+    public void update(AnActionEvent actionEvent) {
+        actionEvent
+                .getPresentation()
+                .setText(this.layout.getName());
+
+        super.update(actionEvent);
     }
 
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        this.applyLayout(event, this.layout);
-        this.showNotification(this.layout);
+        if (this.isProjectLoaded(event)) {
+            this.applyLayout(event, this.layout);
+            this.showNotification(this.layout);
+        }
     }
 
     public Layout getLayout() {
@@ -115,5 +120,9 @@ public class RestoreLayoutAction
         BalloonNotificationHelper.info(
                 MessagesHelper.message("RestoreLayout.Notification.Title"),
                 MessagesHelper.message("RestoreLayout.Notification.Content", updatedLayout.getName()));
+    }
+
+    private boolean isProjectLoaded(AnActionEvent event) {
+        return event.getProject() != null;
     }
 }

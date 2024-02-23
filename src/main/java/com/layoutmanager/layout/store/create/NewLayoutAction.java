@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.DumbAware;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.layoutmanager.layout.store.LayoutCreator;
 import com.layoutmanager.localization.MessagesHelper;
@@ -34,17 +35,18 @@ public class NewLayoutAction
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(
-                Objects.requireNonNull(event.getProject()));
-        Layout newLayout = this.layoutCreator.create(
-                toolWindowManager,
-                this.id,
-                "");
+        if (this.isProjectLoaded(event)) {
+            ToolWindowManager toolWindowManager = this.getToolWindowManager(event);
+            Layout newLayout = this.layoutCreator.create(
+                    toolWindowManager,
+                    this.id,
+                    "");
 
-        if (newLayout != null) {
-            this.storeLayout(newLayout);
-            this.updateWindowMenuItems(newLayout);
-            this.showNotification(newLayout);
+            if (newLayout != null) {
+                this.storeLayout(newLayout);
+                this.updateWindowMenuItems(newLayout);
+                this.showNotification(newLayout);
+            }
         }
     }
 
@@ -65,5 +67,15 @@ public class NewLayoutAction
         BalloonNotificationHelper.info(
                 MessagesHelper.message("StoreLayout.New.Notification.Title"),
                 MessagesHelper.message("StoreLayout.New.Notification.Content", newLayout.getName()));
+    }
+
+    private ToolWindowManager getToolWindowManager(AnActionEvent event) {
+        Project project = event.getProject();
+        return ToolWindowManager.getInstance(
+                Objects.requireNonNull(project));
+    }
+
+    private boolean isProjectLoaded(AnActionEvent event) {
+        return event.getProject() != null;
     }
 }

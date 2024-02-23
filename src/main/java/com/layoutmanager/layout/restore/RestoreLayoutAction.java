@@ -82,6 +82,7 @@ public class RestoreLayoutAction
         if (layout.getEditorPlacement() >= 0) {
             UISettings uiSettings = UISettings.getInstance();
             uiSettings.setEditorTabPlacement(layout.getEditorPlacement());
+            uiSettings.setWideScreenSupport(layout.getWideScreenSupport());
             uiSettings.fireUISettingsChanged();
         }
     }

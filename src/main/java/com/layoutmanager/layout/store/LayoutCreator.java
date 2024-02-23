@@ -51,7 +51,8 @@ public class LayoutCreator {
                 id,
                 name,
                 toolWindows.toArray(ToolWindowInfo[]::new),
-                getEditorPlacement());
+                getEditorPlacement(),
+                getWideScreenSupport());
 
         if (this.layoutSettings.getUseSmartDock()) {
             this.dock(toolWindowManager, layout);
@@ -103,6 +104,14 @@ public class LayoutCreator {
     }
 
     private static int getEditorPlacement() {
-        return UISettings.getInstance().getEditorTabPlacement();
+        return UISettings
+                .getInstance()
+                .getEditorTabPlacement();
+    }
+
+    private static boolean getWideScreenSupport() {
+        return UISettings
+                .getInstance()
+                .getWideScreenSupport();
     }
 }

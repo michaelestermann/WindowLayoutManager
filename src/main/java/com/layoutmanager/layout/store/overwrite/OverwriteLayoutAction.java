@@ -67,6 +67,7 @@ public class OverwriteLayoutAction
 
     private void updateLayout(Layout updatedLayout) {
         this.layout.setEditorPlacement(updatedLayout.getEditorPlacement());
+        this.layout.setWideScreenSupport(updatedLayout.getWideScreenSupport());
         this.layout.setName(updatedLayout.getName());
         this.layout.setToolWindows(updatedLayout.getToolWindows());
     }

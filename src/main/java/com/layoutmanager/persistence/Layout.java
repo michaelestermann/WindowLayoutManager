@@ -7,8 +7,9 @@ import java.util.Objects;
 public class Layout {
     private int id;
     private String name;
-    private int editorTabPlacement;
     private ToolWindowInfo[] toolWindows;
+    private int editorTabPlacement;
+    private boolean wideScreenSupport;
 
     @SuppressWarnings({"unused", "Used for serialization."})
     public Layout() {
@@ -22,11 +23,13 @@ public class Layout {
             int id,
             String name,
             ToolWindowInfo[] toolWindows,
-            int editorTabPlacement) {
+            int editorTabPlacement,
+            boolean wideScreenSupport) {
         this.id = id;
         this.name = name;
         this.toolWindows = toolWindows;
         this.editorTabPlacement = editorTabPlacement;
+        this.wideScreenSupport = wideScreenSupport;
     }
 
     public int getId() {
@@ -51,6 +54,14 @@ public class Layout {
 
     public void setEditorPlacement(int editorTabPlacement) {
         this.editorTabPlacement = editorTabPlacement;
+    }
+
+    public boolean getWideScreenSupport() {
+        return this.wideScreenSupport;
+    }
+
+    public void setWideScreenSupport(boolean wideScreenSupport) {
+        this.wideScreenSupport = wideScreenSupport;
     }
 
     public ToolWindowInfo[] getToolWindows() {

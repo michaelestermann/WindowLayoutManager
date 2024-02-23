@@ -16,15 +16,23 @@ import java.util.concurrent.TimeUnit;
 public class BalloonNotificationHelper {
     private static final int NOTIFICATION_DISPLAY_TIME_IN_SECONDS = 6;
     private static final NotificationGroup LAYOUT_MANAGER_GROUP =
-            new NotificationGroup("WindowLayoutManager", NotificationDisplayType.STICKY_BALLOON, true);
+            new NotificationGroup("WindowLayoutManager", NotificationDisplayType.BALLOON, true);
 
     public static void info(String title, String content) {
-        Notification notification = LAYOUT_MANAGER_GROUP.createNotification(title, null, content, NotificationType.INFORMATION);
+        Notification notification = LAYOUT_MANAGER_GROUP.createNotification(
+                title,
+                null,
+                content,
+                NotificationType.INFORMATION);
         notify(notification);
     }
 
     public static void warning(String title, String content) {
-        Notification notification = LAYOUT_MANAGER_GROUP.createNotification(title, null, content, NotificationType.WARNING);
+        Notification notification = LAYOUT_MANAGER_GROUP.createNotification(
+                title,
+                null,
+                content,
+                NotificationType.WARNING);
         notify(notification);
     }
 
@@ -44,7 +52,9 @@ public class BalloonNotificationHelper {
     }
 
     private static Project getCurrentProject() {
-        Project[] openedProjects = ProjectManager.getInstance().getOpenProjects();
+        Project[] openedProjects = ProjectManager
+                .getInstance()
+                .getOpenProjects();
         return Arrays.stream(openedProjects)
                 .findFirst()
                 .orElse(null);

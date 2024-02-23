@@ -1,19 +1,28 @@
 package com.layoutmanager.startup;
 
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.startup.StartupActivity;
+import com.intellij.ide.AppLifecycleListener;
+import com.intellij.openapi.application.ApplicationManager;
 import com.layoutmanager.cleanup.EmptyLayoutRemoverService;
+import com.layoutmanager.migration.LayoutMigratorService;
 import com.layoutmanager.ui.menu.WindowMenuService;
-import org.jetbrains.annotations.NotNull;
 
-public class PluginBootstrapper implements StartupActivity {
+public class PluginBootstrapper implements AppLifecycleListener {
 
-    public void runActivity(@NotNull Project project) {
-        EmptyLayoutRemoverService emptyLayoutRemoverService = ServiceManager.getService(EmptyLayoutRemoverService.class);
+    @Override
+    public void welcomeScreenDisplayed() {
+        EmptyLayoutRemoverService emptyLayoutRemoverService = ApplicationManager
+                .getApplication()
+                .getService(EmptyLayoutRemoverService.class);
         emptyLayoutRemoverService.execute();
 
-        WindowMenuService windowMenuService = ServiceManager.getService(WindowMenuService.class);
+        LayoutMigratorService layoutMigratorService = ApplicationManager
+                .getApplication()
+                .getService(LayoutMigratorService.class);
+        layoutMigratorService.migrate();
+
+        WindowMenuService windowMenuService = ApplicationManager
+                .getApplication()
+                .getService(WindowMenuService.class);
         windowMenuService.create();
     }
 }

@@ -16,7 +16,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -97,7 +96,7 @@ public class ImportDialog extends JDialog {
 
     private void importFile(File file) {
         try {
-            String encodedContent = new String(Files.readAllBytes(Paths.get(file.getPath())), StandardCharsets.UTF_8);
+            String encodedContent = Files.readString(Paths.get(file.getPath()));
             this.importLayout(encodedContent);
         } catch (IOException e) {
             ComponentNotificationHelper.error(this.importFromFileButton, MessagesHelper.message("ImportDialog.IOException", file.getName(), e.getMessage()));

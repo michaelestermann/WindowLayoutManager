@@ -1,7 +1,7 @@
 package com.layoutmanager.persistence;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
@@ -34,15 +34,14 @@ public class LayoutConfig implements PersistentStateComponent<LayoutConfig> {
         XmlSerializerUtil.copyBean(layoutConfig, this);
     }
 
+    @SuppressWarnings({"unused", "Used for serialization."})
     public Layout getLayout(int number) {
         return this.layouts.get(number);
     }
 
     @SuppressWarnings({"unused", "Used for serialization."})
     public Layout[] getLayouts() {
-        return this.layouts
-            .stream()
-            .toArray(Layout[]::new);
+        return this.layouts.toArray(Layout[]::new);
     }
 
     @SuppressWarnings({"unused", "Used for serialization."})
@@ -62,6 +61,7 @@ public class LayoutConfig implements PersistentStateComponent<LayoutConfig> {
         return this.layouts.size();
     }
 
+    @SuppressWarnings({"unused", "Used for serialization."})
     public void setLayout(int number, Layout layout) {
         this.layouts.set(number, layout);
     }
@@ -74,9 +74,20 @@ public class LayoutConfig implements PersistentStateComponent<LayoutConfig> {
         this.layouts.remove(layout);
     }
 
-    @Nullable
+    public int getNextAvailableId() {
+        for(int id = 0; id < Integer.MAX_VALUE; id++) {
+            int finalId = id;
+            if (this.layouts.stream().noneMatch(x -> x.getId() == finalId)) {
+                return id;
+            }
+        }
+
+        return Integer.MAX_VALUE;
+    }
+
     public static LayoutConfig getInstance() {
-        return ServiceManager.getService(LayoutConfig.class);
+        return ApplicationManager
+                .getApplication()
+                .getService(LayoutConfig.class);
     }
 }
-

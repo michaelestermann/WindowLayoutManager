@@ -2,7 +2,6 @@ package com.layoutmanager.layout.store.smartdock;
 
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.ToolWindowType;
-import com.intellij.openapi.wm.impl.ToolWindowImpl;
 import com.layoutmanager.layout.store.smartdock.dockers.ScreenBorderDocker;
 import com.layoutmanager.layout.store.smartdock.dockers.ToolWindowDocker;
 import com.layoutmanager.layout.store.smartdock.dockers.ToolWindowToScreenShrinker;
@@ -45,7 +44,6 @@ public class SmartDocker {
                 .filter(this::isFloatingOrWindowedToolWindow)
                 .map(x -> new ToolWindowDocking(
                         x,
-                        (ToolWindowImpl)this.toolWindowManager.getToolWindow(x.getId()),
                         ScreenSizeHelper.getContainingScreenBounds(x),
                         THRESHOLD))
                 .toArray(ToolWindowDocking[]::new);

@@ -6,6 +6,6 @@ public class LayoutNameValidator {
     }
 
     private boolean isBlank(String name) {
-        return name.trim().length() == 0;
+        return name.trim().isEmpty();
     }
 }

@@ -14,17 +14,17 @@ public class LayoutNameDialog {
     }
 
     public String show(String defaultName) {
-            String name;
-            do {
-                name = Messages.showInputDialog(
-                        MessagesHelper.message("StoreLayout.Dialog.Title"),
-                        MessagesHelper.message("StoreLayout.Dialog.Content"),
-                        AllIcons.Actions.Edit,
-                        defaultName,
-                        null);
-            } while (name != null && !this.layoutNameValidator.isValid(name));
+        String name;
+        do {
+            name = Messages.showInputDialog(
+                MessagesHelper.message("StoreLayout.Dialog.Title"),
+                MessagesHelper.message("StoreLayout.Dialog.Content"),
+                AllIcons.Actions.Edit,
+                defaultName,
+                null);
+        } while (name != null && !this.layoutNameValidator.isValid(name));
 
-            return name;
+        return name;
     }
 }
 

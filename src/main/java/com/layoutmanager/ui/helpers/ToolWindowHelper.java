@@ -2,9 +2,9 @@ package com.layoutmanager.ui.helpers;
 
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowType;
+import com.intellij.openapi.wm.ex.ToolWindowEx;
 import com.intellij.openapi.wm.impl.FloatingDecorator;
 import com.intellij.openapi.wm.impl.InternalDecorator;
-import com.intellij.openapi.wm.impl.ToolWindowImpl;
 import com.intellij.util.ui.UIUtil;
 
 import java.awt.Rectangle;
@@ -14,8 +14,9 @@ import javax.swing.SwingUtilities;
 
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ToolWindowHelper {
-    public static Rectangle getBounds(ToolWindowImpl toolWindow) {
+    public static Rectangle getBounds(ToolWindowEx toolWindow) {
         if (toolWindow.isVisible()) {
             if (toolWindow.getType() == ToolWindowType.FLOATING) {
                 FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
@@ -32,7 +33,8 @@ public class ToolWindowHelper {
         return new Rectangle(0, 0, 0, 0);
     }
 
-    public static void setBounds(ToolWindowImpl toolWindow, Rectangle bounds) {
+    public static void setBounds(ToolWindowEx toolWindow, Rectangle bounds) {
+        // TODO: To fix the issue with to small screen on multi dpi screens -> Move window when not on screen, then resize it
         if (toolWindow.isVisible()) {
             if (toolWindow.getType() == ToolWindowType.FLOATING) {
                 FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
@@ -52,13 +54,13 @@ public class ToolWindowHelper {
     }
 
     @Nullable
-    private static FloatingDecorator getFloatingDecorator(ToolWindowImpl toolWindow) {
+    private static FloatingDecorator getFloatingDecorator(ToolWindowEx toolWindow) {
         InternalDecorator decorator = toolWindow.getDecorator();
         return (FloatingDecorator) SwingUtilities.getAncestorOfClass(FloatingDecorator.class, decorator);
     }
 
     @Nullable
-    private static Window getWindow(ToolWindowImpl toolWindow) {
+    private static Window getWindow(ToolWindowEx toolWindow) {
         JComponent component = toolWindow.getComponent();
         return UIUtil.getWindow(component);
     }

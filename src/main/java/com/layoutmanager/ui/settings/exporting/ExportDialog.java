@@ -24,8 +24,8 @@ public class ExportDialog extends JDialog {
     private JButton closeButton;
     private JLabel layoutNameLabel;
 
-    private String layoutName;
-    private String content;
+    private final String layoutName;
+    private final String content;
 
     public ExportDialog(String layoutName, String content) {
         this.layoutName = layoutName;
@@ -50,10 +50,6 @@ public class ExportDialog extends JDialog {
         this.setSize(this.getPreferredSize());
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
-    }
-
-    public JPanel getPanel() {
-        return this.contentPanel;
     }
 
     private void exportToClipboard() {

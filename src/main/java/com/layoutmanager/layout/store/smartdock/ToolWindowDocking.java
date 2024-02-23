@@ -1,6 +1,5 @@
 package com.layoutmanager.layout.store.smartdock;
 
-import com.intellij.openapi.wm.impl.ToolWindowImpl;
 import com.layoutmanager.persistence.ToolWindowInfo;
 
 import java.awt.Rectangle;
@@ -8,27 +7,20 @@ import java.awt.Rectangle;
 public class ToolWindowDocking {
 
     private final ToolWindowInfo toolWindowInfo;
-    private final ToolWindowImpl toolWindow;
     private final Rectangle containingScreen;
     private final int threshold;
 
     public ToolWindowDocking(
             ToolWindowInfo toolWindowInfo,
-            ToolWindowImpl toolWindow,
             Rectangle containingScreen,
             int threshold) {
         this.toolWindowInfo = toolWindowInfo;
-        this.toolWindow = toolWindow;
         this.containingScreen = containingScreen;
         this.threshold = threshold;
     }
 
     public ToolWindowInfo getToolWindowInfo() {
         return this.toolWindowInfo;
-    }
-
-    public ToolWindowImpl getToolWindow() {
-        return this.toolWindow;
     }
 
     public Rectangle getContainingScreen() {

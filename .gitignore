@@ -4,3 +4,8 @@
 *.jar
 !gradle/wrapper/gradle-wrapper.jar
 .gradle/**/*
+.DS_Store
+src/.idea/
+src/WindowLayoutManager.iml
+
+src/out/

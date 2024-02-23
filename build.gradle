@@ -1,6 +1,6 @@
 plugins { 
     id 'java' 
-    id 'org.jetbrains.intellij' version '1.17.0'
+    id 'org.jetbrains.intellij' version '1.17.2'
     id 'checkstyle'
 } 
 
@@ -12,7 +12,8 @@ dependencies {
 group 'com.layoutmanager' 
 version '1.5.0'
  
-sourceCompatibility = 1.8 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 buildSearchableOptions.enabled = false
 
@@ -46,4 +47,3 @@ checkstyle {
 checkstyleMain {
     source ='src/main/java'
 }
-targetCompatibility = JavaVersion.VERSION_11

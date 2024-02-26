@@ -6,7 +6,7 @@ A plugin for managing window layout in intelij based IDEs.
 ## Build
 **Master** [![Build status](https://ci.appveyor.com/api/projects/status/hdj1eip606egxrvq/branch/master?svg=true)](https://ci.appveyor.com/project/michaelestermann/windowlayoutmanager/branch/master)
 **Overall** [![Build status](https://ci.appveyor.com/api/projects/status/hdj1eip606egxrvq?svg=true)](https://ci.appveyor.com/project/michaelestermann/windowlayoutmanager)
-**Quality** [![Codacy Badge](https://api.codacy.com/project/badge/Grade/13a0e65d0e854bf3b0481d9e4be2bd16)](https://www.codacy.com/manual/michaelestermann/WindowLayoutManager?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=michaelestermann/WindowLayoutManager&amp;utm_campaign=Badge_Grade)
+**Quality** [![Codacy Badge](https://app.codacy.com/project/badge/Grade/81171f50435741c294ff193317a9d7d8)](https://app.codacy.com/gh/michaelestermann/WindowLayoutManager/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 ## Contribute
 Contribution to the plugin is very much appreciated. The [documentation](doc/dev-setup.md) describes how-to setup your development environment.

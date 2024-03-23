@@ -35,16 +35,17 @@
             - Store docked tool window sizes and restore them accordingly.
           </li>
           <li>
-            Aug 10, 2023 (ver 1.5.0)
+            Februar 25, 2024 (ver 1.5.0)
             - Hide hints after a short time
             - Support key-shortcuts for layouts
             - Improved icons
+            - Minor Bugfixes
           </li>
         </ul>
     ]]></change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="193.5233.102"/>
+  <idea-version since-build="221"/>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
   <depends>com.intellij.modules.lang</depends>

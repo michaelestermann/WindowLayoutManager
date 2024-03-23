@@ -12,8 +12,8 @@ dependencies {
 group 'com.layoutmanager' 
 version '1.5.0'
  
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 17
+targetCompatibility = 17
 
 buildSearchableOptions.enabled = false
 
@@ -26,9 +26,8 @@ repositories {
 // https://www.jetbrains.com/intellij-repository/releases/
 // https://www.jetbrains.com/intellij-repository/snapshots/
 intellij {
+	version = '2022.1'
     type = 'RD'
-    version = "2023.3"
-	updateSinceUntilBuild = false
 }
 
 publishPlugin {

@@ -2,7 +2,6 @@
 The following instructions will show you how to set up your development environment to start developing the plugin.
 Thank you for your interest in the further development of this plugin. Have fun tinkering around and don't be afraid to make a pull request for your cool extensions.
 
-
 ## Setup your Environment
 
 ### Download IDE

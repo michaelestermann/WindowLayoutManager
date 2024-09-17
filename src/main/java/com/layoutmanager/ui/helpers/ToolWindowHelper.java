@@ -9,6 +9,8 @@ import com.intellij.util.ui.UIUtil;
 
 import java.awt.Rectangle;
 import java.awt.Window;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
@@ -39,10 +41,19 @@ public class ToolWindowHelper {
 
     public static void setBounds(ToolWindowEx toolWindow, Rectangle bounds) {
         if (toolWindow.getType() == ToolWindowType.FLOATING) {
-            FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
-            if (floatingDecorator != null) {
-                floatingDecorator.setBounds(bounds);
-            }
+            InternalDecorator decorator = toolWindow.getDecorator();
+            decorator.addHierarchyListener(new HierarchyListener() {
+                @Override
+                public void hierarchyChanged(HierarchyEvent e) {
+                    if ((e.getChangeFlags() & HierarchyEvent.PARENT_CHANGED) != 0) {
+                        FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
+                        if (floatingDecorator != null) {
+                            floatingDecorator.setBounds(bounds);
+                            decorator.removeHierarchyListener(this);
+                        }
+                    }
+                }
+            });
         } else if (toolWindow.getType() == ToolWindowType.WINDOWED) {
             Window window = getWindow(toolWindow);
             if (window != null) {
@@ -61,48 +72,12 @@ public class ToolWindowHelper {
     @Nullable
     private static FloatingDecorator getFloatingDecorator(ToolWindowEx toolWindow) {
         InternalDecorator decorator = toolWindow.getDecorator();
-
-        int tries = 0;
-        do
-        {
-            FloatingDecorator floatingDecorator = (FloatingDecorator) SwingUtilities.getAncestorOfClass(FloatingDecorator.class, decorator);
-
-            if (floatingDecorator != null) {
-                return floatingDecorator;
-            }
-
-            waitFor100Ms();
-        }
-        while(tries++ < 2);
-
-        return null;
+        return (FloatingDecorator) SwingUtilities.getAncestorOfClass(FloatingDecorator.class, decorator);
     }
 
     @Nullable
     private static Window getWindow(ToolWindowEx toolWindow) {
         JComponent component = toolWindow.getComponent();
-
-        int tries = 0;
-        do
-        {
-            Window window = UIUtil.getWindow(component);
-
-            if (window != null) {
-                return window;
-            }
-
-            waitFor100Ms();
-        }
-        while(tries++ < 2);
-
         return UIUtil.getWindow(component);
-    }
-
-    private static void waitFor100Ms() {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

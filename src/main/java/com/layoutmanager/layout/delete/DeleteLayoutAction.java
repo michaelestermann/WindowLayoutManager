@@ -15,7 +15,6 @@ import com.layoutmanager.ui.menu.WindowMenuService;
 import org.jetbrains.annotations.NotNull;
 
 
-@SuppressWarnings({"MissingActionUpdateThread"})
 public class DeleteLayoutAction
         extends LayoutAction
         implements DumbAware {
@@ -44,7 +43,6 @@ public class DeleteLayoutAction
     @Override
     public void update(AnActionEvent e) {
         e.getPresentation().setText(this.layout.getName());
-        super.update(e);
     }
 
     public Layout getLayout() {

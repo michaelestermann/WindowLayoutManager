@@ -5,9 +5,17 @@ import com.layoutmanager.ui.helpers.ComponentNotificationHelper;
 import com.layoutmanager.ui.settings.ImportExportConstants;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.*;
+import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -31,9 +39,9 @@ public class ExportDialog extends JDialog {
         this.layoutName = layoutName;
         this.content = content;
 
-        this.setContentPane(contentPanel);
+        this.setContentPane(this.contentPanel);
         this.setModal(true);
-        this.getRootPane().setDefaultButton(closeButton);
+        this.getRootPane().setDefaultButton(this.closeButton);
 
         this.exportToClipboardButton.addActionListener(actionEvent -> this.exportToClipboard());
         this.exportToFileButton.addActionListener(actionEvent -> this.exportToFile());
@@ -42,7 +50,7 @@ public class ExportDialog extends JDialog {
         this.layoutNameLabel.setText(layoutName);
         this.exportTextBox.setText(content);
 
-        this.contentPanel.registerKeyboardAction(e -> onClose(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        this.contentPanel.registerKeyboardAction(e -> this.onClose(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
     public void showDialogInCenterOf(JDialog parent) {

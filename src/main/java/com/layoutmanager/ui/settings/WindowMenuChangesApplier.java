@@ -12,29 +12,29 @@ public class WindowMenuChangesApplier {
                 .getApplication()
                 .getService(WindowMenuService.class);
 
-        addOrUpdateLayouts(editedLayouts, windowMenuService);
+        this.addOrUpdateLayouts(editedLayouts, windowMenuService);
 
-        removeObsoleteLayouts(editedLayouts, originalLayouts, windowMenuService);
+        this.removeObsoleteLayouts(editedLayouts, originalLayouts, windowMenuService);
     }
 
     private void addOrUpdateLayouts(List<EditLayout> editedLayouts, WindowMenuService windowMenuService) {
         for (EditLayout editLayout : editedLayouts) {
-            if (isNew(editLayout)) {
-                windowMenuService.addLayout(editLayout.getEditedLayout());
+            if (this.isNew(editLayout)) {
+                windowMenuService.addLayout(editLayout.editedLayout());
             } else if (editLayout.nameHasChanged()) {
                 editLayout.applyNameChange();
-                windowMenuService.renameLayout(editLayout.getOriginalLayout());
+                windowMenuService.renameLayout(editLayout.originalLayout());
             }
         }
     }
 
     private boolean isNew(EditLayout editLayout) {
-        return editLayout.getOriginalLayout() == null;
+        return editLayout.originalLayout() == null;
     }
 
     private void removeObsoleteLayouts(List<EditLayout> editedLayouts, Layout[] originalLayouts, WindowMenuService windowMenuService) {
         for (Layout layout : originalLayouts) {
-            if (editedLayouts.stream().noneMatch(x -> x.getOriginalLayout().equals(layout))) {
+            if (editedLayouts.stream().noneMatch(x -> x.originalLayout().equals(layout))) {
                 windowMenuService.deleteLayout(layout);
             }
         }

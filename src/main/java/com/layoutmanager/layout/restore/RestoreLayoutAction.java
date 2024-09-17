@@ -49,8 +49,6 @@ public class RestoreLayoutAction
         actionEvent
                 .getPresentation()
                 .setText(this.layout.getName());
-
-        super.update(actionEvent);
     }
 
 
@@ -67,12 +65,12 @@ public class RestoreLayoutAction
     }
 
     private void applyLayout(AnActionEvent event, Layout layout) {
-        applyEditorTabPlacement(layout);
-        ToolWindowManager toolWindowManager = getToolWindowManager(event);
+        this.applyEditorTabPlacement(layout);
+        ToolWindowManager toolWindowManager = this.getToolWindowManager(event);
 
-        Map<ToolWindowInfo, ToolWindowEx> toolWindows = getToolWindows(toolWindowManager, layout.getToolWindows());
-        hideAllToolWindows(toolWindows);
-        applyToolWindowLayout(toolWindows);
+        Map<ToolWindowInfo, ToolWindowEx> toolWindows = this.getToolWindows(toolWindowManager, layout.getToolWindows());
+        this.hideAllToolWindows(toolWindows);
+        this.applyToolWindowLayout(toolWindows);
     }
 
     private Map<ToolWindowInfo, ToolWindowEx> getToolWindows(ToolWindowManager toolWindowManager, ToolWindowInfo[] toolWindows) {

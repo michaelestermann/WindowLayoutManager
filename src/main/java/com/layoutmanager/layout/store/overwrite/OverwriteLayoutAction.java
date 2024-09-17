@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-@SuppressWarnings({"MissingActionUpdateThread"})
 public class OverwriteLayoutAction
         extends LayoutAction
         implements DumbAware {
@@ -45,12 +44,11 @@ public class OverwriteLayoutAction
     @Override
     public void update(AnActionEvent e) {
         e.getPresentation().setText(this.layout.getName());
-        super.update(e);
     }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        if(this.isProjectLoaded(event)) {
+        if (this.isProjectLoaded(event)) {
             ToolWindowManager toolWindowManager = this.getToolWindowManager(event);
             String previousName = this.layout.getName();
             Layout updatedLayout = this.layoutCreator.create(

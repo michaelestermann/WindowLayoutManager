@@ -75,7 +75,7 @@ public class LayoutConfig implements PersistentStateComponent<LayoutConfig> {
     }
 
     public int getNextAvailableId() {
-        for(int id = 0; id < Integer.MAX_VALUE; id++) {
+        for (int id = 0; id < Integer.MAX_VALUE; id++) {
             int finalId = id;
             if (this.layouts.stream().noneMatch(x -> x.getId() == finalId)) {
                 return id;

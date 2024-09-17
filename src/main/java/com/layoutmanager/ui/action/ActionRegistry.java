@@ -54,7 +54,7 @@ public class ActionRegistry {
 
     private void reRegisterAction(ActionManager actionManager, LayoutAction layoutAction, String previousActionId, String newActionName) {
         actionManager.unregisterAction(previousActionId);
-        actionManager.registerAction(newActionName, layoutAction, getPluginId());
+        actionManager.registerAction(newActionName, layoutAction, this.getPluginId());
     }
 
 

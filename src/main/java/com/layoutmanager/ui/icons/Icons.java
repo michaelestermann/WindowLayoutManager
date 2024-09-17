@@ -3,7 +3,7 @@ package com.layoutmanager.ui.icons;
 import com.intellij.openapi.util.IconLoader;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
+import javax.swing.Icon;
 
 
 public class Icons {

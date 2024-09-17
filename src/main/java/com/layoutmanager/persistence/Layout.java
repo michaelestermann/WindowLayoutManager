@@ -78,7 +78,7 @@ public class Layout {
             return true;
         }
 
-        if (other == null || getClass() != other.getClass()) {
+        if (other == null || this.getClass() != other.getClass()) {
             return false;
         }
 
@@ -91,7 +91,7 @@ public class Layout {
     @Override
     public int hashCode() {
         int result = Objects.hash(this.name, this.editorTabPlacement);
-        result = 31 * result + Arrays.hashCode(toolWindows);
+        result = 31 * result + Arrays.hashCode(this.toolWindows);
         return result;
     }
 }

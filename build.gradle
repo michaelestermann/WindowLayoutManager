@@ -30,8 +30,8 @@ repositories {
 intellij {
     type = 'RD'
     // Update the version if required for testing compatibility with newer versions
-    //version = 2024.1.5
-    version = "2023.1"
+    // This will raise a a build warning, since the version 231 is 2023.1 (2023.1 fails on the build server!)
+    version = "2024.1.5"
 	updateSinceUntilBuild = false
 }
 

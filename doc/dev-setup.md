@@ -11,7 +11,7 @@ When it comes to the Java development, the IntelliJ IDE is a good fit. The commu
 ### Installing Java
 For the development of Java, the JDK (or Open JDK) is required, which can be downloaded either from [Oracle](https://www.oracle.com/ch-de/java/technologies/javase-downloads.html) or the [Open JDK Website](https://openjdk.java.net/). For this repository, Java 8 is the minimum.
 If you have already installed a java development kit (JDK), ensure that the JAVA_HOME environment variable is set and points to the path where the JDK is installed. A step-by-step instruction can be found [here](https://javatutorial.net/set-java-home-windows-10).
-<
+
 ## Download the code
 First of all, you need a GitHub account If you don't have any yet. Afterward you can fork the repository and make it your own. A step-by-step guide can be found [here](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo).
 

@@ -1,13 +1,12 @@
 package com.layoutmanager.localization;
 
 import com.intellij.AbstractBundle;
-import com.intellij.reference.SoftReference;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.PropertyKey;
 
-import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -16,10 +15,10 @@ public class MessagesHelper {
     @NonNls
     public static final String BUNDLE_NAME = "com.layoutmanager.ui.messages";
 
-    private static Reference<ResourceBundle> thisBundle;
+    private static SoftReference<ResourceBundle> thisBundle;
 
     private static ResourceBundle getBundle() {
-        ResourceBundle bundle = SoftReference.dereference(thisBundle);
+        ResourceBundle bundle = thisBundle != null ? thisBundle.get() : null;
         if (bundle == null) {
             try {
                 bundle = ResourceBundle.getBundle(BUNDLE_NAME);

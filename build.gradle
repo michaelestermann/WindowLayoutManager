@@ -26,7 +26,6 @@ repositories {
 // https://www.jetbrains.com/intellij-repository/releases/
 // https://www.jetbrains.com/intellij-repository/snapshots/
 intellij {
-	version = '2022.1'
     type = 'RD'
     version = "2024.1.5"
 	updateSinceUntilBuild = false

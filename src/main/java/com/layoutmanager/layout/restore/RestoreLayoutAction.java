@@ -1,12 +1,5 @@
 package com.layoutmanager.layout.restore;
 
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.ide.ui.UISettings;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -24,6 +17,13 @@ import com.layoutmanager.persistence.ToolWindowInfo;
 import com.layoutmanager.ui.helpers.BalloonNotificationHelper;
 import com.layoutmanager.ui.helpers.ToolWindowHelper;
 import com.layoutmanager.ui.icons.Icons;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class RestoreLayoutAction
         extends LayoutAction

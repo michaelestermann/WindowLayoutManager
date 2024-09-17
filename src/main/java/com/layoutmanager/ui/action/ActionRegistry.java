@@ -1,7 +1,5 @@
 package com.layoutmanager.ui.action;
 
-import java.util.Objects;
-
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.Shortcut;
@@ -9,6 +7,8 @@ import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.keymap.Keymap;
 import com.intellij.openapi.keymap.KeymapManager;
 import com.layoutmanager.layout.LayoutAction;
+
+import java.util.Objects;
 
 public class ActionRegistry {
     private static final String PLUGIN_ID = "com.layoutmanager";

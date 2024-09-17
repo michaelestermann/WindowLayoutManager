@@ -1,5 +1,6 @@
 package com.layoutmanager.layout.store.create;
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
@@ -31,6 +32,11 @@ public class NewLayoutAction
         Presentation presentation = this.getTemplatePresentation();
         presentation.setText(MessagesHelper.message("StoreLayout.New.Menu"));
         presentation.setIcon(Icons.Menu.CreateNewLayout);
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
     }
 
     @Override

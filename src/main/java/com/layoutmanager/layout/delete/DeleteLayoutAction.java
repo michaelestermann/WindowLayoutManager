@@ -1,5 +1,6 @@
 package com.layoutmanager.layout.delete;
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.application.ApplicationManager;
@@ -26,6 +27,11 @@ public class DeleteLayoutAction
         Presentation presentation = this.getTemplatePresentation();
         presentation.setText(layout.getName());
         presentation.setIcon(Icons.Menu.DeleteLayout);
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
     }
 
     @Override

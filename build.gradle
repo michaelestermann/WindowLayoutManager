@@ -28,6 +28,8 @@ repositories {
 intellij {
 	version = '2022.1'
     type = 'RD'
+    version = "2024.1.5"
+	updateSinceUntilBuild = false
 }
 
 publishPlugin {

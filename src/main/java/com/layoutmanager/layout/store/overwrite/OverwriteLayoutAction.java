@@ -1,5 +1,6 @@
 package com.layoutmanager.layout.store.overwrite;
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.application.ApplicationManager;
@@ -34,6 +35,11 @@ public class OverwriteLayoutAction
         Presentation presentation = this.getTemplatePresentation();
         presentation.setText(this.layout.getName());
         presentation.setIcon(Icons.Menu.OverwriteLayout);
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
     }
 
     @Override

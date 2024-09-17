@@ -20,10 +20,14 @@ public class ToolWindowHelper {
         if (toolWindow.isVisible()) {
             if (toolWindow.getType() == ToolWindowType.FLOATING) {
                 FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
-                return floatingDecorator.getBounds();
+                return floatingDecorator != null
+                        ? floatingDecorator.getBounds()
+                        : new Rectangle(100, 100);
             } else if (toolWindow.getType() == ToolWindowType.WINDOWED) {
                 Window window = getWindow(toolWindow);
-                return window.getBounds();
+                return window != null
+                        ? window.getBounds() :
+                        new Rectangle(100, 100);
             } else {
                 InternalDecorator decorator = toolWindow.getDecorator();
                 return decorator.getBounds();
@@ -34,21 +38,22 @@ public class ToolWindowHelper {
     }
 
     public static void setBounds(ToolWindowEx toolWindow, Rectangle bounds) {
-        // TODO: To fix the issue with to small screen on multi dpi screens -> Move window when not on screen, then resize it
-        if (toolWindow.isVisible()) {
-            if (toolWindow.getType() == ToolWindowType.FLOATING) {
-                FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
+        if (toolWindow.getType() == ToolWindowType.FLOATING) {
+            FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
+            if (floatingDecorator != null) {
                 floatingDecorator.setBounds(bounds);
-            } else if (toolWindow.getType() == ToolWindowType.WINDOWED) {
-                Window window = getWindow(toolWindow);
+            }
+        } else if (toolWindow.getType() == ToolWindowType.WINDOWED) {
+            Window window = getWindow(toolWindow);
+            if (window != null) {
                 window.setBounds(bounds);
+            }
+        } else {
+            Rectangle currentBounds = toolWindow.getDecorator().getBounds();
+            if (toolWindow.getAnchor() == ToolWindowAnchor.TOP || toolWindow.getAnchor() == ToolWindowAnchor.BOTTOM) {
+                toolWindow.stretchHeight(bounds.height - currentBounds.height);
             } else {
-                Rectangle currentBounds = toolWindow.getDecorator().getBounds();
-                if (toolWindow.getAnchor() == ToolWindowAnchor.TOP || toolWindow.getAnchor() == ToolWindowAnchor.BOTTOM) {
-                    toolWindow.stretchHeight(bounds.height - currentBounds.height);
-                } else {
-                    toolWindow.stretchWidth(bounds.width - currentBounds.width);
-                }
+                toolWindow.stretchWidth(bounds.width - currentBounds.width);
             }
         }
     }
@@ -56,12 +61,48 @@ public class ToolWindowHelper {
     @Nullable
     private static FloatingDecorator getFloatingDecorator(ToolWindowEx toolWindow) {
         InternalDecorator decorator = toolWindow.getDecorator();
-        return (FloatingDecorator) SwingUtilities.getAncestorOfClass(FloatingDecorator.class, decorator);
+
+        int tries = 0;
+        do
+        {
+            FloatingDecorator floatingDecorator = (FloatingDecorator) SwingUtilities.getAncestorOfClass(FloatingDecorator.class, decorator);
+
+            if (floatingDecorator != null) {
+                return floatingDecorator;
+            }
+
+            waitFor100Ms();
+        }
+        while(tries++ < 2);
+
+        return null;
     }
 
     @Nullable
     private static Window getWindow(ToolWindowEx toolWindow) {
         JComponent component = toolWindow.getComponent();
+
+        int tries = 0;
+        do
+        {
+            Window window = UIUtil.getWindow(component);
+
+            if (window != null) {
+                return window;
+            }
+
+            waitFor100Ms();
+        }
+        while(tries++ < 2);
+
         return UIUtil.getWindow(component);
+    }
+
+    private static void waitFor100Ms() {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

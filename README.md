@@ -1,5 +1,5 @@
 # WindowLayoutManager
-A plugin for managing window layout in intelij based IDEs.
+A plugin for managing window layout in IntelliJ based IDEs.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -9,4 +9,4 @@ A plugin for managing window layout in intelij based IDEs.
 **Quality** [![Codacy Badge](https://app.codacy.com/project/badge/Grade/81171f50435741c294ff193317a9d7d8)](https://app.codacy.com/gh/michaelestermann/WindowLayoutManager/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 ## Contribute
-Contribution to the plugin is very much appreciated. The [documentation](doc/dev-setup.md) describes how-to setup your development environment.
+Contribution to the plugin is very much appreciated. The [documentation](doc/dev-setup.md) describes how-to set up your development environment.

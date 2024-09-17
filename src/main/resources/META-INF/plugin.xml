@@ -3,7 +3,6 @@
   <name>Window Layout Manager</name>
   <vendor email="michael@estermann.family" url="https://www.estermann.family">Michael Estermann</vendor>
 
-
   <description><![CDATA[
     This plugin provides multi layout support for the IntelliJ based IDE of your choice.
     You can store up to four layouts with a meaningful name.
@@ -62,8 +61,11 @@
     <applicationService serviceImplementation="com.layoutmanager.migration.LayoutMigratorService"/>
 
     <applicationConfigurable
-      id="settings.windowlayoutmanager"
-      instance="com.layoutmanager.ui.settings.SettingsPage"
-      displayName="Window Layout Manager"/>
+            id="settings.windowlayoutmanager"
+            instance="com.layoutmanager.ui.settings.SettingsPage"
+            displayName="Window Layout Manager"/>
+
+    <!-- Added the notification group here -->
+    <notificationGroup id="WindowLayoutManager" displayType="BALLOON"/>
   </extensions>
 </idea-plugin>

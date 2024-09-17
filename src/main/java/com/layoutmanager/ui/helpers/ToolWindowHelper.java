@@ -22,13 +22,13 @@ public class ToolWindowHelper {
         if (toolWindow.isVisible()) {
             if (toolWindow.getType() == ToolWindowType.FLOATING) {
                 FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
-                return floatingDecorator != null
-                        ? floatingDecorator.getBounds()
-                        : new Rectangle(100, 100);
+                return floatingDecorator != null ?
+                        floatingDecorator.getBounds() :
+                        new Rectangle(100, 100);
             } else if (toolWindow.getType() == ToolWindowType.WINDOWED) {
                 Window window = getWindow(toolWindow);
-                return window != null
-                        ? window.getBounds() :
+                return window != null ?
+                        window.getBounds() :
                         new Rectangle(100, 100);
             } else {
                 InternalDecorator decorator = toolWindow.getDecorator();

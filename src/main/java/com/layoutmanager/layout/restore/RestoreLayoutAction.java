@@ -10,8 +10,6 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.ex.ToolWindowEx;
-import com.intellij.util.Alarm;
-import com.intellij.util.concurrency.EdtExecutorService;
 import com.layoutmanager.layout.LayoutAction;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.Layout;
@@ -21,7 +19,6 @@ import com.layoutmanager.ui.helpers.ToolWindowHelper;
 import com.layoutmanager.ui.icons.Icons;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -107,8 +104,10 @@ public class RestoreLayoutAction
         toolWindows.forEach((info, toolWindow) -> {
             if (info.isVisible()) {
                 // !! Workaround !!
-                // decorator is not set and throws exception. When calling this method, the content manager lazy variable will be loaded and therefore also the decorator...
-                // See: https://github.com/JetBrains/intellij-community/blob/a63286c3b29fe467399fb353c71ed15cd65db8dd/platform/platform-impl/src/com/intellij/openapi/wm/impl/ToolWindowImpl.kt
+                // decorator is not set and throws exception. When calling this method, the content manager lazy
+                // variable will be loaded and therefore also the decorator...
+                // See: https://github.com/JetBrains/intellij-community/blob/a63286c3b29fe467399fb353c71ed15cd65db8dd/
+                // platform/platform-impl/src/com/intellij/openapi/wm/impl/ToolWindowImpl.kt
                 toolWindow.getComponent();
 
                 toolWindow.setAnchor(ToolWindowAnchor.fromText(info.getAnchor()), null);

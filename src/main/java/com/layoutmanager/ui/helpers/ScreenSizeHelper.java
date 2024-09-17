@@ -4,9 +4,9 @@ import com.layoutmanager.persistence.ToolWindowInfo;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.awt.Insets;
 
 import java.util.Arrays;
 import java.util.Comparator;

@@ -16,7 +16,6 @@ import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.action.ActionRegistry;
 import com.layoutmanager.ui.dialogs.LayoutNameDialog;
 import com.layoutmanager.ui.dialogs.LayoutNameValidator;
-
 import java.util.Arrays;
 
 public class WindowMenuService {

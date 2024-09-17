@@ -15,9 +15,7 @@ import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.helpers.BalloonNotificationHelper;
 import com.layoutmanager.ui.icons.Icons;
 import com.layoutmanager.ui.menu.WindowMenuService;
-
 import java.util.Objects;
-
 import org.jetbrains.annotations.NotNull;
 
 public class NewLayoutAction

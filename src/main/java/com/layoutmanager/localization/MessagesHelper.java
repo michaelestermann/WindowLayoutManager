@@ -1,12 +1,10 @@
 package com.layoutmanager.localization;
 
 import com.intellij.AbstractBundle;
-
 import java.lang.ref.SoftReference;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.PropertyKey;

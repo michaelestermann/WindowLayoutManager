@@ -3,7 +3,6 @@ package com.layoutmanager.ui.settings;
 import com.intellij.openapi.application.ApplicationManager;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.ui.menu.WindowMenuService;
-
 import java.util.List;
 
 public class WindowMenuChangesApplier {

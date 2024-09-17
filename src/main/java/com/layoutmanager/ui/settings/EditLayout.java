@@ -1,7 +1,6 @@
 package com.layoutmanager.ui.settings;
 
 import com.layoutmanager.persistence.Layout;
-
 import org.jetbrains.annotations.NotNull;
 
 public record EditLayout(Layout originalLayout, Layout editedLayout) {

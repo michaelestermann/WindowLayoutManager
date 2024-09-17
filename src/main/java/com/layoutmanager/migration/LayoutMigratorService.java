@@ -2,7 +2,6 @@ package com.layoutmanager.migration;
 
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.LayoutConfig;
-
 import java.util.Arrays;
 
 public class LayoutMigratorService {

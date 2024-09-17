@@ -1,7 +1,6 @@
 package com.layoutmanager.ui.helpers;
 
 import com.layoutmanager.persistence.ToolWindowInfo;
-
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;

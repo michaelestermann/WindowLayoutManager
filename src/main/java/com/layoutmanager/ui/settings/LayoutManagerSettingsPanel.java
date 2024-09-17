@@ -24,7 +24,6 @@ import com.layoutmanager.ui.dialogs.LayoutNameValidator;
 import com.layoutmanager.ui.helpers.ComponentNotificationHelper;
 import com.layoutmanager.ui.settings.exporting.ExportDialog;
 import com.layoutmanager.ui.settings.importing.ImportDialog;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -33,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Collectors;
-
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -47,7 +45,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

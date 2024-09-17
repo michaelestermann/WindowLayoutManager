@@ -7,7 +7,6 @@ import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.keymap.Keymap;
 import com.intellij.openapi.keymap.KeymapManager;
 import com.layoutmanager.layout.LayoutAction;
-
 import java.util.Objects;
 
 public class ActionRegistry {

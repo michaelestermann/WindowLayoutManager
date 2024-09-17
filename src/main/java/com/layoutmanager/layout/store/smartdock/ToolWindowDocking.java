@@ -1,7 +1,6 @@
 package com.layoutmanager.layout.store.smartdock;
 
 import com.layoutmanager.persistence.ToolWindowInfo;
-
 import java.awt.Rectangle;
 
 public class ToolWindowDocking {

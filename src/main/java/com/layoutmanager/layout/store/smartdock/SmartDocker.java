@@ -8,7 +8,6 @@ import com.layoutmanager.layout.store.smartdock.dockers.ToolWindowToScreenShrink
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.ToolWindowInfo;
 import com.layoutmanager.ui.helpers.ScreenSizeHelper;
-
 import java.util.Arrays;
 
 public class SmartDocker {

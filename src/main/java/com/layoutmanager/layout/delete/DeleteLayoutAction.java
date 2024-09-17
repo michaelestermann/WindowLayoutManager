@@ -12,7 +12,6 @@ import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.helpers.BalloonNotificationHelper;
 import com.layoutmanager.ui.icons.Icons;
 import com.layoutmanager.ui.menu.WindowMenuService;
-
 import org.jetbrains.annotations.NotNull;
 
 

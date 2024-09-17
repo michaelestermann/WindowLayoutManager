@@ -1,5 +1,8 @@
 package com.layoutmanager.ui.settings;
 
+import static com.intellij.openapi.keymap.impl.ui.KeymapPanel.addKeyboardShortcut;
+import static javax.swing.JComponent.WHEN_FOCUSED;
+
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -47,9 +50,6 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import static com.intellij.openapi.keymap.impl.ui.KeymapPanel.addKeyboardShortcut;
-import static javax.swing.JComponent.WHEN_FOCUSED;
 
 public class LayoutManagerSettingsPanel {
     private final LayoutConfig layoutConfig;

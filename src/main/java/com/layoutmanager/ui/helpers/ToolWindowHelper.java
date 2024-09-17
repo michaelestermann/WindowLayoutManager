@@ -42,8 +42,7 @@ public class ToolWindowHelper {
             FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
             if (floatingDecorator != null) {
                 floatingDecorator.setBounds(bounds);
-            }
-            else {
+            } else {
                 delayedFloatingDecoratorSetBounds(toolWindow, bounds);
             }
         } else if (toolWindow.getType() == ToolWindowType.WINDOWED) {

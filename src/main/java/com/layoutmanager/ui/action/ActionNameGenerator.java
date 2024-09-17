@@ -1,10 +1,10 @@
 package com.layoutmanager.ui.action;
 
+import static com.layoutmanager.ui.action.ActionRegistry.ACTION_PREFIX;
+
 import com.layoutmanager.layout.LayoutAction;
 import com.layoutmanager.layout.restore.RestoreLayoutAction;
 import com.layoutmanager.persistence.Layout;
-
-import static com.layoutmanager.ui.action.ActionRegistry.ACTION_PREFIX;
 
 public class ActionNameGenerator {
     public static String getActionNameForLayoutAction(LayoutAction layoutAction) {

@@ -11,17 +11,17 @@ public class ActionNameGenerator {
         String className = layoutAction.getClass().getSimpleName();
         String typeName = className.substring(0, className.length() - "LayoutAction".length());
 
-        return getActionNameForLayoutAction(layoutAction.getLayout().getId(), typeName);
+        return getActionName(layoutAction.getLayout().getId(), typeName);
     }
 
     public static String getActionNameForLayout(Layout layout) {
         String className = RestoreLayoutAction.class.getSimpleName();
         String typeName = className.substring(0, className.length() - "LayoutAction".length());
 
-        return getActionNameForLayoutAction(layout.getId(), typeName);
+        return getActionName(layout.getId(), typeName);
     }
 
-    private static String getActionNameForLayoutAction(int id, String typeName) {
+    private static String getActionName(int id, String typeName) {
         return ACTION_PREFIX + typeName + "." + id;
     }
 }

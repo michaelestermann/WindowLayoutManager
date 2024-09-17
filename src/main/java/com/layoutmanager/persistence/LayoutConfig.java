@@ -14,10 +14,10 @@ import java.util.Arrays;
 import java.util.List;
 
 @State(
-        name = "Layout",
-        storages = {
-                @Storage("layout.xml")
-        }
+    name = "Layout",
+    storages = {
+        @Storage("layout.xml")
+    }
 )
 public class LayoutConfig implements PersistentStateComponent<LayoutConfig> {
     private List<Layout> layouts = new ArrayList<>();

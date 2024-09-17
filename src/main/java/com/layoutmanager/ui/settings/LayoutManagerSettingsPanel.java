@@ -238,13 +238,13 @@ public class LayoutManagerSettingsPanel {
             }
 
             @Override
-            public void setValueAt(Object aValue, int row, int column) {
-                String newLayoutName = aValue.toString();
+            public void setValueAt(Object value, int row, int column) {
+                String newLayoutName = value.toString();
                 if (LayoutManagerSettingsPanel.this.layoutNameValidator.isValid(newLayoutName)) {
                     LayoutManagerSettingsPanel.this.editLayouts
                             .get(row)
                             .editedLayout()
-                            .setName(aValue.toString());
+                            .setName(value.toString());
 
                     this.fireTableChanged(new TableModelEvent(this, row));
                 } else {

@@ -1,8 +1,8 @@
 package com.layoutmanager.ui.settings;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.layoutmanager.persistence.Layout;
+
+import org.jetbrains.annotations.NotNull;
 
 public record EditLayout(Layout originalLayout, Layout editedLayout) {
     public EditLayout(

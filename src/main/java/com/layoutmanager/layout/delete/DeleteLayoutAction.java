@@ -1,7 +1,5 @@
 package com.layoutmanager.layout.delete;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
@@ -14,6 +12,8 @@ import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.helpers.BalloonNotificationHelper;
 import com.layoutmanager.ui.icons.Icons;
 import com.layoutmanager.ui.menu.WindowMenuService;
+
+import org.jetbrains.annotations.NotNull;
 
 
 public class DeleteLayoutAction

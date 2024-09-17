@@ -1,16 +1,16 @@
 package com.layoutmanager.localization;
 
-import java.lang.ref.Reference;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import com.intellij.AbstractBundle;
+import com.intellij.reference.SoftReference;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.PropertyKey;
 
-import com.intellij.AbstractBundle;
-import com.intellij.reference.SoftReference;
+import java.lang.ref.Reference;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 public class MessagesHelper {
     @NonNls

@@ -1,12 +1,12 @@
 package com.layoutmanager.layout.store.smartdock.dockers;
 
+import com.layoutmanager.layout.store.smartdock.ToolWindowDocking;
+
 import java.awt.Rectangle;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
-
-import com.layoutmanager.layout.store.smartdock.ToolWindowDocking;
 
 public class ToolWindowDocker {
     public void dock(ToolWindowDocking[] floatedOrWindowsToolWindows) {

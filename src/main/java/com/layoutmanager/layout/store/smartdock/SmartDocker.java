@@ -1,7 +1,5 @@
 package com.layoutmanager.layout.store.smartdock;
 
-import java.util.Arrays;
-
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.ToolWindowType;
 import com.layoutmanager.layout.store.smartdock.dockers.ScreenBorderDocker;
@@ -10,6 +8,8 @@ import com.layoutmanager.layout.store.smartdock.dockers.ToolWindowToScreenShrink
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.ToolWindowInfo;
 import com.layoutmanager.ui.helpers.ScreenSizeHelper;
+
+import java.util.Arrays;
 
 public class SmartDocker {
     private static final int THRESHOLD = 20;

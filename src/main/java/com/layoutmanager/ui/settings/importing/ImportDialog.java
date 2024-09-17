@@ -1,5 +1,12 @@
 package com.layoutmanager.ui.settings.importing;
 
+import com.layoutmanager.localization.MessagesHelper;
+import com.layoutmanager.persistence.Layout;
+import com.layoutmanager.ui.dialogs.LayoutNameValidator;
+import com.layoutmanager.ui.helpers.ComponentNotificationHelper;
+import com.layoutmanager.ui.settings.ImportExportConstants;
+import com.layoutmanager.ui.settings.LayoutSerializer;
+
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -19,13 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
-import com.layoutmanager.localization.MessagesHelper;
-import com.layoutmanager.persistence.Layout;
-import com.layoutmanager.ui.dialogs.LayoutNameValidator;
-import com.layoutmanager.ui.helpers.ComponentNotificationHelper;
-import com.layoutmanager.ui.settings.ImportExportConstants;
-import com.layoutmanager.ui.settings.LayoutSerializer;
 
 public class ImportDialog extends JDialog {
     public static final int OK_RESULT = 1;

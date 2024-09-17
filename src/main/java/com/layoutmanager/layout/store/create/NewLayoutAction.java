@@ -1,9 +1,5 @@
 package com.layoutmanager.layout.store.create;
 
-import java.util.Objects;
-
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -19,6 +15,10 @@ import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.helpers.BalloonNotificationHelper;
 import com.layoutmanager.ui.icons.Icons;
 import com.layoutmanager.ui.menu.WindowMenuService;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class NewLayoutAction
         extends AnAction

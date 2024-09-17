@@ -1,10 +1,5 @@
 package com.layoutmanager.ui.settings.exporting;
 
-import com.layoutmanager.localization.MessagesHelper;
-import com.layoutmanager.ui.helpers.ComponentNotificationHelper;
-import com.layoutmanager.ui.settings.ImportExportConstants;
-import org.jetbrains.annotations.NotNull;
-
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -15,6 +10,7 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
@@ -23,6 +19,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import org.jetbrains.annotations.NotNull;
+
+import com.layoutmanager.localization.MessagesHelper;
+import com.layoutmanager.ui.helpers.ComponentNotificationHelper;
+import com.layoutmanager.ui.settings.ImportExportConstants;
 
 public class ExportDialog extends JDialog {
     private JTextArea exportTextBox;

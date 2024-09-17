@@ -1,6 +1,7 @@
 package com.layoutmanager.ui.settings;
 
 import blazing.chain.LZSEncoding;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.layoutmanager.persistence.Layout;

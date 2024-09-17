@@ -1,15 +1,14 @@
 package com.layoutmanager.ui.helpers;
 
-import com.layoutmanager.persistence.ToolWindowInfo;
-
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
-
 import java.util.Arrays;
 import java.util.Comparator;
+
+import com.layoutmanager.persistence.ToolWindowInfo;
 
 public class ScreenSizeHelper {
     public static Rectangle getContainingScreenBounds(ToolWindowInfo toolWindow) {

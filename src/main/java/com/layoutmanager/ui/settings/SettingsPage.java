@@ -1,15 +1,15 @@
 package com.layoutmanager.ui.settings;
 
-import com.intellij.openapi.options.Configurable;
-
 import javax.swing.JComponent;
 
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.Nullable;
+
+import com.intellij.openapi.options.Configurable;
 import com.layoutmanager.localization.MessagesHelper;
 import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.dialogs.LayoutNameDialog;
 import com.layoutmanager.ui.dialogs.LayoutNameValidator;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.Nullable;
 
 public class SettingsPage implements Configurable {
     private final LayoutManagerSettingsPanel panel;

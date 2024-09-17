@@ -1,8 +1,8 @@
 package com.layoutmanager.layout.store.smartdock.dockers;
 
-import com.layoutmanager.layout.store.smartdock.ToolWindowDocking;
-
 import java.awt.Rectangle;
+
+import com.layoutmanager.layout.store.smartdock.ToolWindowDocking;
 
 public class ToolWindowToScreenShrinker {
     public void shrink(ToolWindowDocking[] floatedOrWindowsToolWindowDockings) {

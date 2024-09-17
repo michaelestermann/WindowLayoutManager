@@ -1,10 +1,10 @@
 package com.layoutmanager.ui.settings;
 
+import java.util.List;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.ui.menu.WindowMenuService;
-
-import java.util.List;
 
 public class WindowMenuChangesApplier {
     public void apply(List<EditLayout> editedLayouts, Layout[] originalLayouts) {

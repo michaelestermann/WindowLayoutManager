@@ -1,5 +1,9 @@
 package com.layoutmanager.layout.store.overwrite;
 
+import java.util.Objects;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
@@ -14,9 +18,6 @@ import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.ui.helpers.BalloonNotificationHelper;
 import com.layoutmanager.ui.icons.Icons;
 import com.layoutmanager.ui.menu.WindowMenuService;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 public class OverwriteLayoutAction
         extends LayoutAction

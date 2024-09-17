@@ -1,9 +1,9 @@
 package com.layoutmanager.persistence;
 
-import com.intellij.openapi.wm.ToolWindowType;
-
 import java.awt.Rectangle;
 import java.util.Objects;
+
+import com.intellij.openapi.wm.ToolWindowType;
 
 public class ToolWindowInfo {
     private String id;

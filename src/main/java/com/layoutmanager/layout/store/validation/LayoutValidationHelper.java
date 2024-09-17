@@ -1,12 +1,12 @@
 package com.layoutmanager.layout.store.validation;
 
+import java.awt.Rectangle;
+import java.util.stream.Stream;
+
 import com.intellij.openapi.wm.ToolWindowType;
 import com.intellij.openapi.wm.WindowManager;
 import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.persistence.ToolWindowInfo;
-
-import java.awt.Rectangle;
-import java.util.stream.Stream;
 
 public class LayoutValidationHelper {
     public static ToolWindowInfo[] retrieveToolWindowsOutsideOfScreen(Layout layout) {

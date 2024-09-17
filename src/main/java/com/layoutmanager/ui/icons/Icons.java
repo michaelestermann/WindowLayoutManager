@@ -1,9 +1,8 @@
 package com.layoutmanager.ui.icons;
 
 import com.intellij.openapi.util.IconLoader;
+import javax.swing.Icon;
 import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
 
 
 public class Icons {

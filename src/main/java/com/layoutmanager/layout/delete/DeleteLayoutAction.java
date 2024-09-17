@@ -1,5 +1,6 @@
 package com.layoutmanager.layout.delete;
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.application.ApplicationManager;
@@ -14,7 +15,6 @@ import com.layoutmanager.ui.menu.WindowMenuService;
 import org.jetbrains.annotations.NotNull;
 
 
-@SuppressWarnings({"MissingActionUpdateThread"})
 public class DeleteLayoutAction
         extends LayoutAction
         implements DumbAware {
@@ -29,6 +29,11 @@ public class DeleteLayoutAction
     }
 
     @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
+    }
+
+    @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         this.deleteLayout();
         this.updateWindowMenuItems();
@@ -38,7 +43,6 @@ public class DeleteLayoutAction
     @Override
     public void update(AnActionEvent e) {
         e.getPresentation().setText(this.layout.getName());
-        super.update(e);
     }
 
     public Layout getLayout() {

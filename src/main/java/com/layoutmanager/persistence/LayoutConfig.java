@@ -5,19 +5,17 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @State(
-        name = "Layout",
-        storages = {
-                @Storage("layout.xml")
-        }
+    name = "Layout",
+    storages = {
+        @Storage("layout.xml")
+    }
 )
 public class LayoutConfig implements PersistentStateComponent<LayoutConfig> {
     private List<Layout> layouts = new ArrayList<>();
@@ -75,7 +73,7 @@ public class LayoutConfig implements PersistentStateComponent<LayoutConfig> {
     }
 
     public int getNextAvailableId() {
-        for(int id = 0; id < Integer.MAX_VALUE; id++) {
+        for (int id = 0; id < Integer.MAX_VALUE; id++) {
             int finalId = id;
             if (this.layouts.stream().noneMatch(x -> x.getId() == finalId)) {
                 return id;

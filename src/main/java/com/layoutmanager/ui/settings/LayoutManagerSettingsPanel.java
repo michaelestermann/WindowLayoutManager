@@ -1,7 +1,14 @@
 package com.layoutmanager.ui.settings;
 
+import static com.intellij.openapi.keymap.impl.ui.KeymapPanel.addKeyboardShortcut;
+import static javax.swing.JComponent.WHEN_FOCUSED;
+
 import com.intellij.ide.IdeBundle;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.actionSystem.Separator;
+import com.intellij.openapi.actionSystem.Shortcut;
 import com.intellij.openapi.keymap.KeyMapBundle;
 import com.intellij.openapi.keymap.Keymap;
 import com.intellij.openapi.keymap.KeymapManager;
@@ -20,12 +27,6 @@ import com.layoutmanager.ui.dialogs.LayoutNameValidator;
 import com.layoutmanager.ui.helpers.ComponentNotificationHelper;
 import com.layoutmanager.ui.settings.exporting.ExportDialog;
 import com.layoutmanager.ui.settings.importing.ImportDialog;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -34,9 +35,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Collectors;
-
-import static com.intellij.openapi.keymap.impl.ui.KeymapPanel.addKeyboardShortcut;
-import static javax.swing.JComponent.WHEN_FOCUSED;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.DefaultTableModel;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class LayoutManagerSettingsPanel {
     private final LayoutConfig layoutConfig;
@@ -84,9 +97,9 @@ public class LayoutManagerSettingsPanel {
         Collections.addAll(
                 this.editLayouts,
                 Arrays
-                    .stream(layoutConfig.getLayouts())
-                    .map(x -> new EditLayout(x, this.layoutDuplicator.duplicate(x)))
-                    .toArray(EditLayout[]::new));
+                        .stream(layoutConfig.getLayouts())
+                        .map(x -> new EditLayout(x, this.layoutDuplicator.duplicate(x)))
+                        .toArray(EditLayout[]::new));
 
         DefaultTableModel table = this.createTableContent();
         this.setKeyBindings(table);
@@ -97,14 +110,14 @@ public class LayoutManagerSettingsPanel {
         this.useSmartDockingCheckbox.setSelected(layoutConfig.getSettings().getUseSmartDock());
     }
 
-    private void setKeyBindings(DefaultTableModel tableModel){
-        InputMap inputMap = layoutsTable.getInputMap(WHEN_FOCUSED);
-        ActionMap actionMap = layoutsTable.getActionMap();
+    private void setKeyBindings(DefaultTableModel tableModel) {
+        InputMap inputMap = this.layoutsTable.getInputMap(WHEN_FOCUSED);
+        ActionMap actionMap = this.layoutsTable.getActionMap();
 
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "delete");
         actionMap.put("delete", new AbstractAction() {
             public void actionPerformed(ActionEvent evt) {
-                int selectedRow = layoutsTable.getSelectedRow();
+                int selectedRow = LayoutManagerSettingsPanel.this.layoutsTable.getSelectedRow();
                 if (selectedRow >= 0) {
                     tableModel.removeRow(selectedRow);
                 }
@@ -119,7 +132,7 @@ public class LayoutManagerSettingsPanel {
     }
 
     private void deleteLayout() {
-        DefaultTableModel table = (DefaultTableModel)this.layoutsTable.getModel();
+        DefaultTableModel table = (DefaultTableModel) this.layoutsTable.getModel();
         table.removeRow(this.layoutsTable.getSelectedRow());
     }
 
@@ -128,7 +141,7 @@ public class LayoutManagerSettingsPanel {
         String newName = this.layoutNameDialog.show(
                 this.editLayouts
                         .get(selectedRow)
-                        .getEditedLayout()
+                        .editedLayout()
                         .getName());
 
         if (newName != null) {
@@ -140,8 +153,8 @@ public class LayoutManagerSettingsPanel {
         int selectedRow = this.layoutsTable.getSelectedRow();
         EditLayout selectedLayout = this.editLayouts.get(selectedRow);
 
-        String encodedContent = this.layoutSerializer.serialize(selectedLayout.getEditedLayout());
-        showExportDialog(selectedLayout.getEditedLayout(), encodedContent);
+        String encodedContent = this.layoutSerializer.serialize(selectedLayout.editedLayout());
+        this.showExportDialog(selectedLayout.editedLayout(), encodedContent);
     }
 
     private void showExportDialog(Layout selectedLayout, String encodedContent) {
@@ -155,7 +168,7 @@ public class LayoutManagerSettingsPanel {
         JDialog parent = this.getParentDialog();
         if (importDialog.showDialogInCenterOf(parent) == ImportDialog.OK_RESULT) {
             this.editLayouts.add(new EditLayout(null, importDialog.getImportedLayout()));
-            ((DefaultTableModel) layoutsTable.getModel()).fireTableDataChanged();
+            ((DefaultTableModel) this.layoutsTable.getModel()).fireTableDataChanged();
         }
     }
 
@@ -166,8 +179,8 @@ public class LayoutManagerSettingsPanel {
 
     public boolean hasChanged() {
         return this.useSmartDockingCheckbox.isSelected() != this.layoutConfig.getSettings().getUseSmartDock() ||
-                layoutsHasBeenAddedOrRemoved() ||
-                layoutsHasBeenRenamed();
+                this.layoutsHasBeenAddedOrRemoved() ||
+                this.layoutsHasBeenRenamed();
     }
 
     private boolean layoutsHasBeenAddedOrRemoved() {
@@ -175,14 +188,14 @@ public class LayoutManagerSettingsPanel {
                 this.layoutConfig.getLayouts(),
                 this.editLayouts
                         .stream()
-                        .map(EditLayout::getOriginalLayout)
+                        .map(EditLayout::originalLayout)
                         .toArray(Layout[]::new));
     }
 
     private boolean layoutsHasBeenRenamed() {
-        return editLayouts
+        return this.editLayouts
                 .stream()
-                .anyMatch(x -> !x.getOriginalLayout().getName().equals(x.getEditedLayout().getName()));
+                .anyMatch(x -> !x.originalLayout().getName().equals(x.editedLayout().getName()));
     }
 
     private void keymapChanged() {
@@ -196,9 +209,9 @@ public class LayoutManagerSettingsPanel {
         this.layoutConfig.setLayouts(this.editLayouts
                 .stream()
                 .map(x ->
-                    x.getOriginalLayout() == null ?
-                        x.getEditedLayout() :
-                        x.getOriginalLayout())
+                        x.originalLayout() == null ?
+                                x.editedLayout() :
+                                x.originalLayout())
                 .toArray(Layout[]::new));
     }
 
@@ -214,7 +227,7 @@ public class LayoutManagerSettingsPanel {
                         MessagesHelper.message("SettingsPage.ConfiguredWindowsColumn"),
                         MessagesHelper.message("SettingsPage.ShortcutColumn")
                 },
-                editLayouts.size()) {
+                this.editLayouts.size()) {
 
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -222,45 +235,43 @@ public class LayoutManagerSettingsPanel {
             }
 
             @Override
-            public void setValueAt(Object aValue, int row, int column) {
-                String newLayoutName = aValue.toString();
-                if (layoutNameValidator.isValid(newLayoutName)) {
-                    editLayouts
+            public void setValueAt(Object value, int row, int column) {
+                String newLayoutName = value.toString();
+                if (LayoutManagerSettingsPanel.this.layoutNameValidator.isValid(newLayoutName)) {
+                    LayoutManagerSettingsPanel.this.editLayouts
                             .get(row)
-                            .getEditedLayout()
-                            .setName(aValue.toString());
+                            .editedLayout()
+                            .setName(value.toString());
 
                     this.fireTableChanged(new TableModelEvent(this, row));
                 } else {
-                    ComponentNotificationHelper.error(layoutsTable, MessagesHelper.message("LayoutNameValidation.InvalidName"));
+                    ComponentNotificationHelper.error(
+                            LayoutManagerSettingsPanel.this.layoutsTable,
+                            MessagesHelper.message("LayoutNameValidation.InvalidName"));
                 }
             }
 
             @Override
             public int getRowCount() {
-                return editLayouts.size();
+                return LayoutManagerSettingsPanel.this.editLayouts.size();
             }
 
             @Override
             public void removeRow(int row) {
-                editLayouts.remove(row);
+                LayoutManagerSettingsPanel.this.editLayouts.remove(row);
                 this.fireTableRowsDeleted(row, row);
             }
 
             @Override
             public Object getValueAt(int row, int column) {
-                Layout layout = editLayouts.get(row).getEditedLayout();
+                Layout layout = LayoutManagerSettingsPanel.this.editLayouts.get(row).editedLayout();
 
-                switch (column) {
-                    case 0:
-                        return layout.getName();
-                    case 1:
-                        return layout.getToolWindows().length;
-                    case 2:
-                        return getKeyMap(layout);
-                    default:
-                        return null;
-                }
+                return switch (column) {
+                    case 0 -> layout.getName();
+                    case 1 -> layout.getToolWindows().length;
+                    case 2 -> this.getKeyMap(layout);
+                    default -> null;
+                };
             }
 
             private String getKeyMap(Layout layout) {
@@ -304,14 +315,16 @@ public class LayoutManagerSettingsPanel {
                 JTable table = (JTable) e.getSource();
                 int column = table.getSelectedColumn();
                 if (column == 2) {
-                    EditLayout layout = editLayouts.get(table.getSelectedRow());
-                    String actionId = ActionNameGenerator.getActionNameForLayout(layout.getEditedLayout());
+                    EditLayout layout = LayoutManagerSettingsPanel.this.editLayouts.get(table.getSelectedRow());
+                    String actionId = ActionNameGenerator.getActionNameForLayout(layout.editedLayout());
 
-                    DefaultActionGroup group = createEditActionGroup(actionId, KeymapManager.getInstance().getActiveKeymap());
+                    DefaultActionGroup group = LayoutManagerSettingsPanel.this.createEditActionGroup(
+                            actionId,
+                            KeymapManager.getInstance().getActiveKeymap());
                     ActionManager.getInstance()
                             .createActionPopupMenu("popup@Keymap.ActionsTree.Menu", group)
                             .getComponent()
-                            .show(e.getComponent(), ((MouseEvent)e).getX(), ((MouseEvent)e).getY());
+                            .show(e.getComponent(), e.getX(), e.getY());
                 }
             }
         }
@@ -335,10 +348,10 @@ public class LayoutManagerSettingsPanel {
                     this.actionId,
                     this.restrictions,
                     this.keymap,
-                    layoutsTable,
+                    LayoutManagerSettingsPanel.this.layoutsTable,
                     null,
                     SystemShortcuts.getInstance());
-            keymapChanged();
+            LayoutManagerSettingsPanel.this.keymapChanged();
         }
     }
 
@@ -356,11 +369,11 @@ public class LayoutManagerSettingsPanel {
 
         @Override
         public void actionPerformed(@NotNull AnActionEvent e) {
-            keymap.removeShortcut(this.actionId, this.shortcut);
+            this.keymap.removeShortcut(this.actionId, this.shortcut);
             if (StringUtil.startsWithChar(this.actionId, '$')) {
-                keymap.removeShortcut(KeyMapBundle.message("editor.shortcut", this.actionId.substring(1)), this.shortcut);
+                this.keymap.removeShortcut(KeyMapBundle.message("editor.shortcut", this.actionId.substring(1)), this.shortcut);
             }
-            keymapChanged();
+            LayoutManagerSettingsPanel.this.keymapChanged();
         }
     }
 
@@ -376,8 +389,8 @@ public class LayoutManagerSettingsPanel {
 
         @Override
         public void actionPerformed(@NotNull AnActionEvent event) {
-            this.keymap.removeAllActionShortcuts(actionId);
-            keymapChanged();
+            this.keymap.removeAllActionShortcuts(this.actionId);
+            LayoutManagerSettingsPanel.this.keymapChanged();
         }
     }
 }

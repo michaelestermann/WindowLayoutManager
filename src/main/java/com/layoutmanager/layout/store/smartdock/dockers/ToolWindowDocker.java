@@ -1,7 +1,6 @@
 package com.layoutmanager.layout.store.smartdock.dockers;
 
 import com.layoutmanager.layout.store.smartdock.ToolWindowDocking;
-
 import java.awt.Rectangle;
 import java.util.Arrays;
 import java.util.Comparator;

@@ -13,12 +13,11 @@ import com.layoutmanager.persistence.ToolWindowInfo;
 import com.layoutmanager.ui.dialogs.LayoutNameDialog;
 import com.layoutmanager.ui.helpers.BalloonNotificationHelper;
 import com.layoutmanager.ui.helpers.ToolWindowHelper;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
+import org.jetbrains.annotations.NotNull;
 
 public class LayoutCreator {
     private final LayoutSettings layoutSettings;

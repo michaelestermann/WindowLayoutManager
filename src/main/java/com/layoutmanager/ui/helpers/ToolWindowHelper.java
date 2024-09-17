@@ -6,12 +6,12 @@ import com.intellij.openapi.wm.ex.ToolWindowEx;
 import com.intellij.openapi.wm.impl.FloatingDecorator;
 import com.intellij.openapi.wm.impl.InternalDecorator;
 import com.intellij.util.ui.UIUtil;
-
 import java.awt.Rectangle;
 import java.awt.Window;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
-
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -20,10 +20,14 @@ public class ToolWindowHelper {
         if (toolWindow.isVisible()) {
             if (toolWindow.getType() == ToolWindowType.FLOATING) {
                 FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
-                return floatingDecorator.getBounds();
+                return floatingDecorator != null ?
+                        floatingDecorator.getBounds() :
+                        new Rectangle(100, 100);
             } else if (toolWindow.getType() == ToolWindowType.WINDOWED) {
                 Window window = getWindow(toolWindow);
-                return window.getBounds();
+                return window != null ?
+                        window.getBounds() :
+                        new Rectangle(100, 100);
             } else {
                 InternalDecorator decorator = toolWindow.getDecorator();
                 return decorator.getBounds();
@@ -34,23 +38,42 @@ public class ToolWindowHelper {
     }
 
     public static void setBounds(ToolWindowEx toolWindow, Rectangle bounds) {
-        // TODO: To fix the issue with to small screen on multi dpi screens -> Move window when not on screen, then resize it
-        if (toolWindow.isVisible()) {
-            if (toolWindow.getType() == ToolWindowType.FLOATING) {
-                FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
+        if (toolWindow.getType() == ToolWindowType.FLOATING) {
+            FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
+            if (floatingDecorator != null) {
                 floatingDecorator.setBounds(bounds);
-            } else if (toolWindow.getType() == ToolWindowType.WINDOWED) {
-                Window window = getWindow(toolWindow);
-                window.setBounds(bounds);
             } else {
-                Rectangle currentBounds = toolWindow.getDecorator().getBounds();
-                if (toolWindow.getAnchor() == ToolWindowAnchor.TOP || toolWindow.getAnchor() == ToolWindowAnchor.BOTTOM) {
-                    toolWindow.stretchHeight(bounds.height - currentBounds.height);
-                } else {
-                    toolWindow.stretchWidth(bounds.width - currentBounds.width);
-                }
+                delayedFloatingDecoratorSetBounds(toolWindow, bounds);
+            }
+        } else if (toolWindow.getType() == ToolWindowType.WINDOWED) {
+            Window window = getWindow(toolWindow);
+            if (window != null) {
+                window.setBounds(bounds);
+            }
+        } else {
+            Rectangle currentBounds = toolWindow.getDecorator().getBounds();
+            if (toolWindow.getAnchor() == ToolWindowAnchor.TOP || toolWindow.getAnchor() == ToolWindowAnchor.BOTTOM) {
+                toolWindow.stretchHeight(bounds.height - currentBounds.height);
+            } else {
+                toolWindow.stretchWidth(bounds.width - currentBounds.width);
             }
         }
+    }
+
+    private static void delayedFloatingDecoratorSetBounds(ToolWindowEx toolWindow, Rectangle bounds) {
+        InternalDecorator decorator = toolWindow.getDecorator();
+        decorator.addHierarchyListener(new HierarchyListener() {
+            @Override
+            public void hierarchyChanged(HierarchyEvent e) {
+                if ((e.getChangeFlags() & HierarchyEvent.PARENT_CHANGED) != 0) {
+                    FloatingDecorator newFloatingDecorator = getFloatingDecorator(toolWindow);
+                    if (newFloatingDecorator != null) {
+                        newFloatingDecorator.setBounds(bounds);
+                        decorator.removeHierarchyListener(this);
+                    }
+                }
+            }
+        });
     }
 
     @Nullable

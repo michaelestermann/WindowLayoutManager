@@ -1,5 +1,6 @@
 package com.layoutmanager.layout.store.overwrite;
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.application.ApplicationManager;
@@ -13,11 +14,9 @@ import com.layoutmanager.persistence.Layout;
 import com.layoutmanager.ui.helpers.BalloonNotificationHelper;
 import com.layoutmanager.ui.icons.Icons;
 import com.layoutmanager.ui.menu.WindowMenuService;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
-@SuppressWarnings({"MissingActionUpdateThread"})
 public class OverwriteLayoutAction
         extends LayoutAction
         implements DumbAware {
@@ -37,14 +36,18 @@ public class OverwriteLayoutAction
     }
 
     @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
+    }
+
+    @Override
     public void update(AnActionEvent e) {
         e.getPresentation().setText(this.layout.getName());
-        super.update(e);
     }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        if(this.isProjectLoaded(event)) {
+        if (this.isProjectLoaded(event)) {
             ToolWindowManager toolWindowManager = this.getToolWindowManager(event);
             String previousName = this.layout.getName();
             Layout updatedLayout = this.layoutCreator.create(

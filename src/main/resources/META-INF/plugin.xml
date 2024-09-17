@@ -3,7 +3,6 @@
   <name>Window Layout Manager</name>
   <vendor email="michael@estermann.family" url="https://www.estermann.family">Michael Estermann</vendor>
 
-
   <description><![CDATA[
     This plugin provides multi layout support for the IntelliJ based IDE of your choice.
     You can store up to four layouts with a meaningful name.
@@ -35,16 +34,18 @@
             - Store docked tool window sizes and restore them accordingly.
           </li>
           <li>
-            Aug 10, 2023 (ver 1.5.0)
+            September 17, 2024 (ver 1.5.0)
             - Hide hints after a short time
             - Support key-shortcuts for layouts
             - Improved icons
+            - Minor Bugfixes
+            - Support of new UI
           </li>
         </ul>
     ]]></change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="193.5233.102"/>
+  <idea-version since-build="231"/>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
   <depends>com.intellij.modules.lang</depends>
@@ -60,8 +61,11 @@
     <applicationService serviceImplementation="com.layoutmanager.migration.LayoutMigratorService"/>
 
     <applicationConfigurable
-      id="settings.windowlayoutmanager"
-      instance="com.layoutmanager.ui.settings.SettingsPage"
-      displayName="Window Layout Manager"/>
+            id="settings.windowlayoutmanager"
+            instance="com.layoutmanager.ui.settings.SettingsPage"
+            displayName="Window Layout Manager"/>
+
+    <!-- Added the notification group here -->
+    <notificationGroup id="WindowLayoutManager" displayType="BALLOON"/>
   </extensions>
 </idea-plugin>

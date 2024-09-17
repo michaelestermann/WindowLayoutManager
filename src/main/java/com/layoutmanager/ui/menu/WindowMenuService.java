@@ -16,7 +16,6 @@ import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.action.ActionRegistry;
 import com.layoutmanager.ui.dialogs.LayoutNameDialog;
 import com.layoutmanager.ui.dialogs.LayoutNameValidator;
-
 import java.util.Arrays;
 
 public class WindowMenuService {
@@ -39,7 +38,7 @@ public class WindowMenuService {
     }
 
     public void addLayout(Layout layout) {
-        LayoutCreator layoutCreator = createLayoutCreator();
+        LayoutCreator layoutCreator = this.createLayoutCreator();
 
         this.addStoreLayoutActionBeforeSeparator(layout, layoutCreator);
         this.addRestoreLayoutAction(layout);
@@ -47,14 +46,14 @@ public class WindowMenuService {
     }
 
     public void deleteLayout(Layout layout) {
-        deleteActionInGroup(layout, this.storeLayout, false);
-        deleteActionInGroup(layout, this.restoreLayout, true);
-        deleteActionInGroup(layout, this.deleteLayout, false);
+        this.deleteActionInGroup(layout, this.storeLayout, false);
+        this.deleteActionInGroup(layout, this.restoreLayout, true);
+        this.deleteActionInGroup(layout, this.deleteLayout, false);
     }
 
     public void renameLayout(Layout layout) {
-        LayoutAction layoutAction = getActionForLayout(this.restoreLayout, layout);
-        actionRegistry.rename(layoutAction);
+        LayoutAction layoutAction = this.getActionForLayout(this.restoreLayout, layout);
+        this.actionRegistry.rename(layoutAction);
     }
 
     private void deleteActionInGroup(Layout layout, DefaultActionGroup actionGroup, boolean unregister) {
@@ -107,10 +106,10 @@ public class WindowMenuService {
     }
 
     private void addStoreLayoutActions(LayoutConfig config) {
-        LayoutCreator layoutCreator = createLayoutCreator();
+        LayoutCreator layoutCreator = this.createLayoutCreator();
 
         for (Layout layout : config.getLayouts()) {
-            addOverwriteLayoutActionAtTheEnd(layout, layoutCreator);
+            this.addOverwriteLayoutActionAtTheEnd(layout, layoutCreator);
         }
 
         if (config.getLayoutCount() > 0) {
@@ -124,7 +123,7 @@ public class WindowMenuService {
         this.actionRegistry.register(newLayoutAction, "NewLayout");
     }
 
-    private void addOverwriteLayoutActionAtTheEnd(Layout layout, LayoutCreator layoutCreator){
+    private void addOverwriteLayoutActionAtTheEnd(Layout layout, LayoutCreator layoutCreator) {
         this.storeLayout.add(new OverwriteLayoutAction(layoutCreator, layout));
     }
 
@@ -132,10 +131,10 @@ public class WindowMenuService {
         AnAction[] actions = this.storeLayout.getChildActionsOrStubs();
         AnAction newLayoutAction = actions[actions.length - 1];
 
-        removeSeparator(actions);
+        this.removeSeparator(actions);
         this.storeLayout.remove(newLayoutAction);
 
-        addOverwriteLayoutActionAtTheEnd(layout, layoutCreator);
+        this.addOverwriteLayoutActionAtTheEnd(layout, layoutCreator);
 
         this.storeLayout.addSeparator();
         this.storeLayout.add(newLayoutAction);

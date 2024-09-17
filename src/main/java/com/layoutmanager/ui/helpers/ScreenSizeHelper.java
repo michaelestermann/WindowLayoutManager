@@ -1,15 +1,13 @@
 package com.layoutmanager.ui.helpers;
 
 import com.layoutmanager.persistence.ToolWindowInfo;
-
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Insets;
 import java.awt.Rectangle;
-
+import java.awt.Toolkit;
 import java.util.Arrays;
 import java.util.Comparator;
-
-import sun.java2d.SunGraphicsEnvironment;
 
 public class ScreenSizeHelper {
     public static Rectangle getContainingScreenBounds(ToolWindowInfo toolWindow) {
@@ -21,12 +19,17 @@ public class ScreenSizeHelper {
     }
 
     private static Rectangle getScreenRectangle(GraphicsDevice device) {
-        Rectangle defaultBounds = SunGraphicsEnvironment.getUsableBounds(device);
-        return new Rectangle(
-                (int)defaultBounds.getX(),
-                (int)defaultBounds.getY(),
-                (int)defaultBounds.getWidth(),
-                (int)defaultBounds.getHeight());
+        Rectangle bounds = device.getDefaultConfiguration().getBounds();
+        Insets insets = Toolkit
+                .getDefaultToolkit()
+                .getScreenInsets(device.getDefaultConfiguration());
+        
+        int x = bounds.x + insets.left;
+        int y = bounds.y + insets.top;
+        int width = bounds.width - (insets.left + insets.right);
+        int height = bounds.height - (insets.top + insets.bottom);
+        
+        return new Rectangle(x, y, width, height);
     }
 
     private static int getIntersectionSize(Rectangle screen, Rectangle window) {

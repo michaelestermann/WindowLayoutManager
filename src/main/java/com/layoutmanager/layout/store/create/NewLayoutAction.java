@@ -1,5 +1,6 @@
 package com.layoutmanager.layout.store.create;
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
@@ -14,9 +15,8 @@ import com.layoutmanager.persistence.LayoutConfig;
 import com.layoutmanager.ui.helpers.BalloonNotificationHelper;
 import com.layoutmanager.ui.icons.Icons;
 import com.layoutmanager.ui.menu.WindowMenuService;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 public class NewLayoutAction
         extends AnAction
@@ -31,6 +31,11 @@ public class NewLayoutAction
         Presentation presentation = this.getTemplatePresentation();
         presentation.setText(MessagesHelper.message("StoreLayout.New.Menu"));
         presentation.setIcon(Icons.Menu.CreateNewLayout);
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
     }
 
     @Override

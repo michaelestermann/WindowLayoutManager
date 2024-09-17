@@ -1,6 +1,7 @@
 package com.layoutmanager.layout.restore;
 
 import com.intellij.ide.ui.UISettings;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.DumbAware;
@@ -16,17 +17,15 @@ import com.layoutmanager.persistence.ToolWindowInfo;
 import com.layoutmanager.ui.helpers.BalloonNotificationHelper;
 import com.layoutmanager.ui.helpers.ToolWindowHelper;
 import com.layoutmanager.ui.icons.Icons;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings({"MissingActionUpdateThread"})
 public class RestoreLayoutAction
         extends LayoutAction
-        implements DumbAware  {
+        implements DumbAware {
 
     private final Layout layout;
 
@@ -40,12 +39,15 @@ public class RestoreLayoutAction
     }
 
     @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
+    }
+
+    @Override
     public void update(AnActionEvent actionEvent) {
         actionEvent
                 .getPresentation()
                 .setText(this.layout.getName());
-
-        super.update(actionEvent);
     }
 
 
@@ -62,12 +64,12 @@ public class RestoreLayoutAction
     }
 
     private void applyLayout(AnActionEvent event, Layout layout) {
-        applyEditorTabPlacement(layout);
-        ToolWindowManager toolWindowManager = getToolWindowManager(event);
+        this.applyEditorTabPlacement(layout);
+        ToolWindowManager toolWindowManager = this.getToolWindowManager(event);
 
-        Map<ToolWindowInfo, ToolWindowEx> toolWindows = getToolWindows(toolWindowManager, layout.getToolWindows());
-        hideAllToolWindows(toolWindows);
-        applyToolWindowLayout(toolWindows);
+        Map<ToolWindowInfo, ToolWindowEx> toolWindows = this.getToolWindows(toolWindowManager, layout.getToolWindows());
+        this.hideAllToolWindows(toolWindows);
+        this.applyToolWindowLayout(toolWindows);
     }
 
     private Map<ToolWindowInfo, ToolWindowEx> getToolWindows(ToolWindowManager toolWindowManager, ToolWindowInfo[] toolWindows) {
@@ -88,26 +90,31 @@ public class RestoreLayoutAction
     }
 
     private void hideAllToolWindows(Map<ToolWindowInfo, ToolWindowEx> toolWindows) {
-        toolWindows.forEach((info, toolWindow) -> toolWindow.hide(null));
+        toolWindows.forEach((info, toolWindow) -> {
+            if (!info.isVisible()) {
+                toolWindow.hide(null);
+            }
+        });
     }
 
     private void applyToolWindowLayout(Map<ToolWindowInfo, ToolWindowEx> toolWindows) {
-
         toolWindows.forEach((info, toolWindow) -> {
-            // !! Workaround !!
-            // decorator is not set and throws exception. When calling this method, the content manager lazy variable will be loaded and therefore also the decorator...
-            // See: https://github.com/JetBrains/intellij-community/blob/a63286c3b29fe467399fb353c71ed15cd65db8dd/platform/platform-impl/src/com/intellij/openapi/wm/impl/ToolWindowImpl.kt
-            toolWindow.getComponent();
-
-            toolWindow.setAnchor(ToolWindowAnchor.fromText(info.getAnchor()), null);
-            toolWindow.setType(info.getType(), null);
-            toolWindow.setSplitMode(info.isToolWindow(), null);
-
             if (info.isVisible()) {
-                toolWindow.show(null);
-            }
+                // !! Workaround !!
+                // decorator is not set and throws exception. When calling this method, the content manager lazy
+                // variable will be loaded and therefore also the decorator...
+                // See: https://github.com/JetBrains/intellij-community/blob/a63286c3b29fe467399fb353c71ed15cd65db8dd/
+                // platform/platform-impl/src/com/intellij/openapi/wm/impl/ToolWindowImpl.kt
+                toolWindow.getComponent();
 
-            ToolWindowHelper.setBounds(toolWindow, info.getBounds());
+                toolWindow.setAnchor(ToolWindowAnchor.fromText(info.getAnchor()), null);
+                toolWindow.setType(info.getType(), null);
+                toolWindow.setSplitMode(info.isToolWindow(), null);
+
+                ToolWindowHelper.setBounds(toolWindow, info.getBounds());
+
+                toolWindow.show();
+            }
         });
     }
 

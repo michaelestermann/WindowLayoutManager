@@ -7,7 +7,6 @@ import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.keymap.Keymap;
 import com.intellij.openapi.keymap.KeymapManager;
 import com.layoutmanager.layout.LayoutAction;
-
 import java.util.Objects;
 
 public class ActionRegistry {
@@ -54,7 +53,7 @@ public class ActionRegistry {
 
     private void reRegisterAction(ActionManager actionManager, LayoutAction layoutAction, String previousActionId, String newActionName) {
         actionManager.unregisterAction(previousActionId);
-        actionManager.registerAction(newActionName, layoutAction, getPluginId());
+        actionManager.registerAction(newActionName, layoutAction, this.getPluginId());
     }
 
 

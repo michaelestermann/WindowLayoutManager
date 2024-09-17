@@ -1,7 +1,6 @@
 package com.layoutmanager.persistence;
 
 import com.intellij.openapi.wm.ToolWindowType;
-
 import java.awt.Rectangle;
 import java.util.Objects;
 
@@ -98,7 +97,7 @@ public class ToolWindowInfo {
             return true;
         }
 
-        if (other == null || getClass() != other.getClass()) {
+        if (other == null || this.getClass() != other.getClass()) {
             return false;
         }
 

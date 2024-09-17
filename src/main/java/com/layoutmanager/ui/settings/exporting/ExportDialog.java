@@ -52,7 +52,10 @@ public class ExportDialog extends JDialog {
         this.layoutNameLabel.setText(layoutName);
         this.exportTextBox.setText(content);
 
-        this.contentPanel.registerKeyboardAction(e -> this.onClose(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        this.contentPanel.registerKeyboardAction(
+                e -> this.onClose(),
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
     public void showDialogInCenterOf(JDialog parent) {

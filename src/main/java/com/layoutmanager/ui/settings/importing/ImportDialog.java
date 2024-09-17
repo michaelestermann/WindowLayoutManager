@@ -68,7 +68,10 @@ public class ImportDialog extends JDialog {
             }
         });
 
-        this.contentPanel.registerKeyboardAction(e -> this.onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        this.contentPanel.registerKeyboardAction(
+                e -> this.onCancel(),
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
     public Layout getImportedLayout() {
@@ -94,7 +97,9 @@ public class ImportDialog extends JDialog {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle(MessagesHelper.message("ImportDialog.SelectFileTitle"));
         fileChooser.setAcceptAllFileFilterUsed(false);
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(ImportExportConstants.FILE_TYPE_NAME, ImportExportConstants.FILE_ENDING);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                ImportExportConstants.FILE_TYPE_NAME,
+                ImportExportConstants.FILE_ENDING);
         fileChooser.setFileFilter(filter);
 
         int result = fileChooser.showOpenDialog(null);
@@ -107,10 +112,14 @@ public class ImportDialog extends JDialog {
             String encodedContent = Files.readString(Paths.get(file.getPath()));
             this.importLayout(encodedContent);
         } catch (IOException e) {
-            ComponentNotificationHelper.error(this.importFromFileButton, MessagesHelper.message("ImportDialog.IOException", file.getName(), e.getMessage()));
+            ComponentNotificationHelper.error(
+                    this.importFromFileButton,
+                    MessagesHelper.message("ImportDialog.IOException", file.getName(), e.getMessage()));
             this.deselectLayout();
         } catch (Exception e) {
-            ComponentNotificationHelper.error(this.importFromFileButton,  MessagesHelper.message("ImportDialog.UnknownFormat"));
+            ComponentNotificationHelper.error(
+                    this.importFromFileButton,
+                    MessagesHelper.message("ImportDialog.UnknownFormat"));
             this.deselectLayout();
         }
     }
@@ -124,7 +133,9 @@ public class ImportDialog extends JDialog {
 
             this.importLayout(lzEncodedContent);
         } catch (Exception e) {
-            ComponentNotificationHelper.error(this.importFromClipboardButton,  MessagesHelper.message("ImportDialog.UnknownFormat"));
+            ComponentNotificationHelper.error(
+                    this.importFromClipboardButton,
+                    MessagesHelper.message("ImportDialog.UnknownFormat"));
             this.deselectLayout();
         }
     }
@@ -141,7 +152,9 @@ public class ImportDialog extends JDialog {
         this.layoutNameTextBox.requestFocus();
         this.layoutConfiguredWindowCountLabel.setText(Integer.toString(layout.getToolWindows().length));
 
-        ComponentNotificationHelper.info(this.layoutNameTextBox, MessagesHelper.message("ImportDialog.SuccessfullyLoadedLayout", layout.getName()));
+        ComponentNotificationHelper.info(
+                this.layoutNameTextBox,
+                MessagesHelper.message("ImportDialog.SuccessfullyLoadedLayout", layout.getName()));
 
         this.importButton.setEnabled(true);
         this.layoutNameTextBox.setEnabled(true);

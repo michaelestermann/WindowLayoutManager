@@ -248,7 +248,9 @@ public class LayoutManagerSettingsPanel {
 
                     this.fireTableChanged(new TableModelEvent(this, row));
                 } else {
-                    ComponentNotificationHelper.error(LayoutManagerSettingsPanel.this.layoutsTable, MessagesHelper.message("LayoutNameValidation.InvalidName"));
+                    ComponentNotificationHelper.error(
+                            LayoutManagerSettingsPanel.this.layoutsTable,
+                            MessagesHelper.message("LayoutNameValidation.InvalidName"));
                 }
             }
 
@@ -319,7 +321,9 @@ public class LayoutManagerSettingsPanel {
                     EditLayout layout = LayoutManagerSettingsPanel.this.editLayouts.get(table.getSelectedRow());
                     String actionId = ActionNameGenerator.getActionNameForLayout(layout.editedLayout());
 
-                    DefaultActionGroup group = LayoutManagerSettingsPanel.this.createEditActionGroup(actionId, KeymapManager.getInstance().getActiveKeymap());
+                    DefaultActionGroup group = LayoutManagerSettingsPanel.this.createEditActionGroup(
+                            actionId,
+                            KeymapManager.getInstance().getActiveKeymap());
                     ActionManager.getInstance()
                             .createActionPopupMenu("popup@Keymap.ActionsTree.Menu", group)
                             .getComponent()

@@ -42,19 +42,13 @@ public class ToolWindowHelper {
 
     public static void setBounds(ToolWindowEx toolWindow, Rectangle bounds) {
         if (toolWindow.getType() == ToolWindowType.FLOATING) {
-            InternalDecorator decorator = toolWindow.getDecorator();
-            decorator.addHierarchyListener(new HierarchyListener() {
-                @Override
-                public void hierarchyChanged(HierarchyEvent e) {
-                    if ((e.getChangeFlags() & HierarchyEvent.PARENT_CHANGED) != 0) {
-                        FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
-                        if (floatingDecorator != null) {
-                            floatingDecorator.setBounds(bounds);
-                            decorator.removeHierarchyListener(this);
-                        }
-                    }
-                }
-            });
+            FloatingDecorator floatingDecorator = getFloatingDecorator(toolWindow);
+            if (floatingDecorator != null) {
+                floatingDecorator.setBounds(bounds);
+            }
+            else {
+                delayedFloatingDecoratorSetBounds(toolWindow, bounds);
+            }
         } else if (toolWindow.getType() == ToolWindowType.WINDOWED) {
             Window window = getWindow(toolWindow);
             if (window != null) {
@@ -68,6 +62,22 @@ public class ToolWindowHelper {
                 toolWindow.stretchWidth(bounds.width - currentBounds.width);
             }
         }
+    }
+
+    private static void delayedFloatingDecoratorSetBounds(ToolWindowEx toolWindow, Rectangle bounds) {
+        InternalDecorator decorator = toolWindow.getDecorator();
+        decorator.addHierarchyListener(new HierarchyListener() {
+            @Override
+            public void hierarchyChanged(HierarchyEvent e) {
+                if ((e.getChangeFlags() & HierarchyEvent.PARENT_CHANGED) != 0) {
+                    FloatingDecorator newFloatingDecorator = getFloatingDecorator(toolWindow);
+                    if (newFloatingDecorator != null) {
+                        newFloatingDecorator.setBounds(bounds);
+                        decorator.removeHierarchyListener(this);
+                    }
+                }
+            }
+        });
     }
 
     @Nullable

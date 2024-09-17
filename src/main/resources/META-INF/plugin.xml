@@ -35,11 +35,12 @@
             - Store docked tool window sizes and restore them accordingly.
           </li>
           <li>
-            Februar 25, 2024 (ver 1.5.0)
+            September 17, 2024 (ver 1.5.0)
             - Hide hints after a short time
             - Support key-shortcuts for layouts
             - Improved icons
             - Minor Bugfixes
+            - Support of new UI
           </li>
         </ul>
     ]]></change-notes>

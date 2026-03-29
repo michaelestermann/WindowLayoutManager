@@ -9,7 +9,7 @@ import com.layoutmanager.ui.menu.WindowMenuService;
 public class PluginBootstrapper implements AppLifecycleListener {
 
     @Override
-    public void welcomeScreenDisplayed() {
+    public void appStarted() {
         EmptyLayoutRemoverService emptyLayoutRemoverService = ApplicationManager
                 .getApplication()
                 .getService(EmptyLayoutRemoverService.class);
